@@ -4,19 +4,24 @@ Proof of Concept for an AI-powered communications engine for IT Simplification.
 
 ## Purpose
 
-The objective of this project is to automate the creation of executive communications and reporting based on IT Simplification data.
+Reduce the manual effort required to produce executive communications and reporting.
 
-## Repository structure
+## Project documents
 
-### docs
-Project documentation and architecture.
+- docs/architecture.md
+- docs/roadmap.md
 
-### scripts
-Automation scripts and code.
+## Project structure
 
-### data
-Sample and test data used for development.
+docs/
+Project documentation
+
+scripts/
+Automation code
+
+data/
+Sample and test data
 
 ## Status
 
-Initial repository setup completed.
+Planning and architecture phase.
