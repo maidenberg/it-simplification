@@ -47,6 +47,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from reporting.weekly_update import assemble_weekly_update
 from src.reporting.leadership_insights import generate_leadership_insights
 from src.reporting.risks_watchouts import generate_risks_watchouts
+from src.reporting.reporting_package import generate_reporting_package
 
 
 # ---------------------------------------------------------------------------
@@ -340,6 +341,7 @@ def run(config: RunnerConfig | None = None) -> dict:
         "previous_snapshot": None,
         "output_directory": None,
         "stages_completed": [],
+        "generated_artefacts": [],
         "warnings": [],
         "errors": [],
         "started_at": _now_iso(),
@@ -398,6 +400,24 @@ def run(config: RunnerConfig | None = None) -> dict:
             output_path=temp_dir / "risks_watchouts.txt",
         )
         manifest["stages_completed"].append("risks_watchouts")
+
+        # 8e. Assemble the full reporting package from the five artefacts
+        # (3D.4). Runs after risks_watchouts, before promotion. The weekly
+        # update artefact is passed by the name the runner produces it under.
+        generate_reporting_package(
+            executive_summary_path=temp_dir / "executive_summary.txt",
+            key_movements_path=temp_dir / "key_movements.txt",
+            weekly_update_path=temp_dir / "weekly_update.md",
+            leadership_insights_path=temp_dir / "leadership_insights.txt",
+            risks_watchouts_path=temp_dir / "risks_watchouts.txt",
+            output_path=temp_dir / "reporting_package.txt",
+        )
+        manifest["stages_completed"].append("reporting_package")
+
+        # Record the generated artefacts (sorted for deterministic manifests).
+        manifest["generated_artefacts"] = sorted(
+            p.name for p in temp_dir.iterdir() if p.is_file()
+        )
 
         # 9. Promote temp output to outputs/<run-id> only after success.
         final_output = config.outputs_dir / run_id
