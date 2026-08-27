@@ -207,13 +207,80 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
     return combined
 
 
+def _contract_set(df: pd.DataFrame) -> set:
+    """
+    Return the unique set of non-blank contract identifiers from a cleaned
+    vendor DataFrame.
+
+    The Contract column is located by name ("Contract") when present, otherwise
+    by position (the second column). Blank/null values are excluded.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A cleaned vendor snapshot (from extract_vendor_data).
+
+    Returns
+    -------
+    set
+        Unique contract identifiers.
+    """
+    if df.shape[1] < 2:
+        return set()
+
+    if "Contract" in df.columns:
+        contract = df["Contract"]
+    else:
+        contract = df.iloc[:, 1]
+
+    blank_tokens = {"", "nan", "none", "nat"}
+    values = contract.astype(str).str.strip()
+    mask = contract.notna() & ~values.str.lower().isin(blank_tokens)
+    return set(values[mask])
+
+
+def _costout_by_contract(df: pd.DataFrame) -> dict:
+    """
+    Return a mapping of contract identifier -> primary Costout (numeric).
+
+    The Contract column is located by name ("Contract") when present, otherwise
+    by position (the second column). The primary Costout column is the one named
+    exactly "Costout" (not the deduped summary copy "Costout_2"). Costout values
+    are coerced to numeric; non-numeric/blank values become 0.0.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A cleaned vendor snapshot (from extract_vendor_data).
+
+    Returns
+    -------
+    dict
+        Mapping of contract identifier to its numeric primary Costout.
+    """
+    if df.shape[1] < 2 or "Costout" not in df.columns:
+        return {}
+
+    contract = df["Contract"] if "Contract" in df.columns else df.iloc[:, 1]
+    costout = pd.to_numeric(df["Costout"], errors="coerce").fillna(0.0)
+
+    blank_tokens = {"", "nan", "none", "nat"}
+    keys = contract.astype(str).str.strip()
+    mask = contract.notna() & ~keys.str.lower().isin(blank_tokens)
+
+    return dict(zip(keys[mask], costout[mask]))
+
+
 def compare_snapshots(previous_df: pd.DataFrame, current_df: pd.DataFrame) -> dict:
     """
-    Compare two vendor-data snapshots.
+    Compare two cleaned vendor snapshots at the contract level.
 
-    Returns each cleaned vendor snapshot's record count and the delta between
-    them. Vendor additions and costout changes are intentionally not
-    implemented yet.
+    Builds a unique set of contracts for each snapshot, identifies which
+    contracts were added, removed, or remained present, and — for contracts
+    present in both — detects changes in the primary Costout value.
+
+    Movement classification, summaries, insights and totals are intentionally
+    not implemented in this milestone.
 
     Parameters
     ----------
@@ -225,13 +292,151 @@ def compare_snapshots(previous_df: pd.DataFrame, current_df: pd.DataFrame) -> di
     Returns
     -------
     dict
-        A dictionary with each snapshot's record count and the count delta.
+        Record counts, count delta, and contract-level added/removed/unchanged
+        results.
     """
+    previous_contracts = _contract_set(previous_df)
+    current_contracts = _contract_set(current_df)
+
+    added_contracts = sorted(current_contracts - previous_contracts)
+    removed_contracts = sorted(previous_contracts - current_contracts)
+    unchanged_contracts = current_contracts & previous_contracts
+
+    # Detect Costout changes for contracts present in both snapshots.
+    previous_costout = _costout_by_contract(previous_df)
+    current_costout = _costout_by_contract(current_df)
+
+    changed_contracts = []
+    increase_count = 0
+    decrease_count = 0
+    for contract in sorted(unchanged_contracts):
+        prev_val = float(previous_costout.get(contract, 0.0))
+        curr_val = float(current_costout.get(contract, 0.0))
+        delta = curr_val - prev_val
+        if delta != 0:
+            if delta > 0:
+                movement_type = "increase"
+                increase_count += 1
+            elif delta < 0:
+                movement_type = "decrease"
+                decrease_count += 1
+            else:
+                movement_type = "unchanged"
+            changed_contracts.append({
+                "contract": contract,
+                "previous_costout": prev_val,
+                "current_costout": curr_val,
+                "delta": delta,
+                "movement_type": movement_type,
+            })
+
+    # Portfolio-level aggregation of Costout movements.
+    total_positive_delta = sum(
+        r["delta"] for r in changed_contracts if r["movement_type"] == "increase"
+    )
+    total_negative_delta = sum(
+        r["delta"] for r in changed_contracts if r["movement_type"] == "decrease"
+    )
+    net_delta = total_positive_delta + total_negative_delta
+
+    # Top movers: increases largest-first, decreases most-negative-first.
+    top_increases = sorted(
+        (r for r in changed_contracts if r["movement_type"] == "increase"),
+        key=lambda r: r["delta"],
+        reverse=True,
+    )
+    top_decreases = sorted(
+        (r for r in changed_contracts if r["movement_type"] == "decrease"),
+        key=lambda r: r["delta"],
+    )
+
     return {
         "previous_count": len(previous_df),
         "current_count": len(current_df),
         "count_delta": len(current_df) - len(previous_df),
+        "added_contracts": added_contracts,
+        "removed_contracts": removed_contracts,
+        "added_count": len(added_contracts),
+        "removed_count": len(removed_contracts),
+        "unchanged_count": len(unchanged_contracts),
+        "changed_contracts": changed_contracts,
+        "changed_count": len(changed_contracts),
+        "increase_count": increase_count,
+        "decrease_count": decrease_count,
+        "total_positive_delta": float(total_positive_delta),
+        "total_negative_delta": float(total_negative_delta),
+        "net_delta": float(net_delta),
+        "top_increases": top_increases,
+        "top_decreases": top_decreases,
     }
+
+
+def _validate_contract_comparison(previous_vendors, current_vendors, result) -> None:
+    """
+    Unit-test style validation of the contract-level comparison result.
+
+    Verifies the structural invariants of compare_snapshots() output using the
+    two loaded snapshots. Raises AssertionError on any failure.
+    """
+    prev_contracts = _contract_set(previous_vendors)
+    curr_contracts = _contract_set(current_vendors)
+
+    # Required keys are present.
+    expected_keys = {
+        "previous_count", "current_count", "count_delta",
+        "added_contracts", "removed_contracts",
+        "added_count", "removed_count", "unchanged_count",
+    }
+    assert expected_keys.issubset(result.keys()), "Result is missing required keys"
+
+    # Counts match the DataFrames and the delta is consistent.
+    assert result["previous_count"] == len(previous_vendors)
+    assert result["current_count"] == len(current_vendors)
+    assert result["count_delta"] == len(current_vendors) - len(previous_vendors)
+
+    # Count fields match their list lengths.
+    assert result["added_count"] == len(result["added_contracts"])
+    assert result["removed_count"] == len(result["removed_contracts"])
+
+    # Added contracts are in current but not previous.
+    for c in result["added_contracts"]:
+        assert c in curr_contracts and c not in prev_contracts
+
+    # Removed contracts are in previous but not current.
+    for c in result["removed_contracts"]:
+        assert c in prev_contracts and c not in curr_contracts
+
+    # Added and removed are disjoint.
+    assert not (set(result["added_contracts"]) & set(result["removed_contracts"]))
+
+    # Set-algebra sanity: unchanged + added == current unique contracts;
+    # unchanged + removed == previous unique contracts.
+    assert result["unchanged_count"] + result["added_count"] == len(curr_contracts)
+    assert result["unchanged_count"] + result["removed_count"] == len(prev_contracts)
+
+    # Movement classification: increases + decreases account for every change.
+    assert result["increase_count"] + result["decrease_count"] == result["changed_count"]
+    for record in result["changed_contracts"]:
+        if record["delta"] > 0:
+            assert record["movement_type"] == "increase"
+        elif record["delta"] < 0:
+            assert record["movement_type"] == "decrease"
+        else:
+            assert record["movement_type"] == "unchanged"
+
+    # Portfolio aggregation: net_delta equals the sum of all contract deltas.
+    all_deltas = sum(r["delta"] for r in result["changed_contracts"])
+    assert abs(result["net_delta"] - all_deltas) < 1e-6
+
+    # Top movers ordering.
+    inc_deltas = [r["delta"] for r in result["top_increases"]]
+    dec_deltas = [r["delta"] for r in result["top_decreases"]]
+    assert all(r["movement_type"] == "increase" for r in result["top_increases"])
+    assert all(r["movement_type"] == "decrease" for r in result["top_decreases"])
+    assert inc_deltas == sorted(inc_deltas, reverse=True)  # largest increase first
+    assert dec_deltas == sorted(dec_deltas)  # largest decrease (most negative) first
+
+    print("Validation passed: contract-level comparison invariants hold.")
 
 
 if __name__ == "__main__":
@@ -256,3 +461,5 @@ if __name__ == "__main__":
 
     result = compare_snapshots(previous_vendors, current_vendors)
     print(f"\n{result}")
+
+    _validate_contract_comparison(previous_vendors, current_vendors, result)
