@@ -42,6 +42,11 @@ from config_loader import build_config, ConfigError
 from compare_snapshots import load_snapshot, extract_vendor_data, compare_snapshots
 from executive_summary import generate_executive_summary, generate_key_movements
 
+# reporting/ lives at the repository root (one level above scripts/).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from reporting.weekly_update import assemble_weekly_update
+from src.reporting.leadership_insights import generate_leadership_insights
+
 
 # ---------------------------------------------------------------------------
 # Errors — each carries a precise, actionable message.
@@ -363,6 +368,26 @@ def run(config: RunnerConfig | None = None) -> dict:
 
         # 8. Write to temp output location.
         _write_outputs(temp_dir, results)
+
+        # 8b. Assemble the weekly update from the just-written 3A/3B artefacts
+        # (3D.1). Runs after Executive Summary + Key Movements are on disk.
+        assemble_weekly_update(
+            output_dir=temp_dir,
+            run_id=run_id,
+            previous_snapshot=str(previous),
+            current_snapshot=str(current),
+            generated_timestamp=_now_iso(),
+        )
+        manifest["stages_completed"].append("weekly_update")
+
+        # 8c. Assemble leadership insights from the just-written 3A/3B artefacts
+        # (3D.2). Reuses existing outputs only; no new analytics.
+        generate_leadership_insights(
+            executive_summary_path=temp_dir / "executive_summary.txt",
+            key_movements_path=temp_dir / "key_movements.txt",
+            output_path=temp_dir / "leadership_insights.txt",
+        )
+        manifest["stages_completed"].append("leadership_insights")
 
         # 9. Promote temp output to outputs/<run-id> only after success.
         final_output = config.outputs_dir / run_id
