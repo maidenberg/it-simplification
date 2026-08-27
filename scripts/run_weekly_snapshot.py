@@ -48,6 +48,7 @@ from reporting.weekly_update import assemble_weekly_update
 from src.reporting.leadership_insights import generate_leadership_insights
 from src.reporting.risks_watchouts import generate_risks_watchouts
 from src.reporting.reporting_package import generate_reporting_package
+from src.reporting.promotion_package import generate_promotion_package
 
 
 # ---------------------------------------------------------------------------
@@ -413,6 +414,16 @@ def run(config: RunnerConfig | None = None) -> dict:
             output_path=temp_dir / "reporting_package.txt",
         )
         manifest["stages_completed"].append("reporting_package")
+
+        # 8f. Assemble the promotion package (3D.5): validate + copy the existing
+        # reporting artefacts into promotion_package/ with a metadata manifest.
+        # Runs after reporting_package, before promotion. Packaging only.
+        generate_promotion_package(
+            source_dir=temp_dir,
+            run_id=run_id,
+            generated_at=_now_iso(),
+        )
+        manifest["stages_completed"].append("promotion_package")
 
         # Record the generated artefacts (sorted for deterministic manifests).
         manifest["generated_artefacts"] = sorted(
