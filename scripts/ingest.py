@@ -53,7 +53,7 @@ def _coerce_types(df: pd.DataFrame) -> pd.DataFrame:
         .astype(str)
         .str.strip()
         .str.lower()
-        .map({"yes": True, "true": True, "1": True, "no": False, "false": False, "0": False})
+        .map({"yes": True, "true": True, "1": True, "y": True, "no": False, "false": False, "0": False, "n": False, "nan": False})
     )
 
     # Categorical columns — lowercase for consistent comparison
@@ -98,8 +98,30 @@ def load_vendor_data(filepath: str | Path) -> pd.DataFrame:
     if not filepath.suffix.lower() == ".xlsx":
         raise ValueError(f"Expected an .xlsx file, got: {filepath.suffix}")
 
-    df = pd.read_excel(filepath, engine="openpyxl")
+    df = pd.read_excel(
+        filepath,
+        sheet_name="Fake Simplified View",
+        engine="openpyxl")
 
+    df = df.rename (
+        columns={
+            "Vendor": "vendor",
+            "Category": "category",
+            "V1 budget": "budget",
+            "Renewal price": "renewal price",
+            "Costout": "cost out",
+            "Finalised?": "finalised"
+        }
+    )
+
+    df["quarter"] = (
+        "Q"
+        + pd.to_datetime(
+            df["When contract is up"],
+            errors="coerce"
+        ).dt.quarter.astype(str)
+    )
+    
     df = _normalise_columns(df)
     df = _drop_empty_rows(df)
     df = _coerce_types(df)
