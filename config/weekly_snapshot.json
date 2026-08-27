@@ -1,0 +1,8 @@
+{
+  "snapshot_worksheet": "Snapshot Wk 2",
+  "incoming_directory": "data/incoming",
+  "archive_directory": "data/archive",
+  "outputs_directory": "data/outputs",
+  "state_directory": "data/state",
+  "allowed_extensions": [".xlsx"]
+}
