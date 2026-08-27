@@ -46,6 +46,7 @@ from executive_summary import generate_executive_summary, generate_key_movements
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from reporting.weekly_update import assemble_weekly_update
 from src.reporting.leadership_insights import generate_leadership_insights
+from src.reporting.risks_watchouts import generate_risks_watchouts
 
 
 # ---------------------------------------------------------------------------
@@ -388,6 +389,15 @@ def run(config: RunnerConfig | None = None) -> dict:
             output_path=temp_dir / "leadership_insights.txt",
         )
         manifest["stages_completed"].append("leadership_insights")
+
+        # 8d. Assemble risks & watchouts from existing reporting artefacts
+        # (3D.3). Reuses existing outputs only; no new analytics.
+        generate_risks_watchouts(
+            leadership_insights_path=temp_dir / "leadership_insights.txt",
+            key_movements_path=temp_dir / "key_movements.txt",
+            output_path=temp_dir / "risks_watchouts.txt",
+        )
+        manifest["stages_completed"].append("risks_watchouts")
 
         # 9. Promote temp output to outputs/<run-id> only after success.
         final_output = config.outputs_dir / run_id
