@@ -174,13 +174,38 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
     else:
         combined = pd.concat(blocks, ignore_index=True)
 
-    # Remove rows where Contract (second column by position) is blank/null.
+    # Keep valid vendor rows even when Contract is blank. For comparison purposes,
+    # use a stable vendor-based identifier so financially valid movements are not
+    # silently discarded.
     blank_tokens = {"", "nan", "none", "nat"}
     rows_before = len(combined)
     if combined.shape[1] >= 2:
+        vendor = combined.iloc[:, 0].astype(str).str.strip()
         contract = combined.iloc[:, 1].astype(str).str.strip()
-        contract_blank = combined.iloc[:, 1].isna() | contract.str.lower().isin(blank_tokens)
-        combined = combined[~contract_blank].reset_index(drop=True)
+	
+        vendor_blank = (
+        combined.iloc[:, 0].isna()
+        | vendor.str.lower().isin(blank_tokens)
+        )
+        contract_blank = (
+            combined.iloc[:, 1].isna()
+            | contract.str.lower().isin(blank_tokens)
+        )
+        
+        # Rows without a vendor are not usable.
+        combined = combined[~vendor_blank].copy()
+
+        # Preserve blank-contract rows using the vendor as a stable identifier.
+        vendor = combined.iloc[:, 0].astype(str).str.strip()
+        contract = combined.iloc[:, 1].astype(str).str.strip()
+        contract_blank = (
+            combined.iloc[:, 1].isna()
+            | contract.str.lower().isin(blank_tokens)
+        )
+        combined.loc[contract_blank, combined.columns[1]] = (
+            "[No Contract] " + vendor[contract_blank]
+        )
+
     rows_after = len(combined)
 
     print(f"Rows before cleanup: {rows_before}")
