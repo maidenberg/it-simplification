@@ -14,6 +14,8 @@ Responsibility:
 """
 
 from pathlib import Path
+import re
+from datetime import datetime
 
 import pandas as pd
 
@@ -54,6 +56,36 @@ def load_snapshot(filepath: str | Path, sheet_name: str) -> pd.DataFrame:
 
     return df
 
+def find_latest_snapshot_sheets(filepath: str | Path) -> tuple[str, str]:
+    """Return the previous and current snapshot worksheet names."""
+    filepath = Path(filepath)
+
+    if not filepath.exists():
+        raise FileNotFoundError(f"Input file not found: {filepath}")
+
+    workbook = pd.ExcelFile(filepath, engine="openpyxl")
+    snapshot_sheets = []
+
+    for sheet_name in workbook.sheet_names:
+        match = re.fullmatch(r"Snapshot (\d{1,2})-(\d{1,2})", sheet_name.strip())
+        if match:
+            day = int(match.group(1))
+            month = int(match.group(2))
+            snapshot_sheets.append(
+                (datetime(2000, month, day), sheet_name)
+            )
+
+    if len(snapshot_sheets) < 2:
+        raise ValueError(
+            f"At least two 'Snapshot D-M' worksheets are required in {filepath}."
+        )
+
+    snapshot_sheets.sort(key=lambda item: item[0])
+
+    previous_sheet = snapshot_sheets[-2][1]
+    current_sheet = snapshot_sheets[-1][1]
+
+    return previous_sheet, current_sheet
 
 def _dedupe_columns(columns: list) -> list:
     """

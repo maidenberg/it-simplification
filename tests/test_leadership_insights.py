@@ -98,34 +98,34 @@ class TestFileGeneration(LeadershipInsightsTestBase):
         for n in (1, 2, 3, 4, 5):
             self.assertIn(f"{n}. ", text)
         self.assertNotIn("6. ", text)
-        self.assertTrue(text.startswith("Leadership Insights"))
+        self.assertTrue(text.startswith("Executive Talking Points"))
 
 
 class TestValueExtraction(LeadershipInsightsTestBase):
     def test_contract_count_extraction(self):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
-        self.assertIn("Portfolio review covered 142 contracts.", text)
+        self.assertIn("142 contracts were reviewed during the reporting period.", text)
 
     def test_net_delta_extraction(self):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
         self.assertIn(
-            "Portfolio net movement for the reporting period was $24,750.09.", text
+            "Net portfolio movement for the week was $24,750.09.", text
         )
 
     def test_first_mover_extraction(self):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
         self.assertIn(
-            "Largest portfolio movement was Example Contract 028 (+$16,764.09).", text
+            "The largest movement this week was Example Contract 028 (+$16,764.09).", text
         )
 
     def test_second_mover_extraction(self):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
         self.assertIn(
-            "Second largest portfolio movement was Example Contract 034 (+$7,489.00).",
+            "The second largest movement this week was Example Contract 034 (+$7,489.00).",
             text,
         )
 
@@ -133,7 +133,7 @@ class TestValueExtraction(LeadershipInsightsTestBase):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
         self.assertIn(
-            "Top two ranked movements were Example Contract 028 and "
+            "Key commercial activity this week: Example Contract 028 and "
             "Example Contract 034.",
             text,
         )
@@ -171,13 +171,13 @@ class TestSingleMoverFallback(LeadershipInsightsTestBase):
         text = self._generate().read_text(encoding="utf-8")
         # First mover present; second mover degrades to the fallback.
         self.assertIn(
-            "Largest portfolio movement was Example Contract 028 (+$16,764.09).", text
+            "The largest movement this week was Example Contract 028 (+$16,764.09).", text
         )
         self.assertIn(
-            f"Second largest portfolio movement was {SINGLE_MOVER_FALLBACK}.", text
+            f"The second largest movement this week was {SINGLE_MOVER_FALLBACK}.", text
         )
         self.assertIn(
-            f"Top two ranked movements were Example Contract 028 and "
+            f"Key commercial activity this week: Example Contract 028 and "
             f"{SINGLE_MOVER_FALLBACK}.",
             text,
         )

@@ -42,7 +42,7 @@ class RunnerConfig:
     # input, not a business rule. The existing pipeline reads a named worksheet,
     # so the runner must be told which one to use. Default is the sheet the
     # pipeline treats as the "current" snapshot.
-    snapshot_worksheet: str = "Snapshot Wk 2"
+    snapshot_worksheet: str = "Live dashboard"
 
     @property
     def state_file(self) -> Path:

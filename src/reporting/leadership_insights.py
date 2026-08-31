@@ -74,6 +74,7 @@ def render_leadership_insights(
     top_mover_2: str,
     contract_1: str,
     contract_2: str,
+    status_summary="Cerberus team has given an offer for a 3-yr deal - awaiting business approval",
 ) -> str:
     """Render the fixed five-insight document. Fixed wording and ordering."""
     return "\n".join([
@@ -87,7 +88,8 @@ def render_leadership_insights(
         "",
         f"4. The second largest movement this week was {top_mover_2}.",
         "",
-        f"5. The most significant movements were {contract_1} and {contract_2}.",
+        f"5. Key commercial activity this week: "
+        f"{status_summary if status_summary else f'{contract_1} and {contract_2}'}."
         "",
     ])
 
@@ -148,6 +150,7 @@ def generate_leadership_insights(
         top_mover_2=top_mover_2,
         contract_1=contract_1,
         contract_2=contract_2,
+        status_summary=None,
     )
 
     output_path = Path(output_path)
