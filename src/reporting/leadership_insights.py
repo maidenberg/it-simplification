@@ -77,17 +77,17 @@ def render_leadership_insights(
 ) -> str:
     """Render the fixed five-insight document. Fixed wording and ordering."""
     return "\n".join([
-        "Leadership Insights",
+        "Executive Talking Points",
         "",
-        f"1. Portfolio review covered {contracts_compared} contracts.",
+        f"1. {contracts_compared} contracts were reviewed during the reporting period.",
         "",
-        f"2. Portfolio net movement for the reporting period was {net_delta}.",
+        f"2. Net portfolio movement for the week was {net_delta}.",
         "",
-        f"3. Largest portfolio movement was {top_mover_1}.",
+        f"3. The largest movement this week was {top_mover_1}.",
         "",
-        f"4. Second largest portfolio movement was {top_mover_2}.",
+        f"4. The second largest movement this week was {top_mover_2}.",
         "",
-        f"5. Top two ranked movements were {contract_1} and {contract_2}.",
+        f"5. The most significant movements were {contract_1} and {contract_2}.",
         "",
     ])
 
