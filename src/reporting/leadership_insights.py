@@ -121,6 +121,8 @@ def generate_leadership_insights(
     executive_summary_path,
     key_movements_path,
     output_path,
+    identified_costout=None,
+    finalised_costout=None,
 ) -> Path:
     """
     Generate leadership_insights.txt from existing reporting artefacts.
@@ -165,12 +167,18 @@ def generate_leadership_insights(
 
     contract_1 = _contract_name(mover_1) or SINGLE_MOVER_FALLBACK
     contract_2 = _contract_name(mover_2) or SINGLE_MOVER_FALLBACK
-    
-    delivery_progress = generate_delivery_progress (
-        identified_costout=809748.45,
-        finalised_costout=614081.40
-    )
 
+    delivery_progress = None
+
+    if (
+        identified_costout is not None
+        and finalised_costout is not None
+    ):
+        delivery_progress = generate_delivery_progress (
+            identified_costout = identified_costout,
+            finalised_costout = finalised_costout,
+        )
+    
     document = render_leadership_insights(
         contracts_compared=contracts_compared if contracts_compared is not None else SINGLE_MOVER_FALLBACK,
         net_delta=net_delta if net_delta is not None else SINGLE_MOVER_FALLBACK,
