@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# PyTest
+.pytest_cache/
+
+# Weekly run outputs
+data/outputs/
+data/archive/
+data/state/
+
+# Incoming data
+data/incoming/
+
+# Local Excel files
+data/*.xlsx

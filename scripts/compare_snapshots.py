@@ -14,6 +14,13 @@ Responsibility:
 """
 
 from pathlib import Path
+import sys
+import re
+from datetime import datetime
+
+sys.path.append(
+    str(Path(__file__).resolve().parents[1] / "src")
+)
 
 import pandas as pd
 
@@ -54,6 +61,36 @@ def load_snapshot(filepath: str | Path, sheet_name: str) -> pd.DataFrame:
 
     return df
 
+def find_latest_snapshot_sheets(filepath: str | Path) -> tuple[str, str]:
+    """Return the previous and current snapshot worksheet names."""
+    filepath = Path(filepath)
+
+    if not filepath.exists():
+        raise FileNotFoundError(f"Input file not found: {filepath}")
+
+    with pd.ExcelFile(filepath, engine="openpyxl") as workbook:
+        snapshot_sheets = []
+
+        for sheet_name in workbook.sheet_names:
+            match = re.fullmatch(r"Snapshot (\d{1,2})-(\d{1,2})", sheet_name.strip())
+            if match:
+                day = int(match.group(1))
+                month = int(match.group(2))
+                snapshot_sheets.append(
+                    (datetime(2000, month, day), sheet_name)
+            )
+
+    if len(snapshot_sheets) < 2:
+        raise ValueError(
+            f"At least two 'Snapshot D-M' worksheets are required in {filepath}."
+        )
+
+    snapshot_sheets.sort(key=lambda item: item[0])
+
+    previous_sheet = snapshot_sheets[-2][1]
+    current_sheet = snapshot_sheets[-1][1]
+
+    return previous_sheet, current_sheet
 
 def _dedupe_columns(columns: list) -> list:
     """
@@ -174,25 +211,44 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
     else:
         combined = pd.concat(blocks, ignore_index=True)
 
-    # Remove rows where Contract (second column by position) is blank/null.
+    # Keep valid vendor rows even when Contract is blank. For comparison purposes,
+    # use a stable vendor-based identifier so financially valid movements are not
+    # silently discarded.
     blank_tokens = {"", "nan", "none", "nat"}
     rows_before = len(combined)
     if combined.shape[1] >= 2:
+        vendor = combined.iloc[:, 0].astype(str).str.strip()
         contract = combined.iloc[:, 1].astype(str).str.strip()
-        contract_blank = combined.iloc[:, 1].isna() | contract.str.lower().isin(blank_tokens)
-        combined = combined[~contract_blank].reset_index(drop=True)
+	
+        vendor_blank = (
+        combined.iloc[:, 0].isna()
+        | vendor.str.lower().isin(blank_tokens)
+        )
+        contract_blank = (
+            combined.iloc[:, 1].isna()
+            | contract.str.lower().isin(blank_tokens)
+        )
+        
+        # Rows without a vendor are not usable.
+        combined = combined[~vendor_blank].copy()
+
+        # Preserve blank-contract rows using the vendor as a stable identifier.
+        vendor = combined.iloc[:, 0].astype(str).str.strip()
+        contract = combined.iloc[:, 1].astype(str).str.strip()
+        contract_blank = (
+            combined.iloc[:, 1].isna()
+            | contract.str.lower().isin(blank_tokens)
+        )
+        combined.loc[contract_blank, combined.columns[1]] = (
+            "[No Contract] " + vendor[contract_blank]
+        )
+
     rows_after = len(combined)
 
     print(f"Rows before cleanup: {rows_before}")
     print(f"Rows after cleanup (blank/null Contract removed): {rows_after}")
 
     print(f"Extracted columns: {list(combined.columns)}")
-
-    print("\nFirst 20 rows:")
-    print(combined.head(20))
-
-    print("\nLast 20 rows:")
-    print(combined.tail(20))
 
     print(f"\nTotal extracted rows: {len(combined)}")
 
@@ -446,9 +502,12 @@ if __name__ == "__main__":
     # pass a workbook path and two sheet names to compare different snapshots.
     import sys
 
-    filepath = sys.argv[1] if len(sys.argv) > 1 else "data/Fake vendor data.xlsx"
-    previous_sheet = sys.argv[2] if len(sys.argv) > 2 else "Snapshot Wk 1"
-    current_sheet = sys.argv[3] if len(sys.argv) > 3 else "Snapshot Wk 2"
+    filepath = sys.argv[1] if len(sys.argv) > 1 else "data/Weekly snapshots.xlsx"
+    if len (sys.argv) > 3:
+        previous_sheet = sys.argv[2]
+        current_sheet = sys.argv[3] 
+    else:
+        previous_sheet, current_sheet = find_latest_snapshot_sheets(filepath)
 
     previous_df = load_snapshot(filepath, previous_sheet)
     current_df = load_snapshot(filepath, current_sheet)
@@ -459,7 +518,52 @@ if __name__ == "__main__":
     print(f"\n[{current_sheet}] extracted vendor data:")
     current_vendors = extract_vendor_data(current_df)
 
+    from reporting.leadership_candidates import (
+        build_candidate_pool,
+        load_candidate_commentary,
+        build_commentary_lookup,
+        enrich_candidates_with_commentary,
+        candidates_with_meaningful_commentary,
+        rank_candidates_for_leadership,
+    )
+
+    candidates = build_candidate_pool(current_vendors)
+
+    commentary_df = load_candidate_commentary(
+        "data/IT Simplification dashboard.xlsx"
+    )
+
+    commentary_lookup = build_commentary_lookup(
+        commentary_df
+    )
+
+    candidates = enrich_candidates_with_commentary(
+        candidates,
+        commentary_lookup,
+    )
+
+    commented_candidates = (
+        candidates_with_meaningful_commentary(candidates)
+    )
+
+    ranked_candidates = rank_candidates_for_leadership (
+        commented_candidates
+    )
+
+    print ("\nTOP LEADERSHIP CANDIDATES")
+
+    for candidate in ranked_candidates[:10]:
+        print (
+            f"{candidate.vendor} | "
+            f"{candidate.contract} | "
+            f"${candidate.costout:,.0f} | "
+            f"{candidate.commentary}"
+        )
+
+    print (f"Leadership candidates: {len(candidates)}")
+
+    print (f"Candidates with commentary: {len(commented_candidates)}")
+
     result = compare_snapshots(previous_vendors, current_vendors)
-    print(f"\n{result}")
 
     _validate_contract_comparison(previous_vendors, current_vendors, result)

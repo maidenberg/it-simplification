@@ -100,7 +100,7 @@ def load_vendor_data(filepath: str | Path) -> pd.DataFrame:
 
     df = pd.read_excel(
         filepath,
-        sheet_name="Fake Simplified View",
+        sheet_name="Simplified view",
         engine="openpyxl")
 
     df = df.rename (

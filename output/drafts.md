@@ -1,30 +1,30 @@
 # IT Simplification — Weekly Update
-Generated: 2026-08-27
+Generated: 2026-08-31
 
 ## Executive Summary
 
-The IT Simplification program has identified $728,975 in total savings across 107 vendors. $320,983 (44%) has been finalised, with $0 remaining in the pipeline. Focus remains on converting pipeline opportunities into confirmed savings.
+The IT Simplification program has identified $809,748 in total savings across 107 vendors. $614,081 (76%) has been finalised, with $0 remaining in the pipeline. The program is well advanced with the majority of savings confirmed.
 
 ## Key Metrics
 
 | Metric | Value |
 |--------|-------|
-| Total savings identified | $728,975 |
-| Finalised savings | $320,983 |
+| Total savings identified | $809,748 |
+| Finalised savings | $614,081 |
 | Savings pipeline | $0 |
 | Total budget | $23,692,506 |
-| Total renewal price | $22,962,976 |
+| Total renewal price | $22,882,202 |
 | Vendors in scope | 107 |
 
 ## Highlights
 
-- Example Vendor 006 — $187,066 savings finalised (licensing)
-- Example Vendor 002 — $33,330 savings finalised (licensing)
-- Example Vendor 001 — $31,644 savings finalised (licensing)
+- LinkedIn Singapore Pte Ltd — $188,401 savings finalised (licensing)
+- Walkme for SAP — $187,066 savings finalised (licensing)
+- Interactive Pty Ltd — $40,000 savings finalised (consumption)
 
 ## Risks
 
-- 81 vendor(s) with budget but no identified savings: Example Vendor 005, Example Vendor 012, Example Vendor 013
+- 73 vendor(s) with budget but no identified savings: Amazon Web Services Australia Pty Ltd, AWS Marketplace - Anthropic PBC, AWS Marketplace - ClamAV
 
 ## Next Steps
 
