@@ -14,8 +14,13 @@ Responsibility:
 """
 
 from pathlib import Path
+import sys
 import re
 from datetime import datetime
+
+sys.path.append(
+    str(Path(__file__).resolve().parents[1] / "src")
+)
 
 import pandas as pd
 
@@ -63,16 +68,16 @@ def find_latest_snapshot_sheets(filepath: str | Path) -> tuple[str, str]:
     if not filepath.exists():
         raise FileNotFoundError(f"Input file not found: {filepath}")
 
-    workbook = pd.ExcelFile(filepath, engine="openpyxl")
-    snapshot_sheets = []
+    with pd.ExcelFile(filepath, engine="openpyxl") as workbook:
+        snapshot_sheets = []
 
-    for sheet_name in workbook.sheet_names:
-        match = re.fullmatch(r"Snapshot (\d{1,2})-(\d{1,2})", sheet_name.strip())
-        if match:
-            day = int(match.group(1))
-            month = int(match.group(2))
-            snapshot_sheets.append(
-                (datetime(2000, month, day), sheet_name)
+        for sheet_name in workbook.sheet_names:
+            match = re.fullmatch(r"Snapshot (\d{1,2})-(\d{1,2})", sheet_name.strip())
+            if match:
+                day = int(match.group(1))
+                month = int(match.group(2))
+                snapshot_sheets.append(
+                    (datetime(2000, month, day), sheet_name)
             )
 
     if len(snapshot_sheets) < 2:
@@ -244,12 +249,6 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
     print(f"Rows after cleanup (blank/null Contract removed): {rows_after}")
 
     print(f"Extracted columns: {list(combined.columns)}")
-
-    print("\nFirst 20 rows:")
-    print(combined.head(20))
-
-    print("\nLast 20 rows:")
-    print(combined.tail(20))
 
     print(f"\nTotal extracted rows: {len(combined)}")
 
@@ -503,9 +502,12 @@ if __name__ == "__main__":
     # pass a workbook path and two sheet names to compare different snapshots.
     import sys
 
-    filepath = sys.argv[1] if len(sys.argv) > 1 else "data/Fake vendor data.xlsx"
-    previous_sheet = sys.argv[2] if len(sys.argv) > 2 else "Snapshot Wk 1"
-    current_sheet = sys.argv[3] if len(sys.argv) > 3 else "Snapshot Wk 2"
+    filepath = sys.argv[1] if len(sys.argv) > 1 else "data/Weekly snapshots.xlsx"
+    if len (sys.argv) > 3:
+        previous_sheet = sys.argv[2]
+        current_sheet = sys.argv[3] 
+    else:
+        previous_sheet, current_sheet = find_latest_snapshot_sheets(filepath)
 
     previous_df = load_snapshot(filepath, previous_sheet)
     current_df = load_snapshot(filepath, current_sheet)
@@ -516,7 +518,37 @@ if __name__ == "__main__":
     print(f"\n[{current_sheet}] extracted vendor data:")
     current_vendors = extract_vendor_data(current_df)
 
+    from reporting.leadership_candidates import (
+        build_candidate_pool,
+        load_candidate_commentary,
+        build_commentary_lookup,
+        enrich_candidates_with_commentary,
+        candidates_with_meaningful_commentary,
+    )
+
+    candidates = build_candidate_pool(current_vendors)
+
+    commentary_df = load_candidate_commentary(
+        "data/IT Simplification dashboard.xlsx"
+    )
+
+    commentary_lookup = build_commentary_lookup(
+        commentary_df
+    )
+
+    candidates = enrich_candidates_with_commentary(
+        candidates,
+        commentary_lookup,
+    )
+
+    commented_candidates = (
+        candidates_with_meaningful_commentary(candidates)
+    )
+
+    print (f"Leadership candidates: {len(candidates)}")
+
+    print (f"Candidates with commentary: {len(commented_candidates)}")
+
     result = compare_snapshots(previous_vendors, current_vendors)
-    print(f"\n{result}")
 
     _validate_contract_comparison(previous_vendors, current_vendors, result)

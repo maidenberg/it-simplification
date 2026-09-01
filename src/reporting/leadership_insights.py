@@ -66,6 +66,28 @@ def _contract_name(mover_text: str | None) -> str | None:
         return None
     return re.sub(r"\s*\([^)]*\)\s*$", "", mover_text).strip()
 
+def generate_delivery_progress(
+    identified_costout: float,
+    finalised_costout: float,
+) -> str:
+    """
+    Generate a single leadership insight describing FY27 delivery progress.
+    """
+
+    if identified_costout <= 0:
+        return "No identified savings currently recorded."
+
+    realised_pct = (
+        finalised_costout / identified_costout
+    ) * 100
+
+    return (
+        f"FY27 identified savings total "
+        f"${identified_costout:,.0f}, "
+        f"with ${finalised_costout:,.0f} converted "
+        f"to realised outcomes "
+        f"({realised_pct:.1f}% delivery confidence)."
+    )
 
 def render_leadership_insights(
     contracts_compared: str,
@@ -74,13 +96,14 @@ def render_leadership_insights(
     top_mover_2: str,
     contract_1: str,
     contract_2: str,
-    status_summary="Cerberus team has given an offer for a 3-yr deal - awaiting business approval",
+    status_summary: str | None = None,
+    delivery_progress: str | None = None,
 ) -> str:
     """Render the fixed five-insight document. Fixed wording and ordering."""
     return "\n".join([
         "Executive Talking Points",
         "",
-        f"1. {contracts_compared} contracts were reviewed during the reporting period.",
+        f"1. {delivery_progress if delivery_progress else f'{contracts_compared} contracts were reviewed during the reporting period.'}",
         "",
         f"2. Net portfolio movement for the week was {net_delta}.",
         "",
@@ -89,7 +112,7 @@ def render_leadership_insights(
         f"4. The second largest movement this week was {top_mover_2}.",
         "",
         f"5. Key commercial activity this week: "
-        f"{status_summary if status_summary else f'{contract_1} and {contract_2}'}."
+        f"{status_summary if status_summary else 'Commercial negotiations and approvals remain in progress across several opportunities.'}."
         "",
     ])
 
@@ -142,6 +165,11 @@ def generate_leadership_insights(
 
     contract_1 = _contract_name(mover_1) or SINGLE_MOVER_FALLBACK
     contract_2 = _contract_name(mover_2) or SINGLE_MOVER_FALLBACK
+    
+    delivery_progress = generate_delivery_progress (
+        identified_costout=809748.45,
+        finalised_costout=614081.40
+    )
 
     document = render_leadership_insights(
         contracts_compared=contracts_compared if contracts_compared is not None else SINGLE_MOVER_FALLBACK,
@@ -151,6 +179,7 @@ def generate_leadership_insights(
         contract_1=contract_1,
         contract_2=contract_2,
         status_summary=None,
+        delivery_progress=delivery_progress,
     )
 
     output_path = Path(output_path)

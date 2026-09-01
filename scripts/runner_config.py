@@ -30,6 +30,7 @@ class RunnerConfig:
     archive_dir: Path = _REPO_ROOT / "data" / "archive"
     outputs_dir: Path = _REPO_ROOT / "data" / "outputs"
     state_dir: Path = _REPO_ROOT / "data" / "state"
+    weekly_snapshot_workbook: Path = _REPO_ROOT / "data" / "Weekly snapshots.xlsx"
 
     # Machine-readable last-successful-run state file.
     state_filename: str = "last_successful_run.json"

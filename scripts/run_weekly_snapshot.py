@@ -39,7 +39,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from runner_config import RunnerConfig, default_config
 from config_loader import build_config, ConfigError
-from compare_snapshots import load_snapshot, extract_vendor_data, compare_snapshots
+from compare_snapshots import (
+    load_snapshot, 
+    extract_vendor_data, 
+    compare_snapshots,
+    find_latest_snapshot_sheets,
+)
 from executive_summary import generate_executive_summary, generate_key_movements
 
 # reporting/ lives at the repository root (one level above scripts/).
@@ -225,16 +230,20 @@ def preflight_workbook(config: RunnerConfig, path: Path, role: str) -> None:
     finally:
         wb.close()
 
-    if config.snapshot_worksheet not in sheet_names:
+    try:
+        find_latest_snapshot_sheets(path)
+    except Exception as exc:
         raise PreflightError(
-            f"[{role}] Required worksheet '{config.snapshot_worksheet}' not found "
-            f"in {path}. Available worksheets: {sheet_names}."
+            f"[{role}] Could not identify the latest two snapshot worksheets "
+            f"in {path}: {exc}"
         )
 
     # Use the existing extractor as the authority for structure/fields.
     try:
         with _quiet():
-            raw = load_snapshot(path, config.snapshot_worksheet)
+            previous_sheet, current_sheet = find_latest_snapshot_sheets(path)
+
+            raw = load_snapshot(path, current_sheet)
             vendors = extract_vendor_data(raw)
     except Exception as exc:
         raise PreflightError(
@@ -244,9 +253,9 @@ def preflight_workbook(config: RunnerConfig, path: Path, role: str) -> None:
 
     if vendors is None or len(vendors) == 0:
         raise PreflightError(
-            f"[{role}] No vendor rows extracted from worksheet "
-            f"'{config.snapshot_worksheet}' in {path}. The required vendor-table "
-            f"structure appears to be missing."
+            f"[{role}] No vendor rows extracted from the latest snapshot "
+            f" worksheet in {path}. The required vendor-table structure "
+            f"appears to be missing."
         )
 
     if "Contract" not in vendors.columns:
@@ -260,10 +269,10 @@ def preflight_workbook(config: RunnerConfig, path: Path, role: str) -> None:
 # Pipeline invocation (reused logic, no new calculations)
 # ---------------------------------------------------------------------------
 
-def _extract(config: RunnerConfig, path: Path):
+def _extract(config: RunnerConfig, path: Path, worksheet: str):
     """Run 2A extraction for one workbook using the existing functions."""
     with _quiet():
-        return extract_vendor_data(load_snapshot(path, config.snapshot_worksheet))
+        return extract_vendor_data(load_snapshot(path, worksheet))
 
 
 def run_pipeline(config: RunnerConfig, previous: Path, current: Path) -> dict:
@@ -276,8 +285,11 @@ def run_pipeline(config: RunnerConfig, previous: Path, current: Path) -> dict:
         {"analysis": <compare_snapshots result>,
          "executive_summary": <str>, "key_movements": <str>}
     """
-    previous_vendors = _extract(config, previous)
-    current_vendors = _extract(config, current)
+    
+    previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
+    
+    previous_vendors = _extract(config, current, previous_sheet)
+    current_vendors = _extract(config, current, current_sheet)
 
     analysis = compare_snapshots(previous_vendors, current_vendors)  # 2B-2F
 
@@ -352,12 +364,14 @@ def run(config: RunnerConfig | None = None) -> dict:
 
     try:
         # 3. Discover current snapshot.
-        current = discover_current_snapshot(config)
+        current = config.weekly_snapshot_workbook
+
         manifest["current_snapshot"] = str(current)
         manifest["stages_completed"].append("discovery")
 
         # 4. Resolve previous snapshot.
-        previous = resolve_previous_snapshot(config, current)
+        previous = current
+
         manifest["previous_snapshot"] = str(previous)
         manifest["stages_completed"].append("previous_resolution")
 
