@@ -1,10 +1,5 @@
-# TODO:
-# Join LeadershipCandidate objects to
-# get_actionable_statuses() output
-# using Vendor + Contract.
-
 from dataclasses import dataclass
-from reporting.dashboard_status import get_actionable_statuses
+from src.reporting.dashboard_status import get_actionable_statuses
 
 
 @dataclass
@@ -224,10 +219,24 @@ def classify_leadership_theme(candidate):
     if "signature" in commentary:
         return "decision_required"
 
+    if "awaiting" in commentary:
+        return "decision_required"
+
+    if "under discussion" in commentary:
+        return "risk"
+
+    if "working on it" in commentary:
+        return "risk"
+
     if candidate.costout < -30000:
         return "financial_risk"
 
     if candidate.costout > 30000:
         return "financial_win"
 
+    print (
+        candidate.contract,
+        "->",
+        commentary,
+    )
     return "general"

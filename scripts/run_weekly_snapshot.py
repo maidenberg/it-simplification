@@ -383,7 +383,7 @@ def run(config: RunnerConfig | None = None) -> dict:
         # 6-7. Analysis (2A-2F) + reporting (3A/3B).
         results = run_pipeline(config, previous, current)
         
-        from reporting.leadership_candidates import (
+        from src.reporting.leadership_candidates import (
             build_candidate_pool,
             load_candidate_commentary,
             build_commentary_lookup,
@@ -402,6 +402,10 @@ def run(config: RunnerConfig | None = None) -> dict:
         )
 
         candidates = build_candidate_pool (current_vendors)
+
+        commentary_df = load_candidate_commentary (
+            "data/IT simplification dashboard.xlsx"
+        )
 
         commentary_lookup = build_commentary_lookup (commentary_df)
 
@@ -444,6 +448,7 @@ def run(config: RunnerConfig | None = None) -> dict:
             executive_summary_path=temp_dir / "executive_summary.txt",
             key_movements_path=temp_dir / "key_movements.txt",
             output_path=temp_dir / "leadership_insights.txt",
+            ranked_candidates=ranked_candidates,
         )
         manifest["stages_completed"].append("leadership_insights")
 

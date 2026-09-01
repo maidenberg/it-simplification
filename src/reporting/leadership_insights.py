@@ -14,6 +14,9 @@ five-insight template. Identical inputs always produce identical output.
 
 import re
 from pathlib import Path
+from src.reporting.leadership_candidates import (
+    classify_leadership_theme,
+)
 
 
 class LeadershipInsightsError(Exception):
@@ -105,11 +108,11 @@ def render_leadership_insights(
         "",
         f"1. {delivery_progress if delivery_progress else f'{contracts_compared} contracts were reviewed during the reporting period.'}",
         "",
-        f"2. Major commercial wins and renewal outcomes were achieved across priority contracts.",
+        f"2. {top_mover_1}",
         "",
-        f"3. Several contracts require management attention due to stalled progress or unresolved decisions.",
+        f"3. {top_mover_2}",
         "",
-        f"4. Financial impacts remain under review across both positive and negative costout movements.",
+        f"4. Leadership review items identified from active contract commentary.",
         "",
         f"5. Commercial negotiations, approvals and signatures continue across the active pipeline.",
         "",
@@ -119,6 +122,7 @@ def generate_leadership_insights(
     executive_summary_path,
     key_movements_path,
     output_path,
+    ranked_candidates=None,
     identified_costout=None,
     finalised_costout=None,
 ) -> Path:
@@ -151,6 +155,33 @@ def generate_leadership_insights(
     exec_text = _read_required(executive_summary_path, "executive summary")
     moves_text = _read_required(key_movements_path, "key movements")
 
+    if ranked_candidates:
+        print("\nLEADERSHIP INSIGHT INPUTS")
+
+        for candidate in ranked_candidates[:5]:
+            print (
+                f"{candidate.contract} | "
+                f"{candidate.commentary}"
+            )
+
+    if ranked_candidates:
+        by_theme = {}
+
+        for candidate in ranked_candidates:
+            theme = classify_leadership_theme(candidate)
+
+            if theme not in by_theme:
+                by_theme[theme] = candidate
+
+        print("\nTHEME WINNERS")
+
+        for theme, candidate in by_theme.items():
+            print(
+                f"{theme}: "
+                f"{candidate.contract} | "
+                f"{candidate.commentary}"
+            )
+
     # Values already produced upstream — parsed, never recalculated.
     contracts_compared = _parse_line_value(exec_text, "Contracts compared:")
     net_delta = _parse_line_value(exec_text, "Net delta:")
@@ -164,7 +195,7 @@ def generate_leadership_insights(
     top_mover_2 = mover_2 if mover_2 is not None else SINGLE_MOVER_FALLBACK
 
     contract_1 = _contract_name(mover_1) or SINGLE_MOVER_FALLBACK
-    contract_2 = _contract_name(mover_2) or SINGLE_MOVER_FALLBACK
+    contract_2 = _contract_name(mover_2) or SSLOWINGLE_MOVER_FALLBACK
 
     delivery_progress = None
 
