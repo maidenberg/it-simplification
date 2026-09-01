@@ -100,22 +100,20 @@ def render_leadership_insights(
     delivery_progress: str | None = None,
 ) -> str:
     """Render the fixed five-insight document. Fixed wording and ordering."""
-    return "\n".join([
+    return "\n".join([        
         "Executive Talking Points",
         "",
         f"1. {delivery_progress if delivery_progress else f'{contracts_compared} contracts were reviewed during the reporting period.'}",
         "",
-        f"2. Net portfolio movement for the week was {net_delta}.",
+        f"2. Major commercial wins and renewal outcomes were achieved across priority contracts.",
         "",
-        f"3. The largest movement this week was {top_mover_1}.",
+        f"3. Several contracts require management attention due to stalled progress or unresolved decisions.",
         "",
-        f"4. The second largest movement this week was {top_mover_2}.",
+        f"4. Financial impacts remain under review across both positive and negative costout movements.",
         "",
-        f"5. Key commercial activity this week: "
-        f"{status_summary if status_summary else 'Commercial negotiations and approvals remain in progress across several opportunities.'}."
+        f"5. Commercial negotiations, approvals and signatures continue across the active pipeline.",
         "",
     ])
-
 
 def generate_leadership_insights(
     executive_summary_path,

@@ -524,6 +524,7 @@ if __name__ == "__main__":
         build_commentary_lookup,
         enrich_candidates_with_commentary,
         candidates_with_meaningful_commentary,
+        rank_candidates_for_leadership,
     )
 
     candidates = build_candidate_pool(current_vendors)
@@ -544,6 +545,20 @@ if __name__ == "__main__":
     commented_candidates = (
         candidates_with_meaningful_commentary(candidates)
     )
+
+    ranked_candidates = rank_candidates_for_leadership (
+        commented_candidates
+    )
+
+    print ("\nTOP LEADERSHIP CANDIDATES")
+
+    for candidate in ranked_candidates[:10]:
+        print (
+            f"{candidate.vendor} | "
+            f"{candidate.contract} | "
+            f"${candidate.costout:,.0f} | "
+            f"{candidate.commentary}"
+        )
 
     print (f"Leadership candidates: {len(candidates)}")
 

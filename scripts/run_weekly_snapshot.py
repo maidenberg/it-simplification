@@ -382,6 +382,46 @@ def run(config: RunnerConfig | None = None) -> dict:
 
         # 6-7. Analysis (2A-2F) + reporting (3A/3B).
         results = run_pipeline(config, previous, current)
+        
+        from reporting.leadership_candidates import (
+            build_candidate_pool,
+            load_candidate_commentary,
+            build_commentary_lookup,
+            enrich_candidates_with_commentary,
+            candidates_with_meaningful_commentary,
+            rank_candidates_for_leadership,
+        )
+
+        current_sheet_name = find_latest_snapshot_sheets(current)[1]
+
+        current_vendors = _extract (
+            config,
+            current,
+            current_sheet_name,
+
+        )
+
+        candidates = build_candidate_pool (current_vendors)
+
+        commentary_lookup = build_commentary_lookup (commentary_df)
+
+        candidates = enrich_candidates_with_commentary (
+            candidates,
+            commentary_lookup,
+        )
+
+        commented_candidates = candidates_with_meaningful_commentary (candidates)
+
+        ranked_candidates = rank_candidates_for_leadership (commented_candidates)
+
+        print("\nTOP LEADERSHIP CANDIDATES")
+
+        for candidate in ranked_candidates[:5]:
+            print (
+                f"{candidate.contract} | "
+                f"{candidate.commentary}"
+            )
+
         manifest["stages_completed"].extend(["analysis", "reporting"])
 
         # 8. Write to temp output location.

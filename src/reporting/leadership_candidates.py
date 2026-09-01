@@ -121,3 +121,113 @@ def candidates_with_meaningful_commentary(candidates):
         for candidate in candidates
         if candidate.commentary
     ]
+
+def executive_relevance_score(candidate):
+    """
+    Higher score = more likely Lewis wants airtime.
+    """
+
+    score = 0
+
+    commentary = candidate.commentary.lower()
+
+    # Major wins
+
+    if "renewed" in commentary:
+        score += 100
+
+    if "approved" in commentary:
+        score += 80
+
+    if "commercials approved" in commentary:
+        score += 120
+
+    # Risks
+
+    if "no progress" in commentary:
+        score += 150
+
+    if "no update" in commentary:
+        score += 150
+
+    if "under discussion" in commentary:
+        score += 90
+
+    if "awaiting" in commentary:
+        score += 110
+
+    if "signature" in commentary:
+        score += 100
+
+    if "approval" in commentary:
+        score += 100
+
+    if "commercial" in commentary:
+        score += 150
+
+    if "working on it" in commentary:
+        score += 60
+
+    if "renewed for 2 years" in commentary:
+        score += 75
+
+    # Financial significance
+
+    if candidate.costout > 0:
+        score += min (candidate.costout / 1000, 100)
+
+    if candidate.costout < 0:
+        score += min (abs(candidate.costout) / 1000, 200)
+
+    return score
+
+def rank_candidates_for_leadership(candidates):
+    """
+    Rank candidates by executive relevance.
+    """
+
+    ranked = sorted(
+        candidates,
+        key=executive_relevance_score,
+        reverse=True,
+    )
+
+    for candidate in ranked[:20]:
+        print (
+            f"SCORE={executive_relevance_score(candidate):.1f} | "
+            f"{candidate.vendor} | "
+            f"{candidate.contract} | "
+            f"{candidate.commentary}"
+        )
+
+    return ranked
+
+def classify_leadership_theme(candidate):
+
+    commentary = candidate.commentary.lower()
+
+    if "renewed" in commentary:
+        return "major_win"
+
+    if "approved" in commentary:
+        return "major_win"
+
+    if "no progress" in commentary:
+        return "risk"
+
+    if "no update" in commentary:
+        return "risk"
+
+    if "approval" in commentary:
+        return "decision_required"
+
+    if "signature" in commentary:
+        return "decision_required"
+
+    if candidate.costout < -30000:
+        return "financial_risk"
+
+    if candidate.costout > 30000:
+        return "financial_win"
+
+    return "general"
