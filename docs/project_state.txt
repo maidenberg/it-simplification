@@ -1,0 +1,239 @@
+IT SIMPLIFICATION AUTOMATION
+PROJECT STATE
+
+
+PROJECT OBJECTIVE
+
+Build an AI-powered executive communications engine for IT Simplification.
+
+Evolution
+
+What moved this week?
+→ What should Lewis care about?
+→ Executive communications engine
+→ Weekly leadership email generation
+→ Stakeholder-specific communications
+
+
+TARGET END STATE
+
+Weekly snapshot workbook
+→ contract comparison
+→ movement detection
+→ commentary enrichment
+→ leadership candidate generation
+→ executive relevance ranking
+→ leadership insights
+→ risks/watchouts
+→ executive briefing
+→ leadership email
+→ stakeholder-specific communications
+
+
+PROJECT PHILOSOPHY
+
+Do not rebuild:
+
+- extraction
+- comparison
+- ranking
+- scoring
+- commentary enrichment
+- candidate generation
+- theme classification
+
+Reuse existing outputs.
+
+Use existing commentary.
+
+Turn data into judgement.
+
+
+CURRENT IMPLEMENTATION STATUS
+
+Completed
+
+✅ Snapshot extraction
+✅ Vendor parsing
+✅ Contract comparison
+✅ Movement classification
+✅ Executive summary
+✅ Key movements
+✅ Weekly update
+✅ Leadership insights
+✅ Risks & watchouts
+✅ Reporting package
+✅ Communications-oriented package ordering
+✅ Active-opportunity-only candidate pipeline
+✅ Leadership watchout generation
+✅ Financial watchout generation
+✅ Separation of leadership insights from risks/watchouts
+✅ First leadership email prototype
+
+Current leadership output
+
+EXECUTIVE WATCHOUT
+
+AWS Marketplace - Cloudec
+No progress.
+
+FINANCIAL WATCHOUT
+
+Silverleaf Solutions Australia Pty Ltd
+Approximately $200,000 of additional cost is currently reflected in the position.
+
+WATCHLIST
+
+Voucherify P.S.A
+Lucid Software Inc.
+MightyHive AU PTY LTD
+
+Current email output
+
+Subject: IT Simplification Weekly Update
+
+Lewis,
+
+Key items requiring attention this week:
+
+AWS Marketplace - Cloudec
+No progress.
+
+Silverleaf Solutions Australia Pty Ltd
+Approximately $200,000 of additional cost is currently reflected in the position.
+
+Watchlist:
+
+Voucherify P.S.A
+Still under discussion.
+
+Lucid Software Inc.
+Initiated - under discussion.
+
+MightyHive AU PTY LTD
+Business working on it.
+
+Regards,
+IT Simplification Automation
+
+
+IMPORTANT DECISIONS
+
+Candidate generation MUST use:
+
+- Upcoming licensing vendors
+- Upcoming consumption vendors
+- Upcoming Microsoft vendors
+- Upcoming new spend vendors
+
+DO NOT use:
+
+- Licensing cost-out to date
+- Consumption cost-out to date
+- Microsoft cost-out to date
+
+Completed opportunities are intentionally excluded.
+
+Leadership Insights and Risks & Watchouts are intentionally separated.
+
+Risks & Watchouts currently begins from:
+
+ranked_candidates[2:10]
+
+to avoid duplication with leadership outputs.
+
+Executive wording should remain commentary-driven.
+
+Avoid generic executive filler language.
+
+Avoid generating commentary that is not supported by existing dashboard commentary or existing reporting outputs.
+
+
+CURRENT REPORTING ORDER
+
+Reporting package currently renders:
+
+1. Executive Summary
+2. Leadership Insights
+3. Risks & Watchouts
+4. Key Movements
+5. Weekly Update
+
+
+NEW COMPONENT
+
+src/reporting/leadership_email.py
+
+Current capabilities
+
+✅ Reads leadership_insights.txt
+✅ Reads risks_watchouts.txt
+✅ Extracts executive watchout
+✅ Extracts financial watchout
+✅ Extracts watchlist
+✅ Renders leadership email
+✅ Returns email string
+
+Not yet implemented
+
+❌ Writes leadership_email.txt
+❌ Runner integration
+❌ Promotion package integration
+
+
+OPEN BUGS
+
+BUG 1
+
+File:
+src/reporting/leadership_email.py
+
+Issue:
+
+Watchlist extraction currently includes:
+
+---------
+
+Expected:
+
+Separator lines should not appear in the email output.
+
+Priority:
+HIGH
+
+Status:
+OPEN
+
+
+NEXT BACKLOG ITEMS
+
+1. Fix watchlist separator bug
+2. Write leadership_email.txt artefact
+3. Integrate leadership_email generation into run_weekly_snapshot.py
+4. Add leadership_email.txt to promotion package
+5. Review generated email quality
+6. Create stakeholder-specific communications
+7. Create executive briefing artefact
+
+
+DO NOT
+
+- rebuild ranking
+- rebuild scoring
+- rebuild extraction
+- rebuild candidate generation
+- redesign commentary enrichment
+- redesign theme classification
+- reintroduce completed opportunities
+
+
+NEXT TASK
+
+Fix watchlist separator bug in leadership_email.py.
+
+After that:
+
+1. Generate leadership_email.txt
+2. Integrate leadership_email into runner
+3. Add leadership_email.txt to promotion package
+4. Review communication quality
