@@ -98,6 +98,7 @@ def render_leadership_insights(
     decision_required: str | None,
     financial: str | None,
     delivery_progress: str | None = None,
+    portfolio_message: str | None = None,
 ) -> str:
     """Render the fixed five-insight document. Fixed wording and ordering."""
     
@@ -105,38 +106,45 @@ def render_leadership_insights(
 
     if major_win:
         sections.extend ([
-        "MAJOR COMMERCIAL WIN",
-        major_win,
-        "",
+            "MAJOR COMMERCIAL WIN",
+            major_win,
+            "",
     ])
 
     if risk:
         sections.extend ([
-        "EXECUTIVE WATCHOUT",
-        risk,
-        "",
+            "EXECUTIVE WATCHOUT",
+            risk,
+            "",
     ])
 
     if decision_required:
-        sections.extend ([
-        "DECISION REQUIRED",
-        decision_required,
-        "",
+            sections.extend ([
+            "DECISION REQUIRED",
+            decision_required,
+            "",
     ])
 
     if financial:
-        sections.extend ([
-        "FINANCIAL CONCERN",
-        financial,
-        "",
+            sections.extend ([
+            "FINANCIAL WATCHOUT",
+            financial,
+            "",
     ])
 
     if delivery_progress:
         sections.extend ([
-        "DELIVERY PROGRESS",
-        delivery_progress,
-        "",
+            "DELIVERY PROGRESS",
+            delivery_progress,
+            "",
     ])
+
+    if portfolio_message:
+        sections.extend ([
+            "PORTFOLIO MESSAGE",
+            portfolio_message,
+            "",
+    ]) 
 
     return "\n".join(sections)
 
@@ -234,6 +242,7 @@ def generate_leadership_insights(
     risk = None
     decision_required = None
     financial = None
+    portfolio_message = None
 
     if ranked_candidates:
 
@@ -257,8 +266,7 @@ def generate_leadership_insights(
             risk = (
                 
                 f"{risk_candidate.vendor}\n"
-                f"{risk_candidate.commentary}.\n"
-                f"The opportunity appears stalled and requires attention."
+                f"{risk_candidate.commentary}."
             )
 
         if decision_candidate:
@@ -288,8 +296,8 @@ def generate_leadership_insights(
             else:
                 financial = (
                     f"{financial_candidate.vendor}\n"
-                    f"Largest negative financial position currently recorded at "
-                    f"approximately ${abs(financial_candidate.costout):,.0f}."
+                    f"Approximately ${abs(financial_candidate.costout):,.0f} "
+                    f"of additional cost is currently reflected in the position."
             )
 
     document = render_leadership_insights(
@@ -298,6 +306,7 @@ def generate_leadership_insights(
         decision_required = decision_required,
         financial = financial,
         delivery_progress = delivery_progress,
+        portfolio_message = portfolio_message,
     )
 
     output_path = Path(output_path)

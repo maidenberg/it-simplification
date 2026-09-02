@@ -208,7 +208,7 @@ def generate_risks_watchouts(
 
         watchouts = []
 
-        for candidate in ranked_candidates[:10]:
+        for candidate in ranked_candidates[2:10]:
 
             commentary = candidate.commentary.lower()
 
