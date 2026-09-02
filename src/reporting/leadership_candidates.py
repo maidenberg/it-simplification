@@ -114,7 +114,11 @@ def candidates_with_meaningful_commentary(candidates):
     return [
         candidate
         for candidate in candidates
-        if candidate.commentary
+        if (
+            candidate.commentary
+            or candidate.costout < -30000
+            or candidate.costout > 30000
+        )
     ]
 
 def executive_relevance_score(candidate):
@@ -222,17 +226,17 @@ def classify_leadership_theme(candidate):
     if "awaiting" in commentary:
         return "decision_required"
 
-    if "under discussion" in commentary:
-        return "risk"
-
-    if "working on it" in commentary:
-        return "risk"
-
     if candidate.costout < -30000:
         return "financial_risk"
 
     if candidate.costout > 30000:
         return "financial_win"
+
+    if "under discussion" in commentary:
+        return "risk"
+
+    if "working on it" in commentary:
+        return "risk"
 
     print (
         candidate.contract,

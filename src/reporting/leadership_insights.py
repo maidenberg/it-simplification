@@ -93,30 +93,52 @@ def generate_delivery_progress(
     )
 
 def render_leadership_insights(
-    contracts_compared: str,
-    net_delta: str,
-    top_mover_1: str,
-    top_mover_2: str,
-    contract_1: str,
-    contract_2: str,
-    status_summary: str | None = None,
+    major_win: str | None,
+    risk: str | None,
+    decision_required: str | None,
+    financial: str | None,
     delivery_progress: str | None = None,
 ) -> str:
     """Render the fixed five-insight document. Fixed wording and ordering."""
-    return "\n".join([        
-        "Executive Talking Points",
-        "",
-        f"1. {delivery_progress if delivery_progress else f'{contracts_compared} contracts were reviewed during the reporting period.'}",
-        "",
-        f"2. {top_mover_1}",
-        "",
-        f"3. {top_mover_2}",
-        "",
-        f"4. Leadership review items identified from active contract commentary.",
-        "",
-        f"5. Commercial negotiations, approvals and signatures continue across the active pipeline.",
+    
+    sections = ["Leadership Insights", ""]
+
+    if major_win:
+        sections.extend ([
+        "MAJOR COMMERCIAL WIN",
+        major_win,
         "",
     ])
+
+    if risk:
+        sections.extend ([
+        "EXECUTIVE WATCHOUT",
+        risk,
+        "",
+    ])
+
+    if decision_required:
+        sections.extend ([
+        "DECISION REQUIRED",
+        decision_required,
+        "",
+    ])
+
+    if financial:
+        sections.extend ([
+        "FINANCIAL CONCERN",
+        financial,
+        "",
+    ])
+
+    if delivery_progress:
+        sections.extend ([
+        "DELIVERY PROGRESS",
+        delivery_progress,
+        "",
+    ])
+
+    return "\n".join(sections)
 
 def generate_leadership_insights(
     executive_summary_path,
@@ -195,7 +217,7 @@ def generate_leadership_insights(
     top_mover_2 = mover_2 if mover_2 is not None else SINGLE_MOVER_FALLBACK
 
     contract_1 = _contract_name(mover_1) or SINGLE_MOVER_FALLBACK
-    contract_2 = _contract_name(mover_2) or SSLOWINGLE_MOVER_FALLBACK
+    contract_2 = _contract_name(mover_2) or SINGLE_MOVER_FALLBACK
 
     delivery_progress = None
 
@@ -208,15 +230,67 @@ def generate_leadership_insights(
             finalised_costout = finalised_costout,
         )
     
+    major_win = None
+    risk = None
+    decision_required = None
+    financial = None
+
+    if ranked_candidates:
+
+        major_win_candidate = by_theme.get("major_win")
+        risk_candidate = by_theme.get("risk")
+        decision_candidate = by_theme.get("decision_required")
+
+        financial_candidate = (
+            by_theme.get("financial_risk")
+            or by_theme.get("financial_win")
+        )
+
+        if major_win_candidate:
+            major_win = (
+                f"{major_win_candidate.contract}: "
+                f"{major_win_candidate.commentary}"
+            )
+
+        if risk_candidate:
+            risk = (
+                f"{risk_candidate.contract}: "
+                f"{risk_candidate.commentary}"
+            )
+
+        if decision_candidate:
+            decision_required = (
+                f"{decision_candidate.contract}: "
+                f"{decision_candidate.commentary}"
+            )
+
+        if financial_candidate:
+
+            print(
+                "FINANCIAL WINNER:",
+                financial_candidate.contract,
+                financial_candidate.commentary,
+                financial_candidate.costout,
+            )
+
+            if financial_candidate.commentary:
+                financial = (
+                    f"{financial_candidate.contract}: "
+                    f"{financial_candidate.commentary}"
+            )
+
+            else:
+                financial = (
+                    f"{financial_candidate.contract}: "
+                    f"Cost impact {financial_candidate.costout:,.0f}"
+            )
+
     document = render_leadership_insights(
-        contracts_compared=contracts_compared if contracts_compared is not None else SINGLE_MOVER_FALLBACK,
-        net_delta=net_delta if net_delta is not None else SINGLE_MOVER_FALLBACK,
-        top_mover_1=top_mover_1,
-        top_mover_2=top_mover_2,
-        contract_1=contract_1,
-        contract_2=contract_2,
-        status_summary=None,
-        delivery_progress=delivery_progress,
+        major_win = major_win,
+        risk = risk,
+        decision_required = decision_required,
+        financial = financial,
+        delivery_progress = delivery_progress,
     )
 
     output_path = Path(output_path)

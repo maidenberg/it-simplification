@@ -426,6 +426,15 @@ def run(config: RunnerConfig | None = None) -> dict:
                 f"{candidate.commentary}"
             )
 
+        print("\nTOP 20 RANKED CANDIDATES")
+
+        for candidate in ranked_candidates[:20]:
+            print (
+                f"{candidate.costout:,.0f} | "
+                f"{candidate.contract} | "
+                f"{candidate.commentary}"
+            )
+
         manifest["stages_completed"].extend(["analysis", "reporting"])
 
         # 8. Write to temp output location.
