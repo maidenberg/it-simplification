@@ -467,6 +467,7 @@ def run(config: RunnerConfig | None = None) -> dict:
             leadership_insights_path=temp_dir / "leadership_insights.txt",
             key_movements_path=temp_dir / "key_movements.txt",
             output_path=temp_dir / "risks_watchouts.txt",
+            ranked_candidates=ranked_candidates,
         )
         manifest["stages_completed"].append("risks_watchouts")
 

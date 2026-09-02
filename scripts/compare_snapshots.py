@@ -187,6 +187,13 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
         start = pos + 1
         end = header_positions[i + 1] if i + 1 < len(header_positions) else total_rows
 
+        section_name = ""
+
+        if pos > 0:
+            section_name = str(
+                snapshot_df.iloc[pos - 1, 0]
+            ).strip()
+        
         # Detected header row -> column names for this block.
         block_columns = snapshot_df.iloc[pos].tolist()
 
@@ -196,6 +203,9 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
 
         print(f"  Block {i + 1} columns: {block_columns}")
 
+        if "cost-out to date" in section_name.lower():
+            continue
+        
         block = snapshot_df.iloc[start:end].copy()
         block.columns = block_columns
 

@@ -248,20 +248,24 @@ def generate_leadership_insights(
 
         if major_win_candidate:
             major_win = (
-                f"{major_win_candidate.contract}: "
-                f"{major_win_candidate.commentary}"
+                f"{major_win_candidate.vendor}\n"
+                f"{major_win_candidate.commentary}.\n"
+                f"This represents a positive commercial outcome."
             )
 
         if risk_candidate:
             risk = (
-                f"{risk_candidate.contract}: "
-                f"{risk_candidate.commentary}"
+                
+                f"{risk_candidate.vendor}\n"
+                f"{risk_candidate.commentary}.\n"
+                f"The opportunity appears stalled and requires attention."
             )
 
         if decision_candidate:
             decision_required = (
-                f"{decision_candidate.contract}: "
-                f"{decision_candidate.commentary}"
+                f"{decision_candidate.vendor}\n"
+                f"{decision_candidate.commentary}.\n"
+                f"Progress is dependent on a pending approval or decision."
             )
 
         if financial_candidate:
@@ -275,14 +279,17 @@ def generate_leadership_insights(
 
             if financial_candidate.commentary:
                 financial = (
-                    f"{financial_candidate.contract}: "
-                    f"{financial_candidate.commentary}"
+                    f"{financial_candidate.vendor}\n"
+                    f"{financial_candidate.commentary}.\n"
+                    f"Financial impact is currently estimated at "
+                    f"${abs(financial_candidate.costout):,.0f}."
             )
 
             else:
                 financial = (
-                    f"{financial_candidate.contract}: "
-                    f"Cost impact {financial_candidate.costout:,.0f}"
+                    f"{financial_candidate.vendor}\n"
+                    f"Largest negative financial position currently recorded at "
+                    f"approximately ${abs(financial_candidate.costout):,.0f}."
             )
 
     document = render_leadership_insights(

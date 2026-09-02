@@ -71,7 +71,10 @@ def build_candidate_pool(
             candidates.append(
                 LeadershipCandidate(
                     vendor=str(row.get("Vendor", "")),
-                    contract=str(row.get("Contract", "")),
+                    contract=str(row.get("Contract", "")).replace (
+                        "[No Contract] ",
+                        ""
+                    ),
                     v1_budget=v1_budget,
                     renewal_price=renewal_price,
                     costout=costout,

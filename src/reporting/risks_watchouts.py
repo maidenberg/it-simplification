@@ -107,15 +107,20 @@ def _extract_labelled(leadership_text: str, label: str) -> list[str]:
 
 
 def _build_risks(movers: list[dict]) -> list[str]:
-    """Risks = movers already marked negative ('-$') in key_movements."""
-    return [f"Negative movement: {m['text']}" for m in movers if m["sign"] == "-"]
-
-
+    return []
+ 
 def _build_watchouts(movers: list[dict]) -> list[str]:
     """Watchouts = movers already marked as significant positive ('+$')."""
-    return [f"Significant movement: {m['text']}" for m in movers if m["sign"] == "+"]
-
-
+    return [
+        (
+            f"{m['name']}\n"
+            f"Positive movement of ${m['amount']} identified.\n"
+            f"Validate that savings remain achievable and on track."
+        )
+        for m in movers
+        if m["sign"] == "+"
+    ]
+ 
 def _build_observations(leadership_text: str) -> list[str]:
     """Data observations sourced verbatim from leadership-insights facts."""
     observations = []
@@ -159,6 +164,7 @@ def generate_risks_watchouts(
     leadership_insights_path,
     key_movements_path,
     output_path,
+    ranked_candidates=None,
 ) -> Path:
     """
     Generate risks_watchouts.txt from existing reporting artefacts.
@@ -194,7 +200,63 @@ def generate_risks_watchouts(
 
     # Fallback per section when no pre-labelled entries exist for that section.
     risks = labelled_risks if labelled_risks else _build_risks(movers)
-    watchouts = labelled_watchouts if labelled_watchouts else _build_watchouts(movers)
+
+    if labelled_watchouts:
+        watchouts = labelled_watchouts
+
+    elif ranked_candidates:
+
+        watchouts = []
+
+        for candidate in ranked_candidates[:10]:
+
+            commentary = candidate.commentary.lower()
+
+            if (
+                "no progress" in commentary
+                or "no update" in commentary
+                or "awaiting" in commentary
+                or "approval" in commentary
+                or "working on it" in commentary
+                or "under discussion" in commentary
+            ):
+                if "no progress" in commentary:
+                    watchouts.append(
+                        f"{candidate.vendor}\n"
+                        f"No progress reported.\n"
+                        f"Opportunity appears stalled and may require intervention."
+                        )
+
+                elif "awaiting" in commentary:
+                    watchouts.append(
+                        f"{candidate.vendor}\n"
+                        f"{candidate.commentary}.\n"
+                        f"Progress remains dependent on completion of contracting activity."
+                        )
+
+                elif "under discussion" in commentary:
+                    watchouts.append(
+                        f"{candidate.vendor}\n"
+                        f"{candidate.commentary}.\n"
+                        f"Position remains unresolved and should continue to be monitored."
+                        )
+
+                elif "working on it" in commentary:
+                    watchouts.append(
+                        f"{candidate.vendor}\n"
+                        f"{candidate.commentary}.\n"
+                        f"Ownership is established but delivery timing remains uncertain."
+                        )
+
+                else:
+                    watchouts.append(
+                        f"{candidate.vendor}\n"
+                        f"{candidate.commentary}"
+                        )
+
+    else:
+        watchouts = _build_watchouts(movers)
+
     observations = (
         labelled_observations if labelled_observations
         else _build_observations(leadership_text)
