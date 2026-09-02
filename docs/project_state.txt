@@ -10,6 +10,7 @@ Evolution
 
 What moved this week?
 → What should Lewis care about?
+→ What should Matt care about?
 → Executive communications engine
 → Weekly leadership email generation
 → Stakeholder-specific communications
@@ -44,9 +45,13 @@ Do not rebuild:
 
 Reuse existing outputs.
 
-Use existing commentary.
+Reuse existing commentary.
 
 Turn data into judgement.
+
+Executive outputs must remain grounded in dashboard commentary and existing reporting outputs.
+
+Avoid creating unsupported narrative.
 
 
 CURRENT IMPLEMENTATION STATUS
@@ -68,9 +73,15 @@ Completed
 ✅ Leadership watchout generation
 ✅ Financial watchout generation
 ✅ Separation of leadership insights from risks/watchouts
-✅ First leadership email prototype
+✅ Leadership email prototype
+✅ leadership_email.txt generation
+✅ leadership email runner integration
+✅ leadership email promotion package integration
+✅ Watchlist rendering fixes
+✅ Watchout formatting fixes
+✅ Commentary-grounded watchlists
 
-Current leadership output
+Current leadership outputs
 
 EXECUTIVE WATCHOUT
 
@@ -85,10 +96,16 @@ Approximately $200,000 of additional cost is currently reflected in the position
 WATCHLIST
 
 Voucherify P.S.A
-Lucid Software Inc.
-MightyHive AU PTY LTD
+Still under discussion
 
-Current email output
+Lucid Software Inc.
+Initiated - under discussion
+
+MightyHive AU PTY LTD
+Business working on it
+
+
+Current leadership email output
 
 Subject: IT Simplification Weekly Update
 
@@ -105,13 +122,13 @@ Approximately $200,000 of additional cost is currently reflected in the position
 Watchlist:
 
 Voucherify P.S.A
-Still under discussion.
+Still under discussion
 
 Lucid Software Inc.
-Initiated - under discussion.
+Initiated - under discussion
 
 MightyHive AU PTY LTD
-Business working on it.
+Business working on it
 
 Regards,
 IT Simplification Automation
@@ -148,10 +165,12 @@ Avoid generic executive filler language.
 
 Avoid generating commentary that is not supported by existing dashboard commentary or existing reporting outputs.
 
+Leadership communications are intended to be reviewed by Lewis and ultimately consumed by Matt.
+
+Current focus has shifted from pipeline construction to communication quality.
+
 
 CURRENT REPORTING ORDER
-
-Reporting package currently renders:
 
 1. Executive Summary
 2. Leadership Insights
@@ -160,60 +179,68 @@ Reporting package currently renders:
 5. Weekly Update
 
 
-NEW COMPONENT
+CURRENT COMMUNICATIONS ORDER
 
-src/reporting/leadership_email.py
+1. Leadership Insights
+2. Risks & Watchouts
+3. Leadership Email
 
-Current capabilities
 
-✅ Reads leadership_insights.txt
-✅ Reads risks_watchouts.txt
-✅ Extracts executive watchout
-✅ Extracts financial watchout
-✅ Extracts watchlist
-✅ Renders leadership email
-✅ Returns email string
+GENERATED ARTEFACTS
 
-Not yet implemented
+✅ executive_summary.txt
+✅ key_movements.txt
+✅ weekly_update.md
+✅ leadership_insights.txt
+✅ risks_watchouts.txt
+✅ reporting_package.txt
+✅ leadership_email.txt
+✅ promotion_package/
 
-❌ Writes leadership_email.txt
-❌ Runner integration
-❌ Promotion package integration
+
+PROMOTION PACKAGE CONTENTS
+
+✅ executive_summary.txt
+✅ key_movements.txt
+✅ weekly_update.md
+✅ leadership_insights.txt
+✅ risks_watchouts.txt
+✅ reporting_package.txt
+✅ leadership_email.txt
+✅ manifest.json
 
 
 OPEN BUGS
 
-BUG 1
+None currently open.
 
-File:
-src/reporting/leadership_email.py
 
-Issue:
+CURRENT ASSESSMENT
 
-Watchlist extraction currently includes:
+Pipeline engineering is largely complete.
 
----------
+The primary challenge is now communication quality rather than data processing.
 
-Expected:
+Outputs are technically correct and grounded in dashboard commentary.
 
-Separator lines should not appear in the email output.
+Remaining work is focused on:
 
-Priority:
-HIGH
-
-Status:
-OPEN
+- executive tone
+- communication quality
+- judgement presentation
+- stakeholder suitability
+- reducing editing effort prior to distribution
 
 
 NEXT BACKLOG ITEMS
 
-1. Fix watchlist separator bug
-2. Write leadership_email.txt artefact
-3. Integrate leadership_email generation into run_weekly_snapshot.py
-4. Add leadership_email.txt to promotion package
-5. Review generated email quality
-6. Create stakeholder-specific communications
-7. Create executive briefing artefact
+1. Review leadership email quality
+2. Refine executive tone
+3. Improve judgement presentation without introducing unsupported commentary
+4. Validate outputs with Lewis
+5. Validate outputs with Matt
+6. Create executive briefing artefact
+7. Create stakeholder-specific communications
 
 
 DO NOT
@@ -225,15 +252,26 @@ DO NOT
 - redesign commentary enrichment
 - redesign theme classification
 - reintroduce completed opportunities
+- introduce unsupported narrative
 
 
 NEXT TASK
 
-Fix watchlist separator bug in leadership_email.py.
+Review leadership email quality.
 
-After that:
+Goal:
 
-1. Generate leadership_email.txt
-2. Integrate leadership_email into runner
-3. Add leadership_email.txt to promotion package
-4. Review communication quality
+Move from:
+
+"accurate reporting output"
+
+to:
+
+"executive communication draft requiring minimal editing"
+
+while continuing to:
+
+- reuse existing outputs
+- reuse existing commentary
+- remain fully grounded in dashboard commentary
+- avoid invented executive narrative

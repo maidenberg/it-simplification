@@ -138,7 +138,10 @@ def _render_section(title: str, underline: str, entries: list[str],
     """Render a titled section with entries or a deterministic placeholder."""
     lines = [title, underline]
     if entries:
-        lines.extend(entries)
+        
+        for entry in entries:
+           lines.append(entry)
+           lines.append("")
     else:
         lines.append(placeholder)
     return lines
@@ -220,42 +223,13 @@ def generate_risks_watchouts(
                 or "working on it" in commentary
                 or "under discussion" in commentary
             ):
-                if "no progress" in commentary:
-                    watchouts.append(
-                        f"{candidate.vendor}\n"
-                        f"No progress reported.\n"
-                        f"Opportunity appears stalled and may require intervention."
-                        )
+                watchouts.append(
+                    f"{candidate.vendor}\n"
+                    f"{candidate.commentary}"
+                    )
 
-                elif "awaiting" in commentary:
-                    watchouts.append(
-                        f"{candidate.vendor}\n"
-                        f"{candidate.commentary}.\n"
-                        f"Progress remains dependent on completion of contracting activity."
-                        )
-
-                elif "under discussion" in commentary:
-                    watchouts.append(
-                        f"{candidate.vendor}\n"
-                        f"{candidate.commentary}.\n"
-                        f"Position remains unresolved and should continue to be monitored."
-                        )
-
-                elif "working on it" in commentary:
-                    watchouts.append(
-                        f"{candidate.vendor}\n"
-                        f"{candidate.commentary}.\n"
-                        f"Ownership is established but delivery timing remains uncertain."
-                        )
-
-                else:
-                    watchouts.append(
-                        f"{candidate.vendor}\n"
-                        f"{candidate.commentary}"
-                        )
-
-    else:
-        watchouts = _build_watchouts(movers)
+            else:
+                continue
 
     observations = (
         labelled_observations if labelled_observations

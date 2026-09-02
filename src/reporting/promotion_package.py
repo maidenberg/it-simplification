@@ -30,6 +30,7 @@ REQUIRED_ARTEFACTS = [
     "leadership_insights.txt",
     "risks_watchouts.txt",
     "reporting_package.txt",
+    "leadership_email.txt",
 ]
 
 

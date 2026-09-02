@@ -115,11 +115,27 @@ def _extract_watchlist(
     if not watchouts:
         return []
 
-    return [
-        block.strip()
-        for block in watchouts.split("\n\n")
-        if block.strip()
-    ]
+    watchlist = []
+
+    for block in watchouts.split("\n\n"):
+
+        cleaned_lines = []
+
+        for line in block.splitlines():
+
+            stripped = line.strip()
+
+            if stripped and set(stripped) == {"-"}:
+                continue
+
+            cleaned_lines.append(line)
+
+        cleaned_block = "\n".join(cleaned_lines).strip()
+
+        if cleaned_block:
+            watchlist.append(cleaned_block)
+
+    return watchlist
 
 def _extract_executive_watchout(
     insights_text: str,
@@ -144,6 +160,7 @@ def _extract_financial_watchout(
 def generate_leadership_email(
     leadership_insights_path,
     risks_watchouts_path,
+    output_path,
 ):
     """Generate leadership email content from existing artefacts."""
 
@@ -169,8 +186,17 @@ def generate_leadership_email(
         risks_text,
     )
 
-    return render_leadership_email(
+    email_content = render_leadership_email(
         executive_watchout=executive_watchout,
         financial_watchout=financial_watchout,
         watchlist=watchlist,
     )
+
+    output_path = Path(output_path)
+
+    output_path.write_text(
+        email_content,
+        encoding="utf-8",
+    )
+
+    return email_content
