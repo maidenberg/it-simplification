@@ -23,10 +23,10 @@ EMPTY_PLACEHOLDER = "No content available."
 # they read from. Underlines match the fixed output structure.
 _SECTIONS = [
     ("EXECUTIVE SUMMARY", "================="),
-    ("KEY MOVEMENTS", "============="),
-    ("WEEKLY UPDATE", "============="),
     ("LEADERSHIP INSIGHTS", "==================="),
     ("RISKS & WATCHOUTS", "================="),
+    ("KEY MOVEMENTS", "============="),
+    ("WEEKLY UPDATE", "============="),
 ]
 
 
@@ -78,10 +78,10 @@ def generate_reporting_package(
     # Validate + read in package section order.
     ordered_inputs = [
         (executive_summary_path, "executive summary"),
-        (key_movements_path, "key movements"),
-        (weekly_update_path, "weekly update"),
         (leadership_insights_path, "leadership insights"),
         (risks_watchouts_path, "risks & watchouts"),
+        (key_movements_path, "key movements"),
+        (weekly_update_path, "weekly update"),        
     ]
     contents = [_read_section_content(path, label) for path, label in ordered_inputs]
 
