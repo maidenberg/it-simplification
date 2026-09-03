@@ -486,10 +486,17 @@ def run(config: RunnerConfig | None = None) -> dict:
         manifest["stages_completed"].append("reporting_package")
 
         # 8f. Generate leadership email
+        previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
+
+        comparison_label = (
+            f"Comparison: {previous_sheet} → {current_sheet}"
+        )
+        
         generate_leadership_email (
             leadership_insights_path = temp_dir / "leadership_insights.txt",
             risks_watchouts_path = temp_dir / "risks_watchouts.txt",
             output_path=temp_dir / "leadership_email.txt",
+            comparison_label= comparison_label,
         )
 
         manifest["stages_completed"].append("leadership_email")

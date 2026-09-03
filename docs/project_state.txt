@@ -1,4 +1,5 @@
 IT SIMPLIFICATION AUTOMATION
+
 PROJECT STATE
 
 
@@ -14,6 +15,15 @@ What moved this week?
 → Executive communications engine
 → Weekly leadership email generation
 → Stakeholder-specific communications
+→ Executive judgement validation
+
+The project has now moved beyond pipeline construction and formatting refinement.
+
+Current focus is validating whether the system surfaces the right leadership issues from real Weekly Snapshot comparisons.
+
+Key question:
+
+If Lewis only had 30 seconds, would the generated outputs direct attention to the most important matters?
 
 
 TARGET END STATE
@@ -53,6 +63,8 @@ Executive outputs must remain grounded in dashboard commentary and existing repo
 
 Avoid creating unsupported narrative.
 
+Executive communications should explain why leadership should care, not simply restate commentary.
+
 
 CURRENT IMPLEMENTATION STATUS
 
@@ -66,7 +78,7 @@ Completed
 ✅ Key movements
 ✅ Weekly update
 ✅ Leadership insights
-✅ Risks & watchouts
+✅ Risks & Watchouts
 ✅ Reporting package
 ✅ Communications-oriented package ordering
 ✅ Active-opportunity-only candidate pipeline
@@ -89,56 +101,198 @@ Completed
 ✅ Leadership email review against real snapshot output
 ✅ Email renderer stabilisation
 ✅ Email formatting freeze (pending stakeholder validation)
+✅ Snapshot comparison traceability in leadership email
+
+Example:
+
+Comparison: Snapshot 24-8 → Snapshot 31-8
+
+Purpose:
+
+- validation traceability
+- easier comparison between test runs
+- supports repeated snapshot testing
 
 
-CURRENT LEADERSHIP OUTPUTS
-
-EXECUTIVE WATCHOUT
-
-AWS Marketplace - Cloudec
-No progress.
-
-FINANCIAL WATCHOUT
-
-Silverleaf Solutions Australia Pty Ltd
-Approximately $200,000 of additional cost is currently reflected in the position.
-
-WATCHLIST
-
-Voucherify P.S.A
-Still under discussion
-
-Lucid Software Inc.
-Initiated - under discussion
-
-MightyHive AU PTY LTD
-Business working on it
-
-
-CURRENT LEADERSHIP EMAIL OUTPUT
+CURRENT LEADERSHIP EMAIL FORMAT
 
 Subject: IT Simplification Weekly Update
+
+Comparison: Snapshot <previous> → Snapshot <current>
 
 Hi Lewis,
 
 Please see this week's IT Simplification watchouts and items to monitor.
 
-Executive watchout:
 
-• AWS Marketplace - Cloudec: No progress.
+VALIDATION STATUS
 
-Financial watchout:
+Validation completed against:
 
-• Silverleaf Solutions Australia Pty Ltd: Approximately $200,000 of additional cost is currently reflected in the position.
+✅ 17-8 → 24-8
 
-Items to monitor:
+✅ 24-8 → 31-8
 
-• Voucherify P.S.A: Still under discussion
-• Lucid Software Inc.: Initiated - under discussion
-• MightyHive AU PTY LTD: Business working on it
+Focus has shifted from formatting validation to judgement validation.
 
-Regards,
-IT Simplification
+
+VALIDATION FINDINGS
+
+Finding 1
+
+Executive watchout severity may be overstated.
+
+Observed example:
+
+AWS Marketplace - Cloudec
+
+Commentary:
+
+"No progress"
+
+A single occurrence does not necessarily justify executive attention.
+
+Repeated stagnation over multiple snapshots appears more meaningful.
+
+Finding 2
+
+Financial watchout communicates the wrong entity.
+
+Current output:
+
+Silverleaf Solutions Australia Pty Ltd
+Approximately $200,000 of additional cost is currently reflected in the position.
+
+Issue:
+
+Silverleaf is the advisory vendor.
+
+The issue leadership actually cares about is the Microsoft EA financial position.
+
+Technically correct.
+
+Potentially not the most useful executive communication.
+
+Finding 3
+
+Executive watchout and financial watchout are not yet clearly differentiated.
+
+Validation suggests:
+
+Executive watchout
+
+- leadership intervention required
+- blocked decision
+- stalled progress
+- escalation required
+
+Financial watchout
+
+- savings exposure
+- budget deterioration
+- renewal cost increase
+- forecast impact
+
+Current distinction requires validation.
+
+
+Finding 4
+
+"Items to monitor" may imply leadership ownership.
+
+Observed reaction:
+
+The wording suggests Lewis or Matt should take action.
+
+In many cases ownership remains operational.
+
+Validation finding only.
+
+No approved change.
+
+
+Finding 5
+
+Outputs lack financial context.
+
+Example:
+
+Voucherify
+Still under discussion
+
+does not answer:
+
+Why should I care?
+
+Future judgement improvements may need:
+
+- costout impact
+- financial implication
+- business significance
+
+while remaining grounded in existing reporting outputs.
+
+
+Finding 6
+
+Financially significant deterioration may be under-promoted.
+
+Observed:
+
+24-8 → 31-8 comparison
+
+MightyHive disappeared from leadership outputs.
+
+Current live position:
+
+Budget ≈ $83.4k
+Renewal ≈ $120k
+Negative costout ≈ $36.6k
+
+Commentary:
+
+Matt asked business to review usage
+Business working on it
+Document with Matt for signature - $ may not be final
+
+Validation concern:
+
+The engine may currently favour commentary keywords over material financial movement.
+
+
+CURRENT LEADERSHIP OUTPUTS
+
+Most recent output:
+
+EXECUTIVE WATCHOUT
+
+AWS Marketplace - Cloudec
+
+No progress.
+
+FINANCIAL WATCHOUT
+
+Silverleaf Solutions Australia Pty Ltd
+
+Approximately $200,000 of additional cost is currently reflected in the position.
+
+WATCHLIST
+
+Voucherify P.S.A
+
+Still under discussion
+
+Lucid Software Inc.
+
+Still under discussion
+
+Historically:
+
+MightyHive AU PTY LTD
+
+Business working on it
+
+was also promoted.
 
 
 IMPORTANT DECISIONS
@@ -158,7 +312,7 @@ DO NOT use:
 
 Completed opportunities are intentionally excluded.
 
-Leadership Insights and Risks & Watchouts are intentionally separated.
+Leadership Insights and Risks & Watchouts remain intentionally separated.
 
 Risks & Watchouts currently begins from:
 
@@ -170,21 +324,21 @@ Executive wording should remain commentary-driven.
 
 Avoid generic executive filler language.
 
-Avoid generating commentary that is not supported by existing dashboard commentary or existing reporting outputs.
+Avoid unsupported executive narrative.
+
+Remain grounded in dashboard commentary and reporting outputs.
 
 Leadership communications are intended to be reviewed by Lewis and ultimately consumed by Matt.
 
-The output channel is plain text.
+Output channel remains plain text.
 
-Formatting decisions must be optimised for:
+Formatting decisions must remain optimised for:
 
 - plain text
 - Outlook
 - email forwarding
 
 Markdown formatting should not be assumed.
-
-Current focus has shifted from pipeline construction to communication quality validation.
 
 
 CURRENT REPORTING ORDER
@@ -226,49 +380,77 @@ PROMOTION PACKAGE CONTENTS
 ✅ leadership_email.txt
 ✅ manifest.json
 
-
 OPEN BUGS
 
-None currently open.
+BUG-001
+
+Leadership promotion may underweight financially material deteriorations.
+
+Observed:
+
+MightyHive dropped out of promoted leadership outputs despite:
+
+- significant negative costout movement
+- active commentary
+- leadership involvement
+
+Potential impact:
+
+Leadership attention may be directed toward commentary stagnation instead of material financial deterioration.
+
+Status:
+
+OPEN
+
+Validation only.
+
+No approved fix.
 
 
 CURRENT ASSESSMENT
 
 Pipeline engineering is effectively complete.
 
-Leadership email output has undergone substantial communication-quality refinement and is now considered stable pending stakeholder validation.
+Leadership email formatting is now stable.
 
-The primary challenge is no longer email formatting.
+Traceability enhancement is complete.
 
-The primary challenge is validating whether generated leadership judgement is appropriate, useful and actionable when applied to real Weekly Snapshot comparisons.
+The primary challenge is no longer formatting.
+
+The primary challenge is validating leadership judgement quality.
 
 Outputs are technically correct and grounded in dashboard commentary.
 
-Future effort should focus on:
+Validation has shown the system now requires assessment of:
+
+- promotion choices
+- executive significance
+- financial context
+- stakeholder usefulness
+
+rather than:
+
+- headings
+- greetings
+- formatting
+
+
+FUTURE FOCUS
 
 - leadership judgement quality
+- executive relevance
+- financial context representation
 - executive briefing content
 - stakeholder suitability
 - validation with Lewis
 - validation with Matt
 
-Avoid further iterative rewrites of email headings, greetings or formatting unless a concrete usability issue is identified.
-
-Key learning:
-
-The output channel is plain text.
-
-Formatting decisions must be optimised for:
-- plain text
-- Outlook
-- email forwarding
-
-Markdown formatting should not be assumed.
+Avoid further formatting iterations unless a genuine usability issue is identified.
 
 
 NEXT BACKLOG ITEMS
 
-1. Validate leadership outputs against multiple Weekly Snapshot comparisons
+1. Continue validating leadership outputs against additional Weekly Snapshot comparisons
 2. Validate outputs with Lewis
 3. Validate outputs with Matt
 4. Refine executive tone where supported by reporting outputs
@@ -280,7 +462,7 @@ NEXT BACKLOG ITEMS
 
 BACKLOG ITEM DETAILS
 
-8. Review generated artefact footprint
+Review generated artefact footprint
 
 Goal:
 
@@ -298,28 +480,22 @@ Assess:
 - manifest.json
 - promotion_package structure
 
+Additional assessment:
+
+Review generated artefacts, temporary files and output directories that may no longer provide operational value.
+
 Questions:
 
 - Which artefacts are consumed directly?
-- Which artefacts exist primarily for debugging?
-- Which artefacts exist as judgement layers?
+- Which artefacts exist for debugging?
+- Which artefacts provide validation?
+- Which artefacts provide traceability?
 - Which artefacts are duplicated elsewhere?
 - Which artefacts can be removed?
 
-Principle:
-
-Retain artefacts that provide:
-
-- traceability
-- auditability
-- validation
-- troubleshooting
-
-Remove artefacts that no longer add operational value.
-
 Success criteria:
 
-A simpler promotion package with fewer generated files and clearer ownership of each artefact.
+A simpler promotion package with fewer generated files and clearer ownership.
 
 
 DO NOT
@@ -338,7 +514,7 @@ DO NOT
 
 NEXT TASK
 
-Validate leadership outputs against real Weekly Snapshot comparisons.
+Continue leadership judgement validation.
 
 Goal:
 
@@ -346,7 +522,8 @@ Confirm that:
 
 - executive watchouts are appropriate
 - financial watchouts are appropriate
-- watchlist items are appropriate
+- promoted items reflect genuine leadership importance
+- financially material items are not missed
 - commentary remains grounded
 - outputs are useful to Lewis
 - outputs are useful to Matt
@@ -362,4 +539,4 @@ Continue to:
 
 Definition of success:
 
-The generated leadership email can be reviewed and distributed with minimal editing, and leadership agrees that the promoted watchouts and watchlist items represent the most important matters requiring attention or monitoring.
+Leadership agrees that the promoted items represent the most important matters requiring attention, discussion, monitoring or intervention, and outputs can be distributed with minimal editing.

@@ -49,11 +49,13 @@ def render_leadership_email(
     executive_watchout: str | None,
     financial_watchout: str | None,
     watchlist: list[str],
+    comparison_label: str,
 ) -> str:
     """Render a concise leadership email."""
 
     lines = [
         "Subject: IT Simplification Weekly Update",
+        comparison_label,
         "",
         "Hi Lewis,",
         "",
@@ -179,6 +181,7 @@ def generate_leadership_email(
     leadership_insights_path,
     risks_watchouts_path,
     output_path,
+    comparison_label: str,
 ):
     """Generate leadership email content from existing artefacts."""
 
@@ -208,6 +211,7 @@ def generate_leadership_email(
         executive_watchout=executive_watchout,
         financial_watchout=financial_watchout,
         watchlist=watchlist,
+        comparison_label=comparison_label,
     )
 
     output_path = Path(output_path)

@@ -230,6 +230,9 @@ def generate_risks_watchouts(
 
             else:
                 continue
+    
+    else:
+        watchouts = []
 
     observations = (
         labelled_observations if labelled_observations
