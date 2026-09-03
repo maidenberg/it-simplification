@@ -211,7 +211,17 @@ def generate_risks_watchouts(
 
         watchouts = []
 
-        for candidate in ranked_candidates[2:10]:
+        print("\nWATCHOUT INPUT CANDIDATES")
+
+        for i, candidate in enumerate (ranked_candidates[:10]):
+            print(
+                f"{i}:"
+                f"{candidate.vendor} | "
+                f"costout={candidate.costout} | "
+                f"{candidate.commentary}"
+            )
+        
+        for candidate in ranked_candidates[1:10]:
 
             commentary = candidate.commentary.lower()
 

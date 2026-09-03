@@ -246,6 +246,12 @@ def generate_leadership_insights(
 
     if ranked_candidates:
 
+        financial_risk_candidates = [
+            candidate
+            for candidate in ranked_candidates
+            if classify_leadership_theme(candidate) == "financial_risk"
+        ]
+
         major_win_candidate = by_theme.get("major_win")
         risk_candidate = by_theme.get("risk")
         decision_candidate = by_theme.get("decision_required")
@@ -276,14 +282,34 @@ def generate_leadership_insights(
                 f"Progress is dependent on a pending approval or decision."
             )
 
-        if financial_candidate:
+        financial_risk_candidates = sorted (
+            financial_risk_candidates,
+            key=lambda c: abs(c.costout),
+            reverse=True,
+        )
+        
+        additional_financial_risks = []
 
-            print(
-                "FINANCIAL WINNER:",
-                financial_candidate.contract,
-                financial_candidate.commentary,
-                financial_candidate.costout,
+        for candidate in financial_risk_candidates[1:]:
+
+            if candidate.commentary:
+
+                additional_financial_risks.append (
+                    f"{candidate.vendor}\n"
+                    f"{candidate.commentary}"
+                    f"Financial impact currently reflected: "
+                    f"${abs(candidate.costout):,.0f}"
             )
+
+            else:
+
+                additional_financial_risks.append (
+                    f"{candidate.vendor}\n"
+                    f"Financial impact currently reflected: "
+                    f"${abs(candidate.costout):,.0f}"
+                )
+
+        if financial_candidate:
 
             if financial_candidate.commentary:
                 financial = (
@@ -299,6 +325,12 @@ def generate_leadership_insights(
                     f"Approximately ${abs(financial_candidate.costout):,.0f} "
                     f"of additional cost is currently reflected in the position."
             )
+
+            if additional_financial_risks:
+                financial += (
+                    "\n\nOther material financial risks:\n\n"
+                    + "\n\n".join (additional_financial_risks)
+                )
 
     document = render_leadership_insights(
         major_win = major_win,

@@ -102,6 +102,12 @@ Completed
 ✅ Email renderer stabilisation
 ✅ Email formatting freeze (pending stakeholder validation)
 ✅ Snapshot comparison traceability in leadership email
+✅ Leadership judgement validation 
+✅ Financial deterioration promotion validation 
+✅ Multi-financial-risk surfacing 
+✅ Financial context enrichment for promoted financial risks 
+✅ Material financial risk ordering 
+✅ BUG-001 remediation
 
 Example:
 
@@ -259,6 +265,48 @@ Validation concern:
 
 The engine may currently favour commentary keywords over material financial movement.
 
+Finding 7 
+
+BUG-001 root cause identified. 
+
+Observed: Financially material deteriorations were correctly: 
+- generated 
+- ranked 
+- classified but only one financial_risk candidate was promoted. 
+
+Root cause: Single-winner-per-theme behaviour. 
+
+Code pattern: if theme not in by_theme: by_theme[theme] = candidate 
+
+Result: Silverleaf became the sole financial_risk winner. Other material financial risks were suppressed. 
+
+Finding 8 
+
+Financial context significantly improves executive usefulness. 
+
+Observed: Vendor-only promotion provided insufficient context. 
+
+Example: Ahrefs Pte Ltd Required: 
+- financial exposure 
+- commentary (if present) 
+Leadership usefulness improved after financial context rendering. 
+
+Finding 9 
+Brevity appears preferable to narrative expansion. 
+
+Observed: Short executive signals appear more useful than longer explanatory prose. 
+
+Direction: 
+
+Retain: 
+- vendor 
+- commentary 
+- financial exposure 
+
+Avoid: 
+- lengthy executive narrative 
+- generic executive filler text 
+- unsupported interpretation Validation with Lewis and Matt pending.
 
 CURRENT LEADERSHIP OUTPUTS
 
@@ -272,28 +320,14 @@ No progress.
 
 FINANCIAL WATCHOUT
 
-Silverleaf Solutions Australia Pty Ltd
+Silverleaf Solutions Australia Pty Ltd 
+Approximately $200,000 of additional cost is currently reflected in the position. 
+Other material financial risks: 
+Ahrefs Pte Ltd 
 
-Approximately $200,000 of additional cost is currently reflected in the position.
-
-WATCHLIST
-
-Voucherify P.S.A
-
-Still under discussion
-
-Lucid Software Inc.
-
-Still under discussion
-
-Historically:
-
-MightyHive AU PTY LTD
-
-Business working on it
-
-was also promoted.
-
+Financial impact currently reflected: $40,752 
+MightyHive AU PTY LTD Document with Matt for signature - $ may not be final 
+Financial impact currently reflected: $36,589
 
 IMPORTANT DECISIONS
 
@@ -310,25 +344,19 @@ DO NOT use:
 - Consumption cost-out to date
 - Microsoft cost-out to date
 
-Completed opportunities are intentionally excluded.
+Completed opportunities are intentionally excluded. 
 
-Leadership Insights and Risks & Watchouts remain intentionally separated.
+Leadership Insights and Risks & Watchouts remain intentionally separated. 
 
-Risks & Watchouts currently begins from:
+Executive wording should remain commentary-driven. 
 
-ranked_candidates[2:10]
+Avoid generic executive filler language. 
 
-to avoid duplication with leadership outputs.
+Avoid unsupported executive narrative. 
 
-Executive wording should remain commentary-driven.
+Remain grounded in dashboard commentary and reporting outputs. 
 
-Avoid generic executive filler language.
-
-Avoid unsupported executive narrative.
-
-Remain grounded in dashboard commentary and reporting outputs.
-
-Leadership communications are intended to be reviewed by Lewis and ultimately consumed by Matt.
+Leadership communications are intended to be reviewed by Lewis and ultimately consumed by Matt. 
 
 Output channel remains plain text.
 
@@ -340,6 +368,11 @@ Formatting decisions must remain optimised for:
 
 Markdown formatting should not be assumed.
 
+Financially material risks MUST NOT be suppressed simply because a larger financial risk exists.
+
+Current approved behaviour: 
+- One primary financial watchout 
+- Additional material financial risks surfaced beneath it
 
 CURRENT REPORTING ORDER
 
@@ -382,6 +415,10 @@ PROMOTION PACKAGE CONTENTS
 
 OPEN BUGS
 
+None
+
+RESOLVED BUGS
+
 BUG-001
 
 Leadership promotion may underweight financially material deteriorations.
@@ -394,17 +431,13 @@ MightyHive dropped out of promoted leadership outputs despite:
 - active commentary
 - leadership involvement
 
-Potential impact:
+Validation completed. 
 
-Leadership attention may be directed toward commentary stagnation instead of material financial deterioration.
+Root cause: Single-winner-per-theme financial promotion behaviour. 
 
-Status:
+Resolution:  Multiple material financial risks are now surfaced.
 
-OPEN
-
-Validation only.
-
-No approved fix.
+Status: RESOLVED
 
 
 CURRENT ASSESSMENT
@@ -536,6 +569,12 @@ Continue to:
 - reuse existing commentary
 - remain fully grounded in dashboard commentary
 - avoid invented executive narrative
+
+Current validation focus: 
+Does Lewis receive the right signals in under 30 seconds? 
+Is the current multi-financial-risk presentation useful? 
+Does Silverleaf represent the correct primary financial watchout? 
+Should Microsoft EA financial position be communicated differently?
 
 Definition of success:
 

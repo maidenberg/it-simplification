@@ -197,6 +197,7 @@ def rank_candidates_for_leadership(candidates):
     for candidate in ranked[:20]:
         print (
             f"SCORE={executive_relevance_score(candidate):.1f} | "
+            f"COSTOUT={candidate.costout:,.0f} | "
             f"{candidate.vendor} | "
             f"{candidate.contract} | "
             f"{candidate.commentary}"
@@ -208,6 +209,12 @@ def classify_leadership_theme(candidate):
 
     commentary = candidate.commentary.lower()
 
+    if candidate.costout < -30000:
+        return "financial_risk"
+
+    if candidate.costout > 30000:
+        return "financial_win"
+        
     if "renewed" in commentary:
         return "major_win"
 
@@ -228,12 +235,6 @@ def classify_leadership_theme(candidate):
 
     if "awaiting" in commentary:
         return "decision_required"
-
-    if candidate.costout < -30000:
-        return "financial_risk"
-
-    if candidate.costout > 30000:
-        return "financial_win"
 
     if "under discussion" in commentary:
         return "risk"
