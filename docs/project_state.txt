@@ -80,8 +80,18 @@ Completed
 ✅ Watchlist rendering fixes
 ✅ Watchout formatting fixes
 ✅ Commentary-grounded watchlists
+✅ Leadership email readability review
+✅ Executive communication-oriented email formatting
+✅ Vendor + commentary inline rendering
+✅ Watchout email sectioning
+✅ Watchlist email sectioning
+✅ Communication-channel validation (plain text email)
+✅ Leadership email review against real snapshot output
+✅ Email renderer stabilisation
+✅ Email formatting freeze (pending stakeholder validation)
 
-Current leadership outputs
+
+CURRENT LEADERSHIP OUTPUTS
 
 EXECUTIVE WATCHOUT
 
@@ -105,33 +115,30 @@ MightyHive AU PTY LTD
 Business working on it
 
 
-Current leadership email output
+CURRENT LEADERSHIP EMAIL OUTPUT
 
 Subject: IT Simplification Weekly Update
 
-Lewis,
+Hi Lewis,
 
-Key items requiring attention this week:
+Please see this week's IT Simplification watchouts and items to monitor.
 
-AWS Marketplace - Cloudec
-No progress.
+Executive watchout:
 
-Silverleaf Solutions Australia Pty Ltd
-Approximately $200,000 of additional cost is currently reflected in the position.
+• AWS Marketplace - Cloudec: No progress.
 
-Watchlist:
+Financial watchout:
 
-Voucherify P.S.A
-Still under discussion
+• Silverleaf Solutions Australia Pty Ltd: Approximately $200,000 of additional cost is currently reflected in the position.
 
-Lucid Software Inc.
-Initiated - under discussion
+Items to monitor:
 
-MightyHive AU PTY LTD
-Business working on it
+• Voucherify P.S.A: Still under discussion
+• Lucid Software Inc.: Initiated - under discussion
+• MightyHive AU PTY LTD: Business working on it
 
 Regards,
-IT Simplification Automation
+IT Simplification
 
 
 IMPORTANT DECISIONS
@@ -167,7 +174,17 @@ Avoid generating commentary that is not supported by existing dashboard commenta
 
 Leadership communications are intended to be reviewed by Lewis and ultimately consumed by Matt.
 
-Current focus has shifted from pipeline construction to communication quality.
+The output channel is plain text.
+
+Formatting decisions must be optimised for:
+
+- plain text
+- Outlook
+- email forwarding
+
+Markdown formatting should not be assumed.
+
+Current focus has shifted from pipeline construction to communication quality validation.
 
 
 CURRENT REPORTING ORDER
@@ -217,30 +234,92 @@ None currently open.
 
 CURRENT ASSESSMENT
 
-Pipeline engineering is largely complete.
+Pipeline engineering is effectively complete.
 
-The primary challenge is now communication quality rather than data processing.
+Leadership email output has undergone substantial communication-quality refinement and is now considered stable pending stakeholder validation.
+
+The primary challenge is no longer email formatting.
+
+The primary challenge is validating whether generated leadership judgement is appropriate, useful and actionable when applied to real Weekly Snapshot comparisons.
 
 Outputs are technically correct and grounded in dashboard commentary.
 
-Remaining work is focused on:
+Future effort should focus on:
 
-- executive tone
-- communication quality
-- judgement presentation
+- leadership judgement quality
+- executive briefing content
 - stakeholder suitability
-- reducing editing effort prior to distribution
+- validation with Lewis
+- validation with Matt
+
+Avoid further iterative rewrites of email headings, greetings or formatting unless a concrete usability issue is identified.
+
+Key learning:
+
+The output channel is plain text.
+
+Formatting decisions must be optimised for:
+- plain text
+- Outlook
+- email forwarding
+
+Markdown formatting should not be assumed.
 
 
 NEXT BACKLOG ITEMS
 
-1. Review leadership email quality
-2. Refine executive tone
-3. Improve judgement presentation without introducing unsupported commentary
-4. Validate outputs with Lewis
-5. Validate outputs with Matt
+1. Validate leadership outputs against multiple Weekly Snapshot comparisons
+2. Validate outputs with Lewis
+3. Validate outputs with Matt
+4. Refine executive tone where supported by reporting outputs
+5. Improve judgement presentation without introducing unsupported commentary
 6. Create executive briefing artefact
 7. Create stakeholder-specific communications
+8. Review generated artefact footprint
+
+
+BACKLOG ITEM DETAILS
+
+8. Review generated artefact footprint
+
+Goal:
+
+Rationalise generated artefacts and promotion package contents.
+
+Assess:
+
+- executive_summary.txt
+- key_movements.txt
+- weekly_update.md
+- leadership_insights.txt
+- risks_watchouts.txt
+- reporting_package.txt
+- leadership_email.txt
+- manifest.json
+- promotion_package structure
+
+Questions:
+
+- Which artefacts are consumed directly?
+- Which artefacts exist primarily for debugging?
+- Which artefacts exist as judgement layers?
+- Which artefacts are duplicated elsewhere?
+- Which artefacts can be removed?
+
+Principle:
+
+Retain artefacts that provide:
+
+- traceability
+- auditability
+- validation
+- troubleshooting
+
+Remove artefacts that no longer add operational value.
+
+Success criteria:
+
+A simpler promotion package with fewer generated files and clearer ownership of each artefact.
 
 
 DO NOT
@@ -253,25 +332,34 @@ DO NOT
 - redesign theme classification
 - reintroduce completed opportunities
 - introduce unsupported narrative
+- collapse judgement generation into email rendering
+- remove intermediate judgement artefacts before validation is complete
 
 
 NEXT TASK
 
-Review leadership email quality.
+Validate leadership outputs against real Weekly Snapshot comparisons.
 
 Goal:
 
-Move from:
+Confirm that:
 
-"accurate reporting output"
+- executive watchouts are appropriate
+- financial watchouts are appropriate
+- watchlist items are appropriate
+- commentary remains grounded
+- outputs are useful to Lewis
+- outputs are useful to Matt
 
-to:
+Focus on judgement quality rather than email formatting.
 
-"executive communication draft requiring minimal editing"
-
-while continuing to:
+Continue to:
 
 - reuse existing outputs
 - reuse existing commentary
 - remain fully grounded in dashboard commentary
 - avoid invented executive narrative
+
+Definition of success:
+
+The generated leadership email can be reviewed and distributed with minimal editing, and leadership agrees that the promoted watchouts and watchlist items represent the most important matters requiring attention or monitoring.

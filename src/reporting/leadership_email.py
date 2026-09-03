@@ -26,6 +26,13 @@ class LeadershipEmailError(Exception):
 
 LEADERSHIP_EMAIL_FILENAME = "leadership_email.txt"
 
+def _format_email_item(text: str) -> str:
+    """Render vendor/commentary content onto a single line."""
+    return text.replace(
+        "\n",
+        ": ",
+    )
+
 def _read_required(path, label: str) -> str:
     """Read a required artefact, failing fast if it is missing."""
     path = Path(path)
@@ -48,30 +55,41 @@ def render_leadership_email(
     lines = [
         "Subject: IT Simplification Weekly Update",
         "",
-        "Lewis,",
+        "Hi Lewis,",
         "",
-        "Key items requiring attention this week:",
+        "Please see this week's IT Simplification watchouts and items to monitor.",
+        "",
         "",
     ]
 
     if executive_watchout:
-        lines.append(executive_watchout)
+        lines.append ("Executive watchout:")
+        lines.append("")
+        formatted_watchout = _format_email_item(executive_watchout)
+        lines.append(f"• {formatted_watchout}")
+        lines.append("")
         lines.append("")
 
     if financial_watchout:
-        lines.append(financial_watchout)
+        lines.append("Financial watchout:")
+        lines.append ("")
+        formatted_watchout = _format_email_item (financial_watchout)
+        lines.append(f"• {formatted_watchout}")
         lines.append("")
-
+        lines.append("")
+      
     if watchlist:
-        lines.append("Watchlist:")
+        lines.append("")
+        lines.append("Items to monitor:")
         lines.append("")
 
         for item in watchlist:
-            lines.append(item)
-            lines.append("")
+            formatted_item = _format_email_item (item)
+            lines.append(f"• {formatted_item}")
 
+    lines.append("")
     lines.append("Regards,")
-    lines.append("IT Simplification Automation")
+    lines.append("Ari's brilliant IT Simplification Automation")
 
     return "\n".join(lines)
 
