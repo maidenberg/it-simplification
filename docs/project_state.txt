@@ -1,29 +1,73 @@
 IT SIMPLIFICATION AUTOMATION
 
-PROJECT STATE
+CANONICAL PROJECT STATE
 
+AUTHORIITATIVE RECOVERY DOCUMENT
+This document is the authoritative project state for IT Simplification Automation project.
+
+If all prior conversations are lost, another Copilot instance should be able to continue the project from this document alone.
+
+This document supersedes and replaces prior conversation history.
+
+This document consolidates:
+- project objectives
+- business context 
+- architecture
+- implementation status
+- design philosophy 
+- approved decisions
+- reporting outputs
+- communication outputs 
+- judgement framework
+- validation history
+- validation findings
+- leadership judgement rules
+- risk rules
+- watchout rules
+- bug and resolutions
+- roadmap
+- backlog
+- known constraints
+- future direction and next actions
+
+Source reconstruction was derived from:
+- Project State
+- Project goal
+- Project Context
+- IT Simplification dashboard
 
 PROJECT OBJECTIVE
 
 Build an AI-powered executive communications engine for IT Simplification.
 
-Evolution
+The project originally began as a dashboard comparison automation initiative and evolved through several stages:
 
-What moved this week?
-→ What should Lewis care about?
-→ What should Matt care about?
+Weekly snapshot comparison
+→ Movement detection
+→ Executive reporting generation
+→ Leadership insight generation
+→ Leadership watchouts
+→ Weekly leadership email
 → Executive communications engine
-→ Weekly leadership email generation
 → Stakeholder-specific communications
-→ Executive judgement validation
+→ Leadership judgement validation
 
-The project has now moved beyond pipeline construction and formatting refinement.
+The project has moved beyond extraction, comparison, aggregation, reporting construction and formatting.
 
-Current focus is validating whether the system surfaces the right leadership issues from real Weekly Snapshot comparisons.
+The current project challenge is validating leadership judgement quality.
 
-Key question:
+The primary question now is: If Lewis only had 30 seconds, would the generated outputs direct attention to the most important matters?
 
-If Lewis only had 30 seconds, would the generated outputs direct attention to the most important matters?
+Target leadership consumers:
+→ Lewis Lee
+→ Matt Toohey
+→ IT Leadership Team 
+→ Executive Leadership Team
+
+Primary operator: Ari Maidenberg
+
+Project outcome: 
+Generate executive-ready communications requiring minimal manual editing while remaining fully grounded in dashboard data and commentary.
 
 
 TARGET END STATE
@@ -31,115 +75,367 @@ TARGET END STATE
 Weekly snapshot workbook
 → contract comparison
 → movement detection
-→ commentary enrichment
-→ leadership candidate generation
+→ commentary enrichment reuse
+→ candidate generation
+→ theme classification 
 → executive relevance ranking
-→ leadership insights
-→ risks/watchouts
-→ executive briefing
-→ leadership email
-→ stakeholder-specific communications
+→ leadership insight generation
+→ risk and watchout generation
+→ executive briefing generation
+→ leadership email generation 
 
+All outputs must remain traceable to source commentary and dashboard data. 
+
+The solution must explain what moved, why it matters, who should care, what requires monitoring, and what requires intervention without inventing narrative.
 
 PROJECT PHILOSOPHY
+
+Core principle: Turn data into judgement. 
+
+Not: Turn data into narrative.
+
+Executive communications exist to explain why leadership should care.
+
+Mandatory design principles:
+
+- Reuse existing outputs.
+- Reuse existing dashboard commentary.
+- Reuse existing enrichment.
+- Reuse existing classifications. 
+- Reuse existing reporting artefacts.
+- Build on analytical outputs already generated.
+
+Executive outputs must remain grounded in:
+- dashboard commentary 
+- contract commentary
+- existing reporting outputs
+- identified financial positions
+- comparison results
+- cost-out movement information
+
+Avoid unsupported interpretation.
+Avoid invented executive storytelling.
+Avoid generic management language.
+Avoid filler text.
+Avoid long narrative expansion.
+Prefer concise executive signals.
+Executive usefulness is more important than verbosity.
+
+NON-GOALS
 
 Do not rebuild:
 
 - extraction
-- comparison
-- ranking
-- scoring
+- dashboard ingestion 
+- comparison engine
+- contract matching
+- movement classification
+- ranking engine
+- scoring engine
 - commentary enrichment
 - candidate generation
 - theme classification
+- dashboard analytics foundation
 
-Reuse existing outputs.
+These are considered complete. 
+Future work must consume existing outputs rather than replace them.
 
-Reuse existing commentary.
+SOLUTION ARCHITECTURE 
 
-Turn data into judgement.
+Inputs
 
-Executive outputs must remain grounded in dashboard commentary and existing reporting outputs.
+Primary Inputs
+- Current dashboard
+- Prior weekly snapshot
+- Vendor records
+- Contract records
+- Dashboard commentary
+- Status updates
+- Monday review outcomes
 
-Avoid creating unsupported narrative.
+Files currently known:
 
-Executive communications should explain why leadership should care, not simply restate commentary.
+- IT simplification dashboard
+- Weekly snapshots
+
+Processing flow
+
+Data Sources
+→ Extraction 
+→ Normalisation
+→ Current vs Prior comparison
+→ Movement detection
+→ Aggregration
+→ Candidate generation
+→ Theme classification
+→ Executive ranking
+→ Leadership insight generation
+→ Risk and watchout generation
+→ Reporting package
+→ Leadership email
+
+All current work occurs after comparison outputs have already been created.
 
 
 CURRENT IMPLEMENTATION STATUS
 
-Completed
+Foundation layer
+
+Completed:
 
 ✅ Snapshot extraction
+✅ Weekly snapshot ingestion
 ✅ Vendor parsing
-✅ Contract comparison
-✅ Movement classification
-✅ Executive summary
-✅ Key movements
-✅ Weekly update
-✅ Leadership insights
-✅ Risks & Watchouts
-✅ Reporting package
-✅ Communications-oriented package ordering
+✅ Contract parsing
+✅ Data cleanup
+✅ Normalisation
+✅ Dashboard metric extraction
+✅ Current vs prior comparison
+✅ Contract matching
+✅ Cost-out movement detection
+✅ Portfolio Aggregration
+✅ Rollups
+✅ Top mover identification
+✅ Executive reporting data model
+✅ Repository foundation
+✅ Prompt experimentation
+
+Reporting layer
+
+Completed:
+
+✅ Executive summary generation
+✅ Key movements generation
+✅ Weekly update generation
+✅ Leadership insights generation
+✅ Risks & Watchouts generation
+✅ Reporting package generation
+
+Leadership layer
+
+Completed:
+
 ✅ Active-opportunity-only candidate pipeline
-✅ Leadership watchout generation
+✅ Executive watchout generation
 ✅ Financial watchout generation
-✅ Separation of leadership insights from risks/watchouts
+✅ Leadership insight generation
+✅ Material risk promotion
+✅ Leadership judgement validation
+✅ Financial deterioration promotion validation
+✅ Multi-financial-risk promotion
+✅ Financial context rendering
+✅ Material financial risk ordering
+✅ Leadership judgement review process 
+
+Communications layer
+
+Completed:
+
 ✅ Leadership email prototype
-✅ leadership_email.txt generation
-✅ leadership email runner integration
+✅ leadership_email.txt
+✅ Email runner integration
+✅ Promotion package integration
+✅ Plain-text optimisation
+✅ Outlook compatibility validation
+✅ Email readability review
+✅ Vendor + commentary rendering
 ✅ leadership email promotion package integration
-✅ Watchlist rendering fixes
-✅ Watchout formatting fixes
-✅ Commentary-grounded watchlists
-✅ Leadership email readability review
-✅ Executive communication-oriented email formatting
-✅ Vendor + commentary inline rendering
-✅ Watchout email sectioning
-✅ Watchlist email sectioning
-✅ Communication-channel validation (plain text email)
-✅ Leadership email review against real snapshot output
-✅ Email renderer stabilisation
-✅ Email formatting freeze (pending stakeholder validation)
-✅ Snapshot comparison traceability in leadership email
-✅ Leadership judgement validation 
-✅ Financial deterioration promotion validation 
-✅ Multi-financial-risk surfacing 
-✅ Financial context enrichment for promoted financial risks 
-✅ Material financial risk ordering 
+✅ Watchlist section rendering
+✅ Watchout section rendering
+✅ Snapshot tracing
+✅ Comparison traceability
+✅ Email formatting stabilisation
+✅ Formatting freeze (pending stakeholder review)
+
+Validation layer
+
+Completed:
+
+✅ Snapshot validation 17-8 -> 24-8 
+✅ Snapshot validation 24-8 -> 31-8 
+✅ Executive judgement review
+✅ Financial watchout validation
 ✅ BUG-001 remediation
 
-Example:
+REPORTING ARTEFACTS
 
-Comparison: Snapshot 24-8 → Snapshot 31-8
+Generated artefacts:
 
-Purpose:
+✅ executive_summary.txt
+✅ key_movements.txt
+✅ weekly_update.md
+✅ leadership_insights.txt
+✅ risks_watchouts.txt
+✅ reporting_package.txt
+✅ leadership_email.txt
+✅ promotion_package/
 
-- validation traceability
-- easier comparison between test runs
-- supports repeated snapshot testing
+Promotion package contains:
+✅ executive_summary.txt
+✅ key_movements.txt
+✅ weekly_update.md
+✅ leadership_insights.txt
+✅ risks_watchouts.txt
+✅ reporting_package.txt
+✅ leadership_email.txt
+✅ manifest.json
+
+REPORTING ORDER
+
+Current approved reporting order:
+
+1. Executive Summary
+2. Leadership Insights
+3. Risks & Watchouts
+4. Key Movements
+5. Weekly Update
+
+Do not change unless validation proves a usability issue.
+
+COMMUNICATIONS ORDER
+
+Current approved communications order:
+
+1. Leadership Insights
+2. Risks & Watchouts
+3. Leadership Email
+
+These orders should not change unless future validation proves a usability problem.
+
+CANDIDATE GENERATION RULES
+
+Leadership candidate generation MUST use:
+- Upcoming licensing vendors
+- Upcoming consumption vendors
+- Upcoming Microsoft vendors
+- Upcoming new spend vendors
+
+Candidate generation MUST NOT use:
+- Licensing cost-out-to-date
+- Consumption cost-out-to-date
+- Microsoft cost-out-to-date
+
+Rationale:
+Cost-out-to-date items are already completed or committed.
+
+Leadership attention should focus on active opportunities and unresolved future positions.
+
+Completed opportunities are intentionally excluded.
+
+RISK GENERATION RULES
+
+Leadership risks must remain grounded in:
+- commentary
+- movement data
+- current financial positions
+
+Not:
+- assumptions
+- predictions
+- invented concerns
+
+Risks should identify:
+- blocked decisions
+- stalled progress
+- unresolved actions
+- deterioration
+- savings exposure
+- leadership dependencies
+
+Financial watchouts should identify:
+- cost increases
+- savings erosion
+- forecast deterioration
+- renewal increases
+- budget exposure
+
+Leadership watchouts and financial watchouts must remain separate concepts.
+
+LEADERSHIP INSIGHT RULES
+
+Leadership insights are intentionally separated from Risks & Watchouts.
+
+Reason:
+Insights explain broad themes. Watchouts explain concerns. They serve different executive purposes.
+This separation is approved and should not be collapsed.
+
+Leadership insights explain: emerging patterns, concentration of savings, areas requiring awareness, leadership-level implications. They are not risk statements.
+
+WATCHOUT RULES
+
+Executive watchouts should focus on:
+- leadership intervention
+- escalation
+- blocked decisions 
+- stalled progress 
+- action dependency 
+
+Financial watchouts should focus on:
+- budget deterioration
+- negative costout
+- renewal increases
+- forecast deterioration
+- savings erosion
+- financial exposure
+
+Executive watchouts and financial watchouts are distinct concepts.
+
+Validation is ongoing but separation is approved.
+
+CURRENT APPROVED WATCHOUT BEHAVIOUR
+
+Executive watchout: One primary executive concern
+Financial watchout: One primary financial concern
+Additional financial risks: Display beneath primary watchout
+
+Financially material items must never be suppressed because a larger financial issue exists.
+
+CURRENT EXAMPLE OUTPUT STATE
+
+Primary Executive Watchout:
+
+AWS Marketplace - Cloudec
+
+No progress.
+
+Primary Financial Watchout:
+
+Silverleaf Solutions Australia Pty Ltd 
+Approximately $200,000 of additional cost currently reflected. 
+
+Other material financial risks: 
+Ahrefs Pte Ltd 
+Financial impact $40,752 
+
+MightyHive AU PTY LTD 
+Financial impact $36,589
+Commentary: Document with Matt for signature - $ may not be final 
 
 
 CURRENT LEADERSHIP EMAIL FORMAT
-
 Subject: IT Simplification Weekly Update
+Header: Comparison: Snapshot -> Snapshot
+Greeting: Hi Lewis,
+Opening: Please see this week's IT Simplification watchouts and items to monitor.
 
-Comparison: Snapshot <previous> → Snapshot <current>
+Benefits:
+- traceable
+- suitable for repeated testing
+- supports validation history
+- supports leadership review
 
-Hi Lewis,
-
-Please see this week's IT Simplification watchouts and items to monitor.
+Format remains plain text. Markdown assumptions must be avoided.
 
 
-VALIDATION STATUS
+VALIDATION HISTORY
 
-Validation completed against:
+Validation comparisons:
 
 ✅ 17-8 → 24-8
 
 ✅ 24-8 → 31-8
 
-Focus has shifted from formatting validation to judgement validation.
+Validation focus has shifted from formatting to judgement quality.
 
 
 VALIDATION FINDINGS
@@ -148,7 +444,7 @@ Finding 1
 
 Executive watchout severity may be overstated.
 
-Observed example:
+Example:
 
 AWS Marketplace - Cloudec
 
@@ -156,92 +452,78 @@ Commentary:
 
 "No progress"
 
-A single occurrence does not necessarily justify executive attention.
+Observation: 
+Single-instance stagnation may not justify executive attention.
 
-Repeated stagnation over multiple snapshots appears more meaningful.
+Potential rule direction:
+Repeated stagnation over multiple snapshots may deserve promotion.
+
+Not yet approved.
 
 Finding 2
 
-Financial watchout communicates the wrong entity.
+Financial watchout may surface the wrong entity.
 
-Current output:
+Current output surfaces:
 
 Silverleaf Solutions Australia Pty Ltd
-Approximately $200,000 of additional cost is currently reflected in the position.
 
-Issue:
+Real issue may be: Microsoft EA financial exposure. Silverleaf is merely the advisory vendor.
 
-Silverleaf is the advisory vendor.
+Potential future enhancement: Communicate business impact rather than intermediary vendor. 
 
-The issue leadership actually cares about is the Microsoft EA financial position.
-
-Technically correct.
-
-Potentially not the most useful executive communication.
+Not yet approved.
 
 Finding 3
 
-Executive watchout and financial watchout are not yet clearly differentiated.
+Executive and financial watchouts remain insufficiently differentiated.
 
-Validation suggests:
+Working hypothesis:
 
-Executive watchout
+Executive -> intervention
+Financial -> exposure
 
-- leadership intervention required
-- blocked decision
-- stalled progress
-- escalation required
-
-Financial watchout
-
-- savings exposure
-- budget deterioration
-- renewal cost increase
-- forecast impact
-
-Current distinction requires validation.
+Validation pending.
 
 
 Finding 4
 
 "Items to monitor" may imply leadership ownership.
 
-Observed reaction:
+Observed concern:
 
 The wording suggests Lewis or Matt should take action.
 
-In many cases ownership remains operational.
-
-Validation finding only.
+Many items remain operational.
 
 No approved change.
 
 
 Finding 5
 
-Outputs lack financial context.
+Outputs lack enough financial context.
 
 Example:
 
 Voucherify
 Still under discussion
 
-does not answer:
+Does not answer:
 
-Why should I care?
+Why should leadership care?
 
-Future judgement improvements may need:
+Potential future context: 
 
-- costout impact
-- financial implication
+- cost-out impact
+- financial exposure
 - business significance
 
-while remaining grounded in existing reporting outputs.
+Must remain evidence-based.
 
 
 Finding 6
 
-Financially significant deterioration may be under-promoted.
+Material financial deterioration may be under-promoted.
 
 Observed:
 
@@ -255,24 +537,13 @@ Budget ≈ $83.4k
 Renewal ≈ $120k
 Negative costout ≈ $36.6k
 
-Commentary:
+Concern:
 
-Matt asked business to review usage
-Business working on it
-Document with Matt for signature - $ may not be final
-
-Validation concern:
-
-The engine may currently favour commentary keywords over material financial movement.
+Engine may favour commentary keywords over material financial deterioration.
 
 Finding 7 
 
-BUG-001 root cause identified. 
-
-Observed: Financially material deteriorations were correctly: 
-- generated 
-- ranked 
-- classified but only one financial_risk candidate was promoted. 
+BUG-001 identified. 
 
 Root cause: Single-winner-per-theme behaviour. 
 
@@ -280,23 +551,21 @@ Code pattern: if theme not in by_theme: by_theme[theme] = candidate
 
 Result: Silverleaf became the sole financial_risk winner. Other material financial risks were suppressed. 
 
+Resolved.
+
 Finding 8 
 
-Financial context significantly improves executive usefulness. 
+Financial context materially improves leadership usefulness. 
 
-Observed: Vendor-only promotion provided insufficient context. 
-
-Example: Ahrefs Pte Ltd Required: 
+Required rendering:
+- vendor
 - financial exposure 
-- commentary (if present) 
-Leadership usefulness improved after financial context rendering. 
+- commentary
+
+Context matters more than vendor name alone. 
 
 Finding 9 
 Brevity appears preferable to narrative expansion. 
-
-Observed: Short executive signals appear more useful than longer explanatory prose. 
-
-Direction: 
 
 Retain: 
 - vendor 
@@ -306,112 +575,10 @@ Retain:
 Avoid: 
 - lengthy executive narrative 
 - generic executive filler text 
-- unsupported interpretation Validation with Lewis and Matt pending.
+- speculative narrative
 
-CURRENT LEADERSHIP OUTPUTS
+Validation with Lewis and Matt pending.
 
-Most recent output:
-
-EXECUTIVE WATCHOUT
-
-AWS Marketplace - Cloudec
-
-No progress.
-
-FINANCIAL WATCHOUT
-
-Silverleaf Solutions Australia Pty Ltd 
-Approximately $200,000 of additional cost is currently reflected in the position. 
-Other material financial risks: 
-Ahrefs Pte Ltd 
-
-Financial impact currently reflected: $40,752 
-MightyHive AU PTY LTD Document with Matt for signature - $ may not be final 
-Financial impact currently reflected: $36,589
-
-IMPORTANT DECISIONS
-
-Candidate generation MUST use:
-
-- Upcoming licensing vendors
-- Upcoming consumption vendors
-- Upcoming Microsoft vendors
-- Upcoming new spend vendors
-
-DO NOT use:
-
-- Licensing cost-out to date
-- Consumption cost-out to date
-- Microsoft cost-out to date
-
-Completed opportunities are intentionally excluded. 
-
-Leadership Insights and Risks & Watchouts remain intentionally separated. 
-
-Executive wording should remain commentary-driven. 
-
-Avoid generic executive filler language. 
-
-Avoid unsupported executive narrative. 
-
-Remain grounded in dashboard commentary and reporting outputs. 
-
-Leadership communications are intended to be reviewed by Lewis and ultimately consumed by Matt. 
-
-Output channel remains plain text.
-
-Formatting decisions must remain optimised for:
-
-- plain text
-- Outlook
-- email forwarding
-
-Markdown formatting should not be assumed.
-
-Financially material risks MUST NOT be suppressed simply because a larger financial risk exists.
-
-Current approved behaviour: 
-- One primary financial watchout 
-- Additional material financial risks surfaced beneath it
-
-CURRENT REPORTING ORDER
-
-1. Executive Summary
-2. Leadership Insights
-3. Risks & Watchouts
-4. Key Movements
-5. Weekly Update
-
-
-CURRENT COMMUNICATIONS ORDER
-
-1. Leadership Insights
-2. Risks & Watchouts
-3. Leadership Email
-
-
-GENERATED ARTEFACTS
-
-✅ executive_summary.txt
-✅ key_movements.txt
-✅ weekly_update.md
-✅ leadership_insights.txt
-✅ risks_watchouts.txt
-✅ reporting_package.txt
-✅ leadership_email.txt
-✅ promotion_package/
-
-
-PROMOTION PACKAGE CONTENTS
-
-✅ executive_summary.txt
-✅ key_movements.txt
-✅ weekly_update.md
-✅ leadership_insights.txt
-✅ risks_watchouts.txt
-✅ reporting_package.txt
-✅ leadership_email.txt
-✅ manifest.json
 
 OPEN BUGS
 
@@ -421,88 +588,137 @@ RESOLVED BUGS
 
 BUG-001
 
-Leadership promotion may underweight financially material deteriorations.
+Title: Single-winner financial risk promotion problem.
 
-Observed:
+Observed: Material financial risks were generated and ranked correctly but suppressed during final promotion.
 
-MightyHive dropped out of promoted leadership outputs despite:
+Root cause: Single-winner-per-theme logic.
 
-- significant negative costout movement
-- active commentary
-- leadership involvement
+Resolution: Allow multiple financial risks.
 
-Validation completed. 
-
-Root cause: Single-winner-per-theme financial promotion behaviour. 
-
-Resolution:  Multiple material financial risks are now surfaced.
+Current approved behaviour: One primary financial watchout; additional material financial risks surfaced beneath primary watchout.
 
 Status: RESOLVED
 
-
 CURRENT ASSESSMENT
 
-Pipeline engineering is effectively complete.
+Analytical pipeline: Effectively complete.
+Reporting pipeline: Effectively complete.
+Communications pipeline: Effectively complete.
+Email formatting: Stable 
+Traceability: Complete 
 
-Leadership email formatting is now stable.
-
-Traceability enhancement is complete.
-
-The primary challenge is no longer formatting.
-
-The primary challenge is validating leadership judgement quality.
+Primary remaining challenge: Leadership judgement quality.
 
 Outputs are technically correct and grounded in dashboard commentary.
 
-Validation has shown the system now requires assessment of:
-
-- promotion choices
-- executive significance
-- financial context
-- stakeholder usefulness
-
-rather than:
-
-- headings
-- greetings
-- formatting
-
-
 FUTURE FOCUS
 
-- leadership judgement quality
+Continue work in:
+- promotion decisions
+- financial significance
 - executive relevance
-- financial context representation
-- executive briefing content
-- stakeholder suitability
-- validation with Lewis
-- validation with Matt
+- leadership usefulness
 
-Avoid further formatting iterations unless a genuine usability issue is identified.
+Avoid further formatting changes unless validated usability issues appear.
 
+ROADMAP
 
-NEXT BACKLOG ITEMS
+Phase 1
+Repository and architecture
+Status: Complete
 
-1. Continue validating leadership outputs against additional Weekly Snapshot comparisons
-2. Validate outputs with Lewis
-3. Validate outputs with Matt
-4. Refine executive tone where supported by reporting outputs
-5. Improve judgement presentation without introducing unsupported commentary
-6. Create executive briefing artefact
-7. Create stakeholder-specific communications
-8. Review generated artefact footprint
+Phase 2
+Input Processing
+Status: Complete
 
+Phase 3:
+Analytical engine
+Status: Complete
 
-BACKLOG ITEM DETAILS
+Phase 4:
+Reporting engine and communications generation
+Includes executive summary, key movements, weekly update, leadership insights, risks & watchouts, leadership email generation, reporting package generation.
 
-Review generated artefact footprint
+Status: Complete
 
-Goal:
+Phase 5:
+Judgement validation
+Current Phase
+Focus:
+- promotion quality
+- executive usefulness
+- stakeholder relevance
 
-Rationalise generated artefacts and promotion package contents.
+Phase 6:
+Executive briefing
+Focus:
+- Convert validated watchouts and insights into executive briefing content 
+- Produce briefing artefacts for leadership discussions
+- Separate "what happened" from "what leadership should discuss"
+
+Status: Planned
+
+Phase 7:
+Artefact rationalisation
+Focus:
+- Review all generated artefacts
+- Remove duplication
+- Simplify promotion package
+- Clarify traceability vs operational outputs
+- Reduce artefact footprint
+
+Status: Future
+
+Phase 8:
+Production adoption
+Focus:
+Minimal-edit executive communications workflow
+Document operating model
+Approval and governance workflow
+Repeatable execution
+Ongoing validation
+
+Status: Future
+
+BACKLOG 
+
+Priority 1: Continue leadership judgement validation using additional Weekly Snapshot comparisons.
+Focus areas:
+- Executive relevance of promoted items
+- Financial risk prioritisation
+- Leadership usefulness of outputs
+- Signal-to-noise ratio in executive communications
+- Traceability between dashboard commentary and promoted outputs 
+
+Priority 2: Create executive briefing artefact.
+Goal: Provide a concise executive-facing output separate from the leadership email.
+
+Success criteria:
+- Highlights only the most material issues
+- Can be consumed in under one minute
+- Remains grounded in existing reporting outputs
+- Requires minimal editing
+
+Priority 3: Improve judgement presentation without introducing unsupported narrative.
+Areas for refinement:
+- Financial context presentation
+- Executive watchout presentation
+- Distinction between watchouts and items to monitor
+- Communication of leadership significance
+
+Priority 4: Review generated artefact footprint.
+
+Goal: Rationalise output files and promotion-package contents.
+
+Questions:
+- Which artefacts are directly consumed?
+- Which exist only for debugging?
+- Which provide validation value?
+- Which are duplicated elsewhere?
+- Which can be removed?
 
 Assess:
-
 - executive_summary.txt
 - key_movements.txt
 - weekly_update.md
@@ -511,70 +727,51 @@ Assess:
 - reporting_package.txt
 - leadership_email.txt
 - manifest.json
-- promotion_package structure
-
-Additional assessment:
-
-Review generated artefacts, temporary files and output directories that may no longer provide operational value.
-
-Questions:
-
-- Which artefacts are consumed directly?
-- Which artefacts exist for debugging?
-- Which artefacts provide validation?
-- Which artefacts provide traceability?
-- Which artefacts are duplicated elsewhere?
-- Which artefacts can be removed?
+- promotion package structure
 
 Success criteria:
-
-A simpler promotion package with fewer generated files and clearer ownership.
-
+- Simpler output structure
+- Reduced duplication
+- Clear artefact ownership
 
 DO NOT
 
+- rebuild extraction
+- rebuild comparison
 - rebuild ranking
 - rebuild scoring
-- rebuild extraction
 - rebuild candidate generation
 - redesign commentary enrichment
 - redesign theme classification
 - reintroduce completed opportunities
-- introduce unsupported narrative
+- invent executive narrative
 - collapse judgement generation into email rendering
 - remove intermediate judgement artefacts before validation is complete
+- optimise formatting ahead of judgement quality 
 
+These are explicit project constraints.
 
 NEXT TASK
 
 Continue leadership judgement validation.
 
-Goal:
-
-Confirm that:
-
-- executive watchouts are appropriate
-- financial watchouts are appropriate
-- promoted items reflect genuine leadership importance
-- financially material items are not missed
-- commentary remains grounded
-- outputs are useful to Lewis
-- outputs are useful to Matt
-
-Focus on judgement quality rather than email formatting.
+Current validation questions:
+Does Lewis receive the right signals in under 30 seconds? 
+Are executive watchouts appropriate?
+Are financial watchouts appropriate?
+Does the multi-financial-risk presentation help?
+Are material financial deteriorations being surfaced?
+Is Silverleaf actually the correct primary financial watchout? 
+Should Microsoft EA financial position be communicated differently?
+Are outputs useful to Lewis and Matt?
+Can outputs be distributed with minimal editing?
 
 Continue to:
 
 - reuse existing outputs
 - reuse existing commentary
+- remain evidence-based
 - remain fully grounded in dashboard commentary
-- avoid invented executive narrative
-
-Current validation focus: 
-Does Lewis receive the right signals in under 30 seconds? 
-Is the current multi-financial-risk presentation useful? 
-Does Silverleaf represent the correct primary financial watchout? 
-Should Microsoft EA financial position be communicated differently?
 
 Definition of success:
 
