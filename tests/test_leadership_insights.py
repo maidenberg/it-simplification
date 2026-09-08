@@ -80,7 +80,7 @@ class LeadershipInsightsTestBase(unittest.TestCase):
 
     def _generate(self):
         return generate_leadership_insights(
-            self.exec_path, self.moves_path, self.out_path
+            self.moves_path, self.out_path
         )
 
 
@@ -107,14 +107,6 @@ class TestDeterminism(LeadershipInsightsTestBase):
 
 
 class TestFailureHandling(LeadershipInsightsTestBase):
-    def test_missing_executive_summary_raises(self):
-        # Only movements present.
-        self.moves_path.write_text(MOVES_ARTEFACT, encoding="utf-8")
-        with self.assertRaises(LeadershipInsightsError) as ctx:
-            self._generate()
-        self.assertIn("executive summary", str(ctx.exception))
-        self.assertFalse(self.out_path.exists())
-
     def test_missing_key_movements_raises(self):
         # Only summary present.
         self.exec_path.write_text(EXEC_ARTEFACT, encoding="utf-8")

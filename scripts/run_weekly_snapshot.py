@@ -440,7 +440,6 @@ def run(config: RunnerConfig | None = None) -> dict:
        # 8a. Assemble leadership insights from the just-written 3A/3B artefacts
         # (3D.2). Reuses existing outputs only; no new analytics.
         generate_leadership_insights(
-            executive_summary_path=temp_dir / "executive_summary.txt",
             key_movements_path=temp_dir / "key_movements.txt",
             output_path=temp_dir / "leadership_insights.txt",
             ranked_candidates=ranked_candidates,

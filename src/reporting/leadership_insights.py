@@ -115,7 +115,6 @@ def render_leadership_insights(
     return "\n".join(sections)
 
 def generate_leadership_insights(
-    executive_summary_path,
     key_movements_path,
     output_path,
     ranked_candidates=None,
@@ -148,7 +147,6 @@ def generate_leadership_insights(
     LeadershipInsightsError
         If either required input artefact is missing.
     """
-    exec_text = _read_required(executive_summary_path, "executive summary")
     moves_text = _read_required(key_movements_path, "key movements")
 
     if ranked_candidates:
