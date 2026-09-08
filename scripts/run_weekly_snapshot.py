@@ -45,7 +45,6 @@ from compare_snapshots import (
     compare_snapshots,
     find_latest_snapshot_sheets,
 )
-from key_movements import generate_key_movements
 
 # reporting/ lives at the repository root (one level above scripts/).
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -291,11 +290,8 @@ def run_pipeline(config: RunnerConfig, previous: Path, current: Path) -> dict:
 
     analysis = compare_snapshots(previous_vendors, current_vendors)  # 2B-2F
 
-    key_moves = generate_key_movements(analysis)         # 3B
-
     return {
         "analysis": analysis,
-        "key_movements": key_moves,
     }
 
 
@@ -307,9 +303,6 @@ def _write_outputs(dest: Path, results: dict) -> None:
     """Write report text and a JSON analysis dump into a directory."""
     dest.mkdir(parents=True, exist_ok=True)
     
-    (dest / "key_movements.txt").write_text(
-        results["key_movements"], encoding="utf-8"
-    )
     # A machine-readable dump of the analysis result (contracts are strings,
     # deltas are floats — all JSON-serialisable).
     with open(dest / "analysis.json", "w", encoding="utf-8") as fh:
@@ -445,7 +438,6 @@ def run(config: RunnerConfig | None = None) -> dict:
         # (3D.3). Reuses existing outputs only; no new analytics.
         generate_risks_watchouts(
             leadership_insights_path=temp_dir / "leadership_insights.txt",
-            key_movements_path=temp_dir / "key_movements.txt",
             output_path=temp_dir / "risks_watchouts.txt",
             ranked_candidates=ranked_candidates,
         )

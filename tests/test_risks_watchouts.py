@@ -95,7 +95,7 @@ class RisksWatchoutsTestBase(unittest.TestCase):
 
     def _generate(self):
         return generate_risks_watchouts(
-            self.leadership_path, self.moves_path, self.out_path
+            self.leadership_path, self.out_path
         )
 
 
@@ -163,13 +163,6 @@ class TestFailureHandling(RisksWatchoutsTestBase):
         with self.assertRaises(RisksWatchoutsError) as ctx:
             self._generate()
         self.assertIn("leadership insights", str(ctx.exception))
-        self.assertFalse(self.out_path.exists())
-
-    def test_missing_key_movements_raises(self):
-        self.leadership_path.write_text(LEADERSHIP_ARTEFACT, encoding="utf-8")
-        with self.assertRaises(RisksWatchoutsError) as ctx:
-            self._generate()
-        self.assertIn("key movements", str(ctx.exception))
         self.assertFalse(self.out_path.exists())
 
 if __name__ == "__main__":

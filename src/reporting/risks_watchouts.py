@@ -34,10 +34,6 @@ NO_RISKS = "No risks identified."
 NO_WATCHOUTS = "No watchouts identified."
 NO_OBSERVATIONS = "No data observations identified."
 
-# Matches a ranked key-movements line, e.g. "1. Example Contract 028 (+$16,764.09)".
-_MOVER_LINE = re.compile(r"^\d+\.\s+(?P<name>.*\S)\s+\((?P<sign>[+-])\$(?P<amount>[\d,]+\.\d{2})\)\s*$")
-
-
 def _read_required(path, label: str) -> str:
     """Read a required artefact, failing fast if it is missing."""
     path = Path(path)
@@ -47,26 +43,6 @@ def _read_required(path, label: str) -> str:
             f"Risks & watchouts cannot be generated."
         )
     return path.read_text(encoding="utf-8")
-
-
-def _parse_signed_movers(key_movements_text: str) -> list[dict]:
-    """
-    Return the ranked movers already present in key_movements.txt.
-
-    Each entry: {"name", "sign", "amount", "text"} taken verbatim from the
-    ranked lines. No re-ranking or recomputation is performed.
-    """
-    movers = []
-    for line in key_movements_text.splitlines():
-        match = _MOVER_LINE.match(line.strip())
-        if match:
-            movers.append({
-                "name": match.group("name"),
-                "sign": match.group("sign"),
-                "amount": match.group("amount"),
-                "text": f"{match.group('name')} ({match.group('sign')}${match.group('amount')})",
-            })
-    return movers
 
 
 def _parse_insight_line(leadership_text: str, prefix: str) -> str | None:
@@ -106,21 +82,6 @@ def _extract_labelled(leadership_text: str, label: str) -> list[str]:
     return entries
 
 
-def _build_risks(movers: list[dict]) -> list[str]:
-    return []
- 
-def _build_watchouts(movers: list[dict]) -> list[str]:
-    """Watchouts = movers already marked as significant positive ('+$')."""
-    return [
-        (
-            f"{m['name']}\n"
-            f"Positive movement of ${m['amount']} identified.\n"
-            f"Validate that savings remain achievable and on track."
-        )
-        for m in movers
-        if m["sign"] == "+"
-    ]
- 
 def _build_observations(leadership_text: str) -> list[str]:
     """Data observations sourced verbatim from leadership-insights facts."""
     observations = []
@@ -165,7 +126,6 @@ def render_risks_watchouts(risks: list[str], watchouts: list[str],
 
 def generate_risks_watchouts(
     leadership_insights_path,
-    key_movements_path,
     output_path,
     ranked_candidates=None,
 ) -> Path:
@@ -192,18 +152,14 @@ def generate_risks_watchouts(
         If either required input artefact is missing.
     """
     leadership_text = _read_required(leadership_insights_path, "leadership insights")
-    moves_text = _read_required(key_movements_path, "key movements")
 
     # Preferred approach: use pre-labelled entries from leadership_insights.
     labelled_risks = _extract_labelled(leadership_text, _LABELS["risk"])
     labelled_watchouts = _extract_labelled(leadership_text, _LABELS["watchout"])
     labelled_observations = _extract_labelled(leadership_text, _LABELS["observation"])
 
-    movers = _parse_signed_movers(moves_text)
-
     # Fallback per section when no pre-labelled entries exist for that section.
-    risks = labelled_risks if labelled_risks else _build_risks(movers)
-
+    risks = labelled_risks if labelled_risks else []
     if labelled_watchouts:
         watchouts = labelled_watchouts
 
