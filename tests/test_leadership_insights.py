@@ -20,7 +20,6 @@ sys.path.insert(0, str(REPO_ROOT))
 from src.reporting.leadership_insights import (
     generate_leadership_insights,
     LeadershipInsightsError,
-    SINGLE_MOVER_FALLBACK,
 )
 
 

@@ -1,15 +1,17 @@
 """
-leadership_insights.py — Leadership Insights assembly (Milestone 3D.2).
+leadership_insights.py — Leadership Insights assembly.
 
-Reporting-only artefact. Builds leadership_insights.txt using ONLY values that
-already exist in the reporting outputs:
+Builds leadership_insights.txt from ranked leadership candidates and delivery metrics.
 
-    - executive_summary.txt  (3A): "Contracts compared: N", "Net delta: $X"
-    - key_movements.txt      (3B): ranked movement lines "1. ..." / "2. ..."
+Produces themed executive insights including:
 
-No analytics, calculations, aggregation, or ranking logic are performed here.
-Values are parsed verbatim from the two artefacts and inserted into a fixed
-five-insight template. Identical inputs always produce identical output.
+    - Major Commercial Win
+    - Executive Watchout
+    - Decision Required
+    - Financial Watchout
+    - Delivery Progress
+
+Contains no analytics, ranking, or cost calculations. Inputs are provided by upstream reporting stags.
 """
 
 import re
@@ -23,10 +25,6 @@ class LeadershipInsightsError(Exception):
     """Raised when a required input artefact is missing or unreadable."""
 
 
-# Fallback text used when a second ranked movement is not present.
-SINGLE_MOVER_FALLBACK = "not available"
-
-
 def _read_required(path, label: str) -> str:
     """Read a required artefact, failing fast if it is missing."""
     path = Path(path)
@@ -36,38 +34,6 @@ def _read_required(path, label: str) -> str:
             f"Leadership insights cannot be generated."
         )
     return path.read_text(encoding="utf-8")
-
-
-def _parse_line_value(text: str, label: str) -> str | None:
-    """Return the value following an exact 'label' prefix, or None if absent."""
-    for line in text.splitlines():
-        stripped = line.strip()
-        if stripped.startswith(label):
-            return stripped[len(label):].strip()
-    return None
-
-
-def _parse_ranked_movement(text: str, number: int) -> str | None:
-    """Return the ranked movement entry 'N. ...' text, or None if absent."""
-    pattern = re.compile(rf"^{number}\.\s+(.*\S)\s*$")
-    for line in text.splitlines():
-        match = pattern.match(line.strip())
-        if match:
-            return match.group(1).strip()
-    return None
-
-
-def _contract_name(mover_text: str | None) -> str | None:
-    """
-    Extract the contract-name portion from a ranked movement line.
-
-    Ranked movements look like 'Example Contract 028 (+$16,764.09)'. The contract
-    name is the text before the trailing ' (...)' amount. If no amount is
-    present, the whole entry is treated as the contract name.
-    """
-    if mover_text is None:
-        return None
-    return re.sub(r"\s*\([^)]*\)\s*$", "", mover_text).strip()
 
 def generate_delivery_progress(
     identified_costout: float,
@@ -211,21 +177,6 @@ def generate_leadership_insights(
                 f"{candidate.contract} | "
                 f"{candidate.commentary}"
             )
-
-    # Values already produced upstream — parsed, never recalculated.
-    contracts_compared = _parse_line_value(exec_text, "Contracts compared:")
-    net_delta = _parse_line_value(exec_text, "Net delta:")
-
-    mover_1 = _parse_ranked_movement(moves_text, 1)
-    mover_2 = _parse_ranked_movement(moves_text, 2)
-
-    # Single-mover fallback: when only one ranked movement is present, the
-    # second-mover fields degrade gracefully rather than failing.
-    top_mover_1 = mover_1 if mover_1 is not None else SINGLE_MOVER_FALLBACK
-    top_mover_2 = mover_2 if mover_2 is not None else SINGLE_MOVER_FALLBACK
-
-    contract_1 = _contract_name(mover_1) or SINGLE_MOVER_FALLBACK
-    contract_2 = _contract_name(mover_2) or SINGLE_MOVER_FALLBACK
 
     delivery_progress = None
 

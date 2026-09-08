@@ -51,7 +51,6 @@ from executive_summary import generate_executive_summary, generate_key_movements
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.reporting.leadership_insights import generate_leadership_insights
 from src.reporting.risks_watchouts import generate_risks_watchouts
-from src.reporting.reporting_package import generate_reporting_package
 from src.reporting.leadership_email import generate_leadership_email
 
 
@@ -458,19 +457,7 @@ def run(config: RunnerConfig | None = None) -> dict:
         )
         manifest["stages_completed"].append("risks_watchouts")
 
-        # 8c. Assemble the full reporting package from the five artefacts
-        # (3D.4). Runs after risks_watchouts, before promotion. The weekly
-        # update artefact is passed by the name the runner produces it under.
-        generate_reporting_package(
-            executive_summary_path=temp_dir / "executive_summary.txt",
-            key_movements_path=temp_dir / "key_movements.txt",
-            leadership_insights_path=temp_dir / "leadership_insights.txt",
-            risks_watchouts_path=temp_dir / "risks_watchouts.txt",
-            output_path=temp_dir / "reporting_package.txt",
-        )
-        manifest["stages_completed"].append("reporting_package")
-
-        # 8d. Generate leadership email
+        # 8c. Generate leadership email
         previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
 
         comparison_label = (

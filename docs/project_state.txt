@@ -24,7 +24,7 @@ Build an AI-powered executive communications engine for IT Simplification.
 Business deliverable:
 One weekly leadership email to Matt Toohey and Lewis Lee.
 
-Nothing else is a business deliverable. All other files are supporting, intermediate, diagnostic, validation, traceability, aggregation, or packaging artefacts. Their continued existence must be justified through the artefact rationalisation workstream.
+Nothing else is a business deliverable. All other files are supporting, intermediate, diagnostic, validation, traceability, or aggregation artefacts. Artefact rationalisation has removed several previously-maintained outputs and future artefacts should only be retained where they directly improve the weekly leadership email.
 
 The governing question for all future work is: "Does this improve the quality of the weekly leadership email?"
 
@@ -47,7 +47,7 @@ The project is not a general executive communications platform.
 
 The project is not intended to create multiple stakeholder products, executive briefing products, monthly reporting products, presentation content, or communication variants unless a future stakeholder request demonstrates that such work directly improves the weekly leadership email.
 
-The project briefly drifted towards a broader "executive communications engine" with stakeholder-specific outputs and an executive briefing artefact. That broader framing has been rejected for the active scope because the sole business deliverable is the weekly email to Matt Toohey and Lewis Lee.
+The project briefly drifted towards a broader "executive communications engine" with stakeholder-specific outputs and executive briefing artefacts. That direction has been formally retired. The active scope is limited to improving the weekly leadership email to Matt Toohey and Lewis Lee.
 
 
 (2) PRIMARY BUSINESS OUTCOME
@@ -97,12 +97,13 @@ Do not:
 - create a new scoring model
 - create new themes without a validated defect
 - collapse judgement generation into email rendering merely to reduce file count
-- redesign architecture before completing the current artefact rationalisation work
+- undertake major architectural design without a demonstrated weekly-email quality benefit
 - add special handling for Silverleaf solely because it is a known Microsoft EA advisory exception
 - prioritise cosmetic formatting over the email's business usefulness
 - create an executive briefing artefact unless Matt Toohey or Lewis Lee explicitly requests a non-email briefing format
 - create stakeholder-specific communication variants unless a demonstrated requirement emerges
 - create monthly reporting or presentation outputs as part of the current project
+- reintroduce retired artefacts without a demonstrated weekly-email quality benefit
 
 
 (3) PROJECT EVOLUTION: 
@@ -111,7 +112,19 @@ Phase 1: Automated dashboard comparison.
 Phase 2: Automated reporting package generation.
 Phase 3: Leadership insight generation.
 Phase 4: Executive watchout generation.
-Phase 5 (Current): Leadership judgement validation. Question being tested: If Lewis only had 30 seconds, would the output direct attention to the most important matters?
+Phase 5: Leadership judgement validation. Question being tested: If Lewis only had 30 seconds, would the output direct attention to the most important matters?
+Phase 6 (Current): Artefact rationalisation and email-quality optimisation.
+
+This phase removed or retired multiple non-essential artefacts, workflows, and tests that did not directly improve the weekly leadership email, including:
+- workbook archiving
+- timestamped output directories
+- timestamped manifests
+- promotion packages
+- legacy Executive Talking Points outputs
+- legacy movement-derived risks/watchouts logic
+- fake workbook dependencies
+
+The current focus is improving the business usefulness of the weekly leadership email rather than generating additional artefacts.
 
 
 (4) PROJECT PHILOSOPHY
@@ -151,7 +164,7 @@ Weekly Snapshot workbook + dashboard commentary/status notes
 → executive relevance ranking
 → leadership insights
 → risks and watchouts
-→ weekly leadership email generation / executive briefing
+→ weekly leadership email generation
 
 
 (6) CURRENT IMPLEMENTATION STATUS
@@ -185,6 +198,7 @@ Reporting layer:
 ✅ Commentary traceability
 ✅ Candidate generation
 ✅ Active-opportunity pipeline
+✅ Artefact rationalisation
 
 Communications layer:
 ✅ Leadership email prototype
@@ -204,6 +218,11 @@ Judgement layer:
 ✅ Multiple financial risk surfacing
 ✅ Financial context rendering
 ✅ Material financial risk ordering
+✅ Executive-theme classification
+✅ Major commercial win identification
+✅ Executive watchout identification
+✅ Decision-required identification
+✅ Financial watchout identification
 
 
 (7) REPORTING AND COMMUNICATIONS PACKAGE STRUCTURE 
@@ -221,7 +240,11 @@ Historical communications order:
 2. Risks & Watchouts
 3. Leadership Email
 
-These historical orders remain useful for understanding the pipeline but are no longer business-output priorities. The leadership email is the primary product.
+These historical orders remain useful for understanding pipeline evolution and artefact dependencies.
+
+Current business-output priority:
+1. Leadership email
+The leadership email is the primary and sole business deliverable.
 
 
 (8) GENERATED ARTEFACTS
@@ -233,16 +256,8 @@ Currently generated:
 - risks_watchouts.txt
 - reporting_package.txt
 - leadership_email.txt
-- promotion_package/
-
-Current promotion package contents:
-- executive_summary.txt
-- key_movements.txt
-- leadership_insights.txt
-- risks_watchouts.txt
-- reporting_package.txt
-- leadership_email.txt
-- manifest.json
+- analysis.json
+- manifest.json 
 
 
 (9) REPORTING RULES
@@ -626,25 +641,22 @@ General leadership judgement validation: Complete.
 Formal validation criteria: Approved.
 
 Current phase:
-Artefact rationalisation and promotion-package simplification.
+Leadership email quality optimisation and judgement refinement.
 
 Current governing question:
-"What is the minimum set of artefacts required to generate, review, trace, and distribute a high-quality weekly leadership email?"
+"Does the generated leadership email direct attention to the handful of matters that genuinely require leadership awareness, intervention, or decision?"
 
 Secondary governing question:
-"Does this artefact improve the quality, reliability, traceability, or maintainability of leadership_email.txt?"
-
-If not, it is a candidate for removal, disabling, demotion to debug-only status, or conversion to an internal processing stage.
+"Does this change improve the quality, reliability, traceability, or maintainability, or leadership usefulness of leadership_email.txt?"
 
 Formatting must remain a consideration, but not the primary workstream.
 
 
 (19) ACTIVE BACKLOG
 
-1. Rationalise promotion package contents.
-2. Specific leadership email accuracy and presentation refinements
-3. Production adoption and closure
-4. Potential refinements, which include:
+1. Specific leadership email accuracy and presentation refinements
+2. Production adoption and closure
+3. Potential refinements, which include:
 - correct actual values where source or generated values are inaccurate
 - fix concatenated financial-risk rendering
 - clarify section semantics where "Financial watchout" coexists with "No watchouts identified"
@@ -672,83 +684,18 @@ Broader executive communications engine
 Status: Rejected as the active project framing.
 
 
-(21) RATIONALISE PROMOTION PACKAGE CONTENTS
+(21) IMPLEMENTATION DISCIPLINE
 
-Priority: CURRENT AND HIGHEST
-
-Objective: 
-Review and simplify the final reporting output structure to ensure each generated artefact has a clear audience, purpose, and business value while avoiding duplicate narrative generation.
-
-Background:
-The current reporting architecture has evolved from a single-report model into a multi-audience communication model. Existing project documentation identifies multiple intended outputs, including leadership updates, executive summaries, key movements, leadership insights, risks and watchouts, highlights, and next steps.
-
-A review of the current artefact set indicates that most outputs now serve distinct reporting purposes and should be retained. There was a redundancy identified in the creation of promotion_package/. 
-
-Decision: Retain the existing multi-output reporting model and remove duplication by retiring the creation of promotion_package/.
-
-Retain as Core Outputs:
-
-Business Deliverable
- - leadership_email.txt (primary leadership communication output)
-
-Narrative Components
-- leadership_insights.txt
-- risks_watchouts.txt
-- key_movements.txt
-
-Optional Consumer Output
-- executive_summary.txt (generated but disabled by default unless explicitly requested)
-
-Operational and Validation Outputs
-- reporting_package.txt
-- manifest.json
-
-Candidate for Removal / Merge
-- promotion_package/
-
-Rationale
-promotion_package/ duplicates content already generated within:
-leadership_email.txt
-executive_summary.txt
-key_movements.txt
-leadership_insights.txt
-risks_watchouts.txt
-
-Maintaining both the consolidated weekly update and the individual narrative outputs introduces unnecessary generation effort, increases maintenance overhead, and creates potential content divergence.
-
-The preferred architecture is for audience-facing deliverables to be assembled directly from validated narrative components rather than generating a separate intermediate weekly update document.
-
-Implementation Tasks
-1. Review all current dependencies on promotion_package/.
-2. Confirm whether any downstream processes consume promotion_package/.
-3. If no dependency exists, remove generation of promotion_package/.
-4. If dependencies exist, replace them with references to retained narrative outputs.
-5. Update output schema, workflow documentation, and repository structure.
-6. Update manifest and validation logic to reflect the reduced artefact set.
-7. Confirm traceability and reporting controls remain intact after removal.
-
-Definition of Done
-- promotion_package/ is either removed or fully merged into existing outputs.
-- All retained artefacts have documented consumers and business purpose.
-- No duplicate narrative generation exists between outputs.
-- Final reporting architecture consists of:
-leadership_email.txt
-leadership_insights.txt
-risks_watchouts.txt
-key_movements.txt
-executive_summary.txt (optional)
-reporting_package.txt
-manifest.json
-- Existing reporting objectives remain fully supported.
-
-Do not provide multiple code changes at once.
-
-If implementation inspection identifies a new bug:
-1. Explain the bug.
-2. Add it to OPEN BUGS.
-3. Make one change only.
-4. Validate the change against leadership_email.txt and existing comparison outputs.
-5. Continue to the next item only after the prior change is complete.
+1. Do not provide multiple code changes at once.
+2. If implementation inspection identifies a new bug:
+- Explain the bug.
+- Add it to OPEN BUGS.
+- Make one change only.
+- Validate the change against leadership_email.txt and existing comparison outputs.
+- Continue to the next item only after the prior change is complete.
+3. Prefer incremental, validated changes over large refactors.
+4. Maintain a passing test suite throughout implementation work wherever practical.
+5. Architectural simplification must not reduce weekly leadership email quality.
 
 
 (22) DEFINITION OF SUCCESS
@@ -772,10 +719,10 @@ Current success metric: Correct leadership judgement, not formatting precision.
 4. Validation is complete.
 5. The formal judgement framework is approved.
 6. There are no formally open bugs.
-7. The current phase is Artefact Rationalisation and Promotion-Package Simplification.
+7. The current phase is Leadership Email Quality Optimisation and Judgement Refinement.
 8. Start with leadership_email.txt.
-9. Maintain a master artefact assessment table.
-10. Analyse and decide one artefact at a time.
+9. Start by reviewing leadership_email.txt and identifying the highest-value business-quality improvement opportunity.
+10. Make one validated change at a time and confirm impact before proceeding to the next change. 
 11. Do not redesign completed components.
 12. Do not rebuild extraction, comparison, matching, ranking, scoring, aggregation, commentary enrichment, candidate generation, movement classification, or theme classification.
 13. Reuse existing outputs and commentary.
@@ -784,3 +731,5 @@ Current success metric: Correct leadership judgement, not formatting precision.
 16. Silverleaf is a business exception, not a risk and not a code defect.
 17. Do not build an executive briefing unless stakeholder demand emerges.
 18. Keep all changes grounded, minimal, and directly connected to leadership_email.txt.
+19. Do not provide multiple code changes at once.
+20. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
