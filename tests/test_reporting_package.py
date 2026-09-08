@@ -49,13 +49,12 @@ class ReportingPackageTestBase(unittest.TestCase):
               leadership_c=LEADERSHIP, risks_c=RISKS):
         self.paths["exec"].write_text(exec_c, encoding="utf-8")
         self.paths["moves"].write_text(moves_c, encoding="utf-8")
-        self.paths["weekly"].write_text(weekly_c, encoding="utf-8")
         self.paths["leadership"].write_text(leadership_c, encoding="utf-8")
         self.paths["risks"].write_text(risks_c, encoding="utf-8")
 
     def _generate(self):
         return generate_reporting_package(
-            self.paths["exec"], self.paths["moves"], self.paths["weekly"],
+            self.paths["exec"], self.paths["moves"], 
             self.paths["leadership"], self.paths["risks"], self.paths["out"],
         )
 
@@ -71,22 +70,20 @@ class TestNormalGeneration(ReportingPackageTestBase):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
         self.assertTrue(text.startswith("IT SIMPLIFICATION WEEKLY REPORT"))
-        for heading in ("EXECUTIVE SUMMARY", "KEY MOVEMENTS", "WEEKLY UPDATE",
-                        "LEADERSHIP INSIGHTS", "RISKS & WATCHOUTS", "END OF REPORT"):
+        for heading in ("EXECUTIVE SUMMARY", "KEY MOVEMENTS", "LEADERSHIP INSIGHTS", "RISKS & WATCHOUTS", "END OF REPORT"):
             self.assertIn(heading, text)
 
     def test_fixed_section_order(self):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
-        order = ["EXECUTIVE SUMMARY", "KEY MOVEMENTS", "WEEKLY UPDATE",
-                 "LEADERSHIP INSIGHTS", "RISKS & WATCHOUTS", "END OF REPORT"]
+        order = ["EXECUTIVE SUMMARY", "LEADERSHIP INSIGHTS", "RISKS & WATCHOUTS", "KEY MOVEMENTS", "END OF REPORT"]
         positions = [text.index(s) for s in order]
         self.assertEqual(positions, sorted(positions))
 
     def test_verbatim_source_preservation(self):
         self._seed()
         text = self._generate().read_text(encoding="utf-8")
-        for content in (EXEC, MOVES, WEEKLY, LEADERSHIP, RISKS):
+        for content in (EXEC, MOVES, LEADERSHIP, RISKS):
             self.assertIn(content, text)
 
     def test_deterministic_output(self):
@@ -109,15 +106,8 @@ class TestEmptyPlaceholders(ReportingPackageTestBase):
         self._seed(moves_c="")
         text = self._generate().read_text(encoding="utf-8")
         moves_idx = text.index("KEY MOVEMENTS")
-        weekly_idx = text.index("WEEKLY UPDATE")
+        weekly_idx = text.index("END OF REPORT")
         self.assertIn(EMPTY_PLACEHOLDER, text[moves_idx:weekly_idx])
-
-    def test_empty_weekly_update(self):
-        self._seed(weekly_c="\n\n")
-        text = self._generate().read_text(encoding="utf-8")
-        weekly_idx = text.index("WEEKLY UPDATE")
-        leadership_idx = text.index("LEADERSHIP INSIGHTS")
-        self.assertIn(EMPTY_PLACEHOLDER, text[weekly_idx:leadership_idx])
 
     def test_empty_leadership_insights(self):
         self._seed(leadership_c="")
@@ -149,13 +139,6 @@ class TestMissingFiles(ReportingPackageTestBase):
         with self.assertRaises(ReportingPackageError) as ctx:
             self._generate()
         self.assertIn("key movements", str(ctx.exception))
-
-    def test_missing_weekly_update(self):
-        self._seed()
-        self.paths["weekly"].unlink()
-        with self.assertRaises(ReportingPackageError) as ctx:
-            self._generate()
-        self.assertIn("weekly update", str(ctx.exception))
 
     def test_missing_leadership_insights(self):
         self._seed()
