@@ -49,60 +49,6 @@ def _top_movers(analysis: dict) -> list:
     return list(analysis.get("top_increases", [])) + list(analysis.get("top_decreases", []))
 
 
-def generate_executive_summary(analysis: dict) -> str:
-    """
-    Render the deterministic executive summary from a movement-analysis result.
-
-    Parameters
-    ----------
-    analysis : dict
-        The result object returned by compare_snapshots().
-
-    Returns
-    -------
-    str
-        The formatted executive summary with fixed section ordering.
-    """
-    contracts_compared = analysis["previous_count"]
-    changed_contracts = analysis["changed_count"]
-    increase_count = analysis["increase_count"]
-    decrease_count = analysis["decrease_count"]
-    total_positive_delta = _format_currency(analysis["total_positive_delta"])
-    total_negative_delta = _format_currency(analysis["total_negative_delta"])
-    net_delta = _format_currency(analysis["net_delta"])
-
-    movers = _top_movers(analysis)
-
-    lines = [
-        SEPARATOR,
-        "IT SIMPLIFICATION WEEKLY MOVEMENT SUMMARY",
-        SEPARATOR,
-        "",
-        f"Contracts compared: {contracts_compared}",
-        f"Contracts with movement: {changed_contracts}",
-        "",
-        f"Increases: {increase_count}",
-        f"Decreases: {decrease_count}",
-        "",
-        f"Total positive delta: ${total_positive_delta}",
-        f"Total negative delta: ${total_negative_delta}",
-        "",
-        f"Net delta: ${net_delta}",
-        "",
-        "Top Movements",
-        "-------------",
-        "",
-    ]
-
-    for i in range(3):
-        if i < len(movers):
-            lines.append(f"{i + 1}. {_format_mover(movers[i])}")
-        else:
-            lines.append(f"{i + 1}.")
-
-    return "\n".join(lines)
-
-
 def _format_signed_mover(mover: dict) -> str:
     """
     Render a mover as 'Contract Name (+$X.XX)' or 'Contract Name (-$X.XX)'.

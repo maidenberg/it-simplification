@@ -45,7 +45,7 @@ from compare_snapshots import (
     compare_snapshots,
     find_latest_snapshot_sheets,
 )
-from executive_summary import generate_executive_summary, generate_key_movements
+from key_movements import generate_key_movements
 
 # reporting/ lives at the repository root (one level above scripts/).
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -291,12 +291,10 @@ def run_pipeline(config: RunnerConfig, previous: Path, current: Path) -> dict:
 
     analysis = compare_snapshots(previous_vendors, current_vendors)  # 2B-2F
 
-    exec_summary = generate_executive_summary(analysis)  # 3A
     key_moves = generate_key_movements(analysis)         # 3B
 
     return {
         "analysis": analysis,
-        "executive_summary": exec_summary,
         "key_movements": key_moves,
     }
 
@@ -308,9 +306,7 @@ def run_pipeline(config: RunnerConfig, previous: Path, current: Path) -> dict:
 def _write_outputs(dest: Path, results: dict) -> None:
     """Write report text and a JSON analysis dump into a directory."""
     dest.mkdir(parents=True, exist_ok=True)
-    (dest / "executive_summary.txt").write_text(
-        results["executive_summary"], encoding="utf-8"
-    )
+    
     (dest / "key_movements.txt").write_text(
         results["key_movements"], encoding="utf-8"
     )
@@ -440,7 +436,6 @@ def run(config: RunnerConfig | None = None) -> dict:
        # 8a. Assemble leadership insights from the just-written 3A/3B artefacts
         # (3D.2). Reuses existing outputs only; no new analytics.
         generate_leadership_insights(
-            key_movements_path=temp_dir / "key_movements.txt",
             output_path=temp_dir / "leadership_insights.txt",
             ranked_candidates=ranked_candidates,
         )

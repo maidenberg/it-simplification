@@ -79,10 +79,7 @@ class LeadershipInsightsTestBase(unittest.TestCase):
         self.moves_path.write_text(moves_content, encoding="utf-8")
 
     def _generate(self):
-        return generate_leadership_insights(
-            self.moves_path, self.out_path
-        )
-
+        return generate_leadership_insights(self.out_path)
 
 class TestFileGeneration(LeadershipInsightsTestBase):
     def test_file_generation(self):
@@ -104,17 +101,6 @@ class TestDeterminism(LeadershipInsightsTestBase):
         first = self._generate().read_text(encoding="utf-8")
         second = self._generate().read_text(encoding="utf-8")
         self.assertEqual(first, second)
-
-
-class TestFailureHandling(LeadershipInsightsTestBase):
-    def test_missing_key_movements_raises(self):
-        # Only summary present.
-        self.exec_path.write_text(EXEC_ARTEFACT, encoding="utf-8")
-        with self.assertRaises(LeadershipInsightsError) as ctx:
-            self._generate()
-        self.assertIn("key movements", str(ctx.exception))
-        self.assertFalse(self.out_path.exists())
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
