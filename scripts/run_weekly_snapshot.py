@@ -13,11 +13,11 @@ discovery, previous-snapshot resolution, preflight validation, temp->promote
 output handling, archiving, last-successful-run state, and a per-run manifest.
 
 Operator workflow:
-    1. Place exactly one new .xlsx workbook in data/incoming/.
+    1. Ensure the latest Weekly snapshots.xlsx workbook is present in data/.
     2. Run:  python scripts/run_weekly_snapshot.py
-    3. Review data/outputs/<run-id>/ and the manifest.
-    4. On success the workbook is archived and becomes the next baseline.
-    5. On failure the workbook stays in incoming/ and the error says why.
+    3. Review data/outputs/latest/ and data/outputs/manifest.json.
+    4. The workbook remains in place and can be re-run as required.
+    5. On failure, review the error message and re-run after correction.
 
 Usage:
     python scripts/run_weekly_snapshot.py
@@ -179,11 +179,11 @@ def resolve_previous_snapshot(config: RunnerConfig, current: Path) -> Path:
     return previous
 
 
-def write_state(config: RunnerConfig, archived_snapshot: Path, run_id: str) -> None:
+def write_state(config: RunnerConfig, snapshot: Path, run_id: str) -> None:
     """Persist the last-successful-run state (called only after 3B succeeds)."""
     config.state_dir.mkdir(parents=True, exist_ok=True)
     state = {
-        "snapshot_path": str(archived_snapshot.resolve()),
+        "snapshot_path": str(snapshot.resolve()),
         "run_id": run_id,
         "updated_at": _now_iso(),
     }
@@ -324,7 +324,7 @@ def _write_outputs(dest: Path, results: dict) -> None:
 def _write_manifest(config: RunnerConfig, manifest: dict) -> Path:
     """Write the per-run manifest under outputs/, keyed by run id."""
     config.outputs_dir.mkdir(parents=True, exist_ok=True)
-    manifest_path = config.outputs_dir / f"manifest_{manifest['run_id']}.json"
+    manifest_path = config.outputs_dir / "manifest.json"
     with open(manifest_path, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=2)
     return manifest_path
@@ -339,8 +339,7 @@ def run(config: RunnerConfig | None = None) -> dict:
     Execute the full drop-in run. Returns the run manifest dict.
 
     A manifest is produced for every attempt. On failure, state is not updated,
-    the incoming workbook is not archived, and no promoted output directory is
-    left behind.
+    and no promoted output directory is left behind.
     """
     config = config or default_config()
     config.ensure_directories()
@@ -493,22 +492,15 @@ def run(config: RunnerConfig | None = None) -> dict:
         )
 
         # 9. Promote temp output to outputs/<run-id> only after success.
-        final_output = config.outputs_dir / run_id
+        final_output = config.outputs_dir / "latest"
         if final_output.exists():
             shutil.rmtree(final_output)
         shutil.move(str(temp_dir), str(final_output))
         manifest["output_directory"] = str(final_output)
         manifest["stages_completed"].append("promote")
 
-        # 10. Archive the processed current snapshot.
-        archived = config.archive_dir / current.name
-        if archived.exists():
-            archived = config.archive_dir / f"{current.stem}_{run_id}{current.suffix}"
-        shutil.move(str(current), str(archived))
-        manifest["stages_completed"].append("archive")
-
-        # 11. Update last-successful-run state.
-        write_state(config, archived, run_id)
+        # 10. Update last-successful-run state.
+        write_state(config, current, run_id)
         manifest["stages_completed"].append("state_update")
 
         manifest["status"] = "success"

@@ -8,7 +8,6 @@ only reads, validates, resolves paths, and merges runtime settings.
 Supported configuration keys (config/weekly_snapshot.json):
     snapshot_worksheet   : str
     incoming_directory   : str  (repo-relative or absolute path)
-    archive_directory    : str
     outputs_directory    : str
     state_directory      : str
     allowed_extensions   : list[str]  (each like ".xlsx")
@@ -42,7 +41,6 @@ DEFAULT_CONFIG_PATH = _REPO_ROOT / "config" / "weekly_snapshot.json"
 _STRING_KEYS = {"snapshot_worksheet"}
 _PATH_KEYS = {
     "incoming_directory": "incoming_dir",
-    "archive_directory": "archive_dir",
     "outputs_directory": "outputs_dir",
     "state_directory": "state_dir",
 }

@@ -1,7 +1,6 @@
 {
   "snapshot_worksheet": "Live dashboard",
   "incoming_directory": "data/incoming",
-  "archive_directory": "data/archive",
   "outputs_directory": "data/outputs",
   "state_directory": "data/state",
   "allowed_extensions": [".xlsx"]

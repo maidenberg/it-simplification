@@ -27,7 +27,6 @@ class RunnerConfig:
     # Base data directory and its sub-folders.
     data_dir: Path = _REPO_ROOT / "data"
     incoming_dir: Path = _REPO_ROOT / "data" / "incoming"
-    archive_dir: Path = _REPO_ROOT / "data" / "archive"
     outputs_dir: Path = _REPO_ROOT / "data" / "outputs"
     state_dir: Path = _REPO_ROOT / "data" / "state"
     weekly_snapshot_workbook: Path = _REPO_ROOT / "data" / "Weekly snapshots.xlsx"
@@ -54,7 +53,6 @@ class RunnerConfig:
         """Create the configured runtime directories if they do not exist."""
         for directory in (
             self.incoming_dir,
-            self.archive_dir,
             self.outputs_dir,
             self.state_dir,
         ):
