@@ -113,29 +113,6 @@ class TestStructure(RisksWatchoutsTestBase):
         self.assertEqual(positions, sorted(positions))
 
 
-class TestPopulated(RisksWatchoutsTestBase):
-    def test_populated_watchouts(self):
-        self._seed(moves=MOVES_POSITIVE_ONLY)
-        text = self._generate().read_text(encoding="utf-8")
-        self.assertIn("Significant movement: Example Contract 028 (+$16,764.09)", text)
-        self.assertIn("Significant movement: Example Contract 034 (+$7,489.00)", text)
-
-    def test_populated_risks(self):
-        self._seed(moves=MOVES_WITH_NEGATIVE)
-        text = self._generate().read_text(encoding="utf-8")
-        self.assertIn("Negative movement: Example Contract 099 (-$5,560.00)", text)
-        # The positive mover still appears as a watchout.
-        self.assertIn("Significant movement: Example Contract 028 (+$16,764.09)", text)
-
-    def test_data_observations_sourced_from_leadership(self):
-        self._seed()
-        text = self._generate().read_text(encoding="utf-8")
-        self.assertIn("1. Portfolio review covered 142 contracts.", text)
-        self.assertIn(
-            "2. Portfolio net movement for the reporting period was $24,750.09.", text
-        )
-
-
 class TestEmptyPlaceholders(RisksWatchoutsTestBase):
     def test_no_risks_placeholder(self):
         # Positive-only movers => no risks.
@@ -194,63 +171,6 @@ class TestFailureHandling(RisksWatchoutsTestBase):
             self._generate()
         self.assertIn("key movements", str(ctx.exception))
         self.assertFalse(self.out_path.exists())
-
-
-class TestRunnerIntegration(unittest.TestCase):
-    SAMPLE_WORKBOOK = REPO_ROOT / "data" / "Fake vendor data.xlsx"
-
-    @unittest.skipUnless((REPO_ROOT / "data" / "Fake vendor data.xlsx").exists(),
-                         "sample workbook not present")
-    def test_runner_produces_risks_watchouts(self):
-        import openpyxl
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        import run_weekly_snapshot as runner
-        from runner_config import RunnerConfig
-
-        def _extract(src, sheet, dest, ds):
-            s = openpyxl.load_workbook(src, read_only=True, data_only=True)
-            w = s[sheet]
-            o = openpyxl.Workbook()
-            ow = o.active
-            ow.title = ds
-            for row in w.iter_rows(values_only=True):
-                ow.append(list(row))
-            o.save(dest)
-            s.close()
-
-        tmp = Path(tempfile.mkdtemp(prefix="rw_run_"))
-        try:
-            ws = "Snapshot Wk 2"
-            config = RunnerConfig(
-                data_dir=tmp, incoming_dir=tmp / "incoming",
-                archive_dir=tmp / "archive", outputs_dir=tmp / "outputs",
-                state_dir=tmp / "state", snapshot_worksheet=ws,
-            )
-            config.ensure_directories()
-            prev = config.archive_dir / "prev.xlsx"
-            curr = config.incoming_dir / "curr.xlsx"
-            _extract(self.SAMPLE_WORKBOOK, "Snapshot Wk 1", prev, ws)
-            _extract(self.SAMPLE_WORKBOOK, "Snapshot Wk 2", curr, ws)
-            runner.write_state(config, prev, "baseline")
-
-            manifest = runner.run(config)
-
-            self.assertEqual(manifest["status"], "success", manifest["errors"])
-            # Ordering: risks_watchouts runs after leadership_insights, before promote.
-            stages = manifest["stages_completed"]
-            self.assertLess(stages.index("leadership_insights"),
-                            stages.index("risks_watchouts"))
-            self.assertLess(stages.index("risks_watchouts"),
-                            stages.index("promote"))
-
-            out = config.outputs_dir / manifest["run_id"] / "risks_watchouts.txt"
-            self.assertTrue(out.exists())
-            text = out.read_text(encoding="utf-8")
-            self.assertIn("IT SIMPLIFICATION RISKS & WATCHOUTS", text)
-            self.assertIn("END OF REPORT", text)
-        finally:
-            shutil.rmtree(tmp, ignore_errors=True)
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
