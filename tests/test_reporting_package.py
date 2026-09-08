@@ -37,7 +37,6 @@ class ReportingPackageTestBase(unittest.TestCase):
         self.paths = {
             "exec": self.tmp / "executive_summary.txt",
             "moves": self.tmp / "key_movements.txt",
-            "weekly": self.tmp / "weekly_update.md",
             "leadership": self.tmp / "leadership_insights.txt",
             "risks": self.tmp / "risks_watchouts.txt",
             "out": self.tmp / REPORTING_PACKAGE_FILENAME,

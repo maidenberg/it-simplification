@@ -49,7 +49,6 @@ from executive_summary import generate_executive_summary, generate_key_movements
 
 # reporting/ lives at the repository root (one level above scripts/).
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from reporting.weekly_update import assemble_weekly_update
 from src.reporting.leadership_insights import generate_leadership_insights
 from src.reporting.risks_watchouts import generate_risks_watchouts
 from src.reporting.reporting_package import generate_reporting_package
@@ -441,18 +440,7 @@ def run(config: RunnerConfig | None = None) -> dict:
         # 8. Write to temp output location.
         _write_outputs(temp_dir, results)
 
-        # 8b. Assemble the weekly update from the just-written 3A/3B artefacts
-        # (3D.1). Runs after Executive Summary + Key Movements are on disk.
-        assemble_weekly_update(
-            output_dir=temp_dir,
-            run_id=run_id,
-            previous_snapshot=str(previous),
-            current_snapshot=str(current),
-            generated_timestamp=_now_iso(),
-        )
-        manifest["stages_completed"].append("weekly_update")
-
-        # 8c. Assemble leadership insights from the just-written 3A/3B artefacts
+       # 8a. Assemble leadership insights from the just-written 3A/3B artefacts
         # (3D.2). Reuses existing outputs only; no new analytics.
         generate_leadership_insights(
             executive_summary_path=temp_dir / "executive_summary.txt",
@@ -462,7 +450,7 @@ def run(config: RunnerConfig | None = None) -> dict:
         )
         manifest["stages_completed"].append("leadership_insights")
 
-        # 8d. Assemble risks & watchouts from existing reporting artefacts
+        # 8b. Assemble risks & watchouts from existing reporting artefacts
         # (3D.3). Reuses existing outputs only; no new analytics.
         generate_risks_watchouts(
             leadership_insights_path=temp_dir / "leadership_insights.txt",
@@ -472,20 +460,19 @@ def run(config: RunnerConfig | None = None) -> dict:
         )
         manifest["stages_completed"].append("risks_watchouts")
 
-        # 8e. Assemble the full reporting package from the five artefacts
+        # 8c. Assemble the full reporting package from the five artefacts
         # (3D.4). Runs after risks_watchouts, before promotion. The weekly
         # update artefact is passed by the name the runner produces it under.
         generate_reporting_package(
             executive_summary_path=temp_dir / "executive_summary.txt",
             key_movements_path=temp_dir / "key_movements.txt",
-            weekly_update_path=temp_dir / "weekly_update.md",
             leadership_insights_path=temp_dir / "leadership_insights.txt",
             risks_watchouts_path=temp_dir / "risks_watchouts.txt",
             output_path=temp_dir / "reporting_package.txt",
         )
         manifest["stages_completed"].append("reporting_package")
 
-        # 8f. Generate leadership email
+        # 8d. Generate leadership email
         previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
 
         comparison_label = (
@@ -501,7 +488,7 @@ def run(config: RunnerConfig | None = None) -> dict:
 
         manifest["stages_completed"].append("leadership_email")
 
-        # 8g. Assemble the promotion package (3D.5): validate + copy the existing
+        # 8e. Assemble the promotion package (3D.5): validate + copy the existing
         # reporting artefacts into promotion_package/ with a metadata manifest.
         # Runs after reporting_package, before promotion. Packaging only.
         generate_promotion_package(

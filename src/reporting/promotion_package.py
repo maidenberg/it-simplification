@@ -26,7 +26,6 @@ PROMOTION_MANIFEST_FILENAME = "manifest.json"
 REQUIRED_ARTEFACTS = [
     "executive_summary.txt",
     "key_movements.txt",
-    "weekly_update.md",
     "leadership_insights.txt",
     "risks_watchouts.txt",
     "reporting_package.txt",

@@ -101,7 +101,7 @@ class TestReportingPackageRunner(unittest.TestCase):
 
             # Existing artefacts remain present and unchanged in structure.
             for name in ("executive_summary.txt", "key_movements.txt",
-                         "weekly_update.md", "leadership_insights.txt",
+                         "leadership_insights.txt",
                          "risks_watchouts.txt", "analysis.json"):
                 self.assertTrue((out_dir / name).exists())
         finally:

@@ -26,7 +26,6 @@ _SECTIONS = [
     ("LEADERSHIP INSIGHTS", "==================="),
     ("RISKS & WATCHOUTS", "================="),
     ("KEY MOVEMENTS", "============="),
-    ("WEEKLY UPDATE", "============="),
 ]
 
 
@@ -53,7 +52,6 @@ def _read_section_content(path, label: str) -> str:
 def generate_reporting_package(
     executive_summary_path,
     key_movements_path,
-    weekly_update_path,
     leadership_insights_path,
     risks_watchouts_path,
     output_path,
@@ -80,8 +78,7 @@ def generate_reporting_package(
         (executive_summary_path, "executive summary"),
         (leadership_insights_path, "leadership insights"),
         (risks_watchouts_path, "risks & watchouts"),
-        (key_movements_path, "key movements"),
-        (weekly_update_path, "weekly update"),        
+        (key_movements_path, "key movements"),       
     ]
     contents = [_read_section_content(path, label) for path, label in ordered_inputs]
 
