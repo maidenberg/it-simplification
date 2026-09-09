@@ -241,8 +241,8 @@ def generate_leadership_insights(
             if candidate.commentary:
 
                 additional_financial_risks.append (
-                    f"{candidate.vendor}\n"
-                    f"{candidate.commentary}"
+                    f"• {candidate.vendor}\n"
+                    f"{candidate.commentary}\n"
                     f"Financial impact currently reflected: "
                     f"${abs(candidate.costout):,.0f}"
             )
@@ -250,7 +250,7 @@ def generate_leadership_insights(
             else:
 
                 additional_financial_risks.append (
-                    f"{candidate.vendor}\n"
+                    f"• {candidate.vendor}\n"
                     f"Financial impact currently reflected: "
                     f"${abs(candidate.costout):,.0f}"
                 )

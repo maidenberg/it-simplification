@@ -27,11 +27,8 @@ class LeadershipEmailError(Exception):
 LEADERSHIP_EMAIL_FILENAME = "leadership_email.txt"
 
 def _format_email_item(text: str) -> str:
-    """Render vendor/commentary content onto a single line."""
-    return text.replace(
-        "\n",
-        ": ",
-    )
+    """Preserve multi-line formatting for email readability."""
+    return text.strip()
 
 def _read_required(path, label: str) -> str:
     """Read a required artefact, failing fast if it is missing."""

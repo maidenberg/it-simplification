@@ -641,7 +641,7 @@ General leadership judgement validation: Complete.
 Formal validation criteria: Approved.
 
 Current phase:
-Leadership email quality optimisation and judgement refinement.
+Leadership email quality optimisation and documentation alignment.
 
 Current governing question:
 "Does the generated leadership email direct attention to the handful of matters that genuinely require leadership awareness, intervention, or decision?"
@@ -654,9 +654,10 @@ Formatting must remain a consideration, but not the primary workstream.
 
 (19) ACTIVE BACKLOG
 
-1. Specific leadership email accuracy and presentation refinements
-2. Production adoption and closure
-3. Potential refinements, which include:
+1. DOCUMENTATION AND COMMENT CLEANUP WORKSTREAM 
+2. Specific leadership email accuracy and presentation refinements
+3. Production adoption and closure
+4. Potential refinements, which include:
 - correct actual values where source or generated values are inaccurate
 - fix concatenated financial-risk rendering
 - clarify section semantics where "Financial watchout" coexists with "No watchouts identified"
@@ -733,3 +734,77 @@ Current success metric: Correct leadership judgement, not formatting precision.
 18. Keep all changes grounded, minimal, and directly connected to leadership_email.txt.
 19. Do not provide multiple code changes at once.
 20. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
+
+(24) DOCUMENTATION AND COMMENT CLEANUP WORKSTREAM 
+
+Status: Active
+
+Completed architectural simplification
+
+The following artefacts have been retired from the active leadership-email pipeline:
+
+- promotion_package/
+- reporting_package.txt
+- executive_summary.txt
+- key_movements.txt
+
+These artefacts no longer contribute to the generation of:
+- leadership_insights.txt
+- risks_watchouts.txt
+- leadership_email.txt
+
+and are no longer considered part of the active business-output path.
+
+Current active output path:
+analysis.json
+↓
+leadership candidate generation
+↓
+leadership_insights.txt
+↓
+risks_watchouts.txt
+↓
+leadership_email.txt
+
+Current objective:
+
+Perform documentation and code-comment cleanup to align repository documentation with the implemented architecture.
+
+scope
+
+Review and update:
+- module docstrings
+- function docstrings
+- README content
+- project_state.txt
+- inline code comments
+
+where they still describe retired artefacts or retired dependencies.
+
+Typical stale references
+
+Review for references to:
+- promotion_package/
+- reporting_package.txt
+- executive_summary.txt
+- key_movements.txt
+- Executive Talking Points
+- movement-derived risks
+- movement-derived watchouts
+- contracts compared
+- net delta
+- top movers as leadership-insight inputs
+
+Review rule
+
+Historical context may be retained if clearly marked as historical.
+
+Documentation describing current runtime behaviour must reflect the implemented architecture.
+
+Implementation Discipline 
+
+Documentation updates should be performed independently of behavioural code changes.
+
+Make one change at a time.
+
+Maintain a passing test suite throughout the cleanup effort.
