@@ -1,6 +1,6 @@
 # IT Simplification
 
-Proof of Concept for an AI-powered communications engine for IT Simplification.
+AI-powered leadership email automation for the IT Simplification program.
 
 ## Purpose
 
@@ -24,4 +24,9 @@ Sample and test data
 
 ## Status
 
-Planning and architecture phase.
+Leadership email generation operational.
+ 
+Current focus:
+- documentation and comment cleanup
+- leadership email quality optimisation
+- production adoption and closure
