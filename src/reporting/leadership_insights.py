@@ -11,7 +11,7 @@ Produces themed executive insights including:
     - Financial Watchout
     - Delivery Progress
 
-Contains no analytics, ranking, or cost calculations. Inputs are provided by upstream reporting stags.
+Contains no analytics, ranking, or cost calculations. Inputs are provided by the leadership-candidate generation layer.
 """
 
 import re
@@ -123,18 +123,24 @@ def generate_leadership_insights(
     """
     Generate leadership_insights.txt from existing reporting artefacts.
 
-    Reads the executive-summary and key-movements artefacts, parses the required
-    values already present in them, assembles the fixed five-insight document,
-    and writes it to output_path.
+    Consumes the ranked leadership candidates produced by the active
+    leadership-email pipeline and renders leadership-relevant insights
+    without performing additional ranking, scoring, or analysis.
 
     Parameters
     ----------
-    executive_summary_path : str or Path
-        Path to the existing executive_summary.txt artefact.
-    key_movements_path : str or Path
-        Path to the existing key_movements.txt artefact.
     output_path : str or Path
         Path to write leadership_insights.txt.
+
+    ranked_candidates : list, optional
+        Ranked leadership candidates supplied by the upstream
+        candidate-generation process.
+
+    identified_costout : float, optional
+        Portfolio identified cost-out value.
+
+    finalised_costout : float, optional
+        Finalised portfolio cost-out value.
 
     Returns
     -------

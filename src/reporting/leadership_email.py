@@ -10,12 +10,14 @@ Inputs:
 Output:
     leadership_email.txt
 
-No analytics.
-No ranking.
-No scoring.
-No candidate generation.
+This module assembles the final plain-text email from existing leadership artefacts.
 
-Formatting only.
+Contains no analytics, ranking, scoring, candidate generation, or leadership judgement.
+
+Responsibilities:
+    - extract approved leadership sections
+    - render Outlook-compatible plain-text output
+    - preserve readability and scanability
 """
 
 from pathlib import Path
