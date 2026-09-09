@@ -7,7 +7,6 @@ __pycache__/
 
 # Weekly run outputs
 data/outputs/
-data/archive/
 data/state/
 
 # Incoming data

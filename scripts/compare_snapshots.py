@@ -1,16 +1,19 @@
 """
-compare_snapshots.py — Snapshot comparison module for the IT Simplification
-Communications Engine.
+compare_snapshots.py - Snapshot extraction and comparison module for the
+IT Simplification weekly leadership email pipeline.
 
-Responsibility:
-    Load individual weekly snapshot worksheets so they can be compared
-    week-on-week. Each snapshot is stored as a separate worksheet within the
-    workbook (e.g. "Snapshot Wk 1", "Snapshot Wk 2"), so load_snapshot targets
-    a specific sheet by name.
+Responsibilities:
+Identify the latest two weekly snapshot worksheets in the workbook.
 
-    Vendor-data parsing (locating the vendor table, normalising columns/types)
-    and comparison logic (deltas, movements, newly finalised items) are
-    intentionally not implemented yet.
+Load individual snapshot worksheets for comparison.
+
+Extract and normalise vendor and contract data from the dashboard layout.
+
+Compare previous and current contract positions, including added and removed
+contracts, cost-out movements, portfolio totals, and top movers.
+
+This module provides the analysis data used by the downstream leadership
+candidate, leadership insight, risk and watchout, and leadership email stages.
 """
 
 from pathlib import Path
@@ -228,17 +231,12 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
     rows_before = len(combined)
     if combined.shape[1] >= 2:
         vendor = combined.iloc[:, 0].astype(str).str.strip()
-        contract = combined.iloc[:, 1].astype(str).str.strip()
-	
+        	
         vendor_blank = (
         combined.iloc[:, 0].isna()
         | vendor.str.lower().isin(blank_tokens)
         )
-        contract_blank = (
-            combined.iloc[:, 1].isna()
-            | contract.str.lower().isin(blank_tokens)
-        )
-        
+                
         # Rows without a vendor are not usable.
         combined = combined[~vendor_blank].copy()
 
@@ -256,7 +254,7 @@ def extract_vendor_data(snapshot_df: pd.DataFrame) -> pd.DataFrame:
     rows_after = len(combined)
 
     print(f"Rows before cleanup: {rows_before}")
-    print(f"Rows after cleanup (blank/null Contract removed): {rows_after}")
+    print(f"Rows after cleanup (blank/null Vendor removed; blank Contract preserved): {rows_after}")
 
     print(f"Extracted columns: {list(combined.columns)}")
 
@@ -345,8 +343,9 @@ def compare_snapshots(previous_df: pd.DataFrame, current_df: pd.DataFrame) -> di
     contracts were added, removed, or remained present, and — for contracts
     present in both — detects changes in the primary Costout value.
 
-    Movement classification, summaries, insights and totals are intentionally
-    not implemented in this milestone.
+    The comparison includes cost-out movement classification, portfolio-level
+    positive and negative totals, net movement, and ordered top increases and
+    decreases. Leadership interpretation is handled by downstream reporting modules.
 
     Parameters
     ----------
@@ -506,10 +505,15 @@ def _validate_contract_comparison(previous_vendors, current_vendors, result) -> 
 
 
 if __name__ == "__main__":
-    # Temporary manual test harness.
-    # Loads the two snapshot worksheets and prints the comparison result.
-    # Defaults target the sample workbook so this runs out of the box;
-    # pass a workbook path and two sheet names to compare different snapshots.
+    
+    # Manual diagnostic harness.
+    # Loads the latest two snapshot worksheets, extracts vendor data,
+    # compares contract-level movements, and displays ranked leadership
+    # candidates for inspection.
+    #
+    # Defaults target the local workbook so the module can be run directly;
+    # alternatively provide a workbook path and worksheet names.
+
     import sys
 
     filepath = sys.argv[1] if len(sys.argv) > 1 else "data/Weekly snapshots.xlsx"
@@ -528,7 +532,7 @@ if __name__ == "__main__":
     print(f"\n[{current_sheet}] extracted vendor data:")
     current_vendors = extract_vendor_data(current_df)
 
-    from reporting.leadership_candidates import (
+    from src.reporting.leadership_candidates import (
         build_candidate_pool,
         load_candidate_commentary,
         build_commentary_lookup,

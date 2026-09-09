@@ -25,7 +25,7 @@ Sample and test data
 ## Status
 
 Leadership email generation operational.
- 
+
 Current focus:
 - documentation and comment cleanup
 - leadership email quality optimisation

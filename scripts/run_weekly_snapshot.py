@@ -5,12 +5,10 @@ Orchestration only. This module wires together the existing, unchanged pipeline:
 
     2A  compare_snapshots.load_snapshot / extract_vendor_data
     2B-2F  compare_snapshots.compare_snapshots
-    3A  executive_summary.generate_executive_summary
-    3B  executive_summary.generate_key_movements
 
 The runner performs no analysis or reporting calculations itself. It adds only
 discovery, previous-snapshot resolution, preflight validation, temp->promote
-output handling, archiving, last-successful-run state, and a per-run manifest.
+output handling, last-successful-run state, and a per-run manifest.
 
 Operator workflow:
     1. Ensure the latest Weekly snapshots.xlsx workbook is present in data/.

@@ -24,7 +24,6 @@ pip install -r scripts/requirements.txt
 The runner uses these directories (created automatically if missing):
 
 - `data/incoming/` — where you drop the new weekly workbook
-- `data/archive/` — successfully processed workbooks are moved here
 - `data/outputs/latest` — generated reporting artefacts and leadership email outputs
 - `data/state/` — `last_successful_run.json`, the baseline pointer
 
@@ -39,8 +38,7 @@ Runtime settings (paths, allowed extensions, and worksheet selection) live in `s
    - leadership_insights.txt
    - risks_watchouts.txt
    - leadership_email.txt
-4. **On success**, the workbook is moved to `data/archive/` and becomes the
-   baseline (previous snapshot) for the following run.
+4. **On success**, outputs are written to data/outputs/latest and state is updated for the next comparison.
 5. **On failure**, the workbook stays in `data/incoming/`, the baseline is left
    unchanged, no partial report is promoted, and the printed error identifies
    exactly what must be corrected.
@@ -67,8 +65,7 @@ Precedence (highest first): **CLI flag > configuration file > built-in default.*
   built-in defaults apply.
 
 Invalid configuration (missing explicit file, malformed JSON, unknown key, wrong
-value type) fails the run *before* any analysis, and never archives the workbook
-or changes the baseline.
+value type) fails the run *before* any analysis, and never updates state or produces outputs or changes the baseline.
 
 ### Establishing the first baseline
 
@@ -76,17 +73,17 @@ The first run needs a previous snapshot to compare against. Until a baseline
 exists the runner stops with a clear message ("a baseline must be established").
 The runner never uses the current file as both previous and current.
 
-To establish the first baseline, record an already-processed workbook as the
+To establish the first baseline, record an already-processed workbook as the`
 baseline. This writes `data/state/last_successful_run.json` pointing at that
-workbook (place the baseline workbook in `data/archive/` first):
+workbook:
 
 ```
-python -c "import sys; sys.path.insert(0,'scripts'); from config_loader import build_config; import run_weekly_snapshot as r; from pathlib import Path; c=build_config(); c.ensure_directories(); r.write_state(c, Path('data/archive/<baseline>.xlsx'), 'manual-baseline')"
+python -c "import sys; sys.path.insert(0,'scripts'); from config_loader import build_config; import run_weekly_snapshot as r; from pathlib import Path; c=build_config(); c.ensure_directories(); r.write_state(c, Path(<baseline>.xlsx'), 'manual-baseline')"
 ```
 
 After this, drop the next week's workbook into `data/incoming/` and run the
-normal command. On each subsequent success the processed workbook is archived and
-automatically becomes the baseline for the following run.
+normal command. On each subsequent success state is updated and the latest outputs are
+written to data/outputs/latest.
 
 ### Rules the runner enforces
 
@@ -100,6 +97,4 @@ automatically becomes the baseline for the following run.
 
 ### Tests
 
-```
-python -m unittest scripts.test_run_weekly_snapshot
-```
+See the active test suite in the tests/ folder.
