@@ -124,7 +124,15 @@ This phase removed or retired multiple non-essential artefacts, workflows, and t
 - legacy movement-derived risks/watchouts logic
 - fake workbook dependencies
 
-The current focus is improving the business usefulness of the weekly leadership email rather than generating additional artefacts.
+Documentation review and cleanup has been substantially completed.
+ 
+Current focus:
+- improving the business usefulness of the weekly leadership email
+- identifying legacy workflow references that survived earlier simplification work
+- reviewing obsolete tests, configuration, comments, and documentation associated with retired workflows
+- removing dead code and legacy implementation paths where they are no longer used by the active leadership-email pipeline
+ 
+The current focus remains improving the business usefulness of the weekly leadership email rather than generating additional artefacts.
 
 
 (4) PROJECT PHILOSOPHY
@@ -188,20 +196,17 @@ Data layer:
 ✅ Top-mover identification
 
 Reporting layer:
-✅ Executive summary
-✅ Key movements
-✅ Weekly update
 ✅ Leadership insights
 ✅ Risks and watchouts
-✅ Reporting package
-✅ Reporting package ordering
 ✅ Commentary traceability
 ✅ Candidate generation
 ✅ Active-opportunity pipeline
 ✅ Artefact rationalisation
+✅ Documentation cleanup
+✅ Legacy workflow review
 
 Communications layer:
-✅ Leadership email prototype
+✅ Leadership email generation
 ✅ leadership_email.txt
 ✅ Leadership email renderer
 ✅ Email formatting stabilisation
@@ -249,15 +254,20 @@ The leadership email is the primary and sole business deliverable.
 
 (8) GENERATED ARTEFACTS
 
-Currently generated:
-- executive_summary.txt
-- key_movements.txt
+Current active artefacts:
+ 
+- analysis.json
 - leadership_insights.txt
 - risks_watchouts.txt
-- reporting_package.txt
 - leadership_email.txt
-- analysis.json
-- manifest.json 
+- manifest.json
+ 
+Retired from the active leadership-email pipeline:
+ 
+- executive_summary.txt
+- key_movements.txt
+- reporting_package.txt
+- promotion_package/
 
 
 (9) REPORTING RULES
@@ -569,22 +579,15 @@ Remaining work is not general judgement validation. Remaining work concerns:
 - operationalisation
 
 Finding 11
-The latest leadership email rendering has a genuine usability issue.
-
-Observed output combined multiple financial-risk sections and items using repeated colons and missing line breaks, for example:
-- primary financial watchout
-- "Other material financial risks"
-- Ahrefs
-- MightyHive commentary
-- financial impacts
-
-were concatenated into one visually noisy bullet.
-
-The output looked like debugging output rather than a polished plain-text email.
-
-This does not imply a failure in extraction, ranking, scoring, commentary translation, candidate generation, or promotion selection.
-
-This is a rendering/presentation issue to address only when it becomes the first applicable open bug or backlog item after the artefact review identifies the retained email-generation path.
+Leadership email financial-watchout rendering previously contained a usability issue.
+ 
+Observed output combined multiple financial-risk sections and items using repeated colons and missing line breaks, causing multiple risks and financial impacts to be rendered as a single visually noisy item.
+ 
+Conclusion: The issue was a presentation/rendering defect rather than a failure in extraction, ranking, scoring, commentary translation, candidate generation, or promotion selection.
+ 
+Resolution: Financial-watchout rendering was updated to preserve line breaks and correctly separate commentary, financial impacts, and additional material financial risks.
+ 
+Status: RESOLVED.
 
 Finding 12
 "Financial watchout" followed by "Items to monitor: No watchouts identified" can read as semantically contradictory.
@@ -611,37 +614,61 @@ The project will not return to formatting-first development. However, email form
 (17) BUG REGISTER
 
 1. Open bugs
-
-Potential rendering issues recorded in Validation Findings 11, 12, and 13 have not yet been formally promoted to OPEN BUGS because the current active task is to assess leadership_email.txt and the output artefact chain first. If implementation inspection confirms a discrete defect, add it to OPEN BUGS before changing code.
-
+ 
+No open bugs.
+ 
+Validation Findings 12 and 13 remain observations and potential future email-quality improvements. They have not been promoted to formal bugs.
+ 
 2. Resolved bugs
-
+ 
 BUG-001
-
+ 
 Issue: Financially material deteriorations suppressed.
 Observed: MightyHive dropped from leadership outputs despite material negative cost-out and active commentary.
 Root cause: Single-winner-per-theme financial promotion logic.
 Resolution: Support primary watchout plus additional material financial risks.
-
+ 
+Status: RESOLVED
+ 
+BUG-002
+ 
+Issue: Financial-watchout rendering concatenated multiple financial risks, commentary, and financial impacts into a single unreadable line.
+Observed: Primary financial watchout, additional financial risks, commentary, and financial impacts were rendered as a single plain-text string.
+Root cause: Email rendering replaced line breaks with colon-delimited text.
+Resolution: Updated leadership_email.py to preserve multi-line formatting.
+ 
+Status: RESOLVED
+ 
+BUG-003
+ 
+Issue: Additional financial-risk commentary and financial-impact text were concatenated.
+Observed: 
+Examples such as:
+ 
+Pinged Lewis about thisFinancial impact currently reflected: $36,589
+ 
+appeared in leadership_insights.txt and leadership_email.txt.
+ 
+Root cause: Missing newline during assembly of additional financial-risk content.
+Resolution: Inserted explicit line break between commentary and financial-impact text.
+ 
 Status: RESOLVED
 
 
 (18) CURRENT ASSESSMENT
 
 Pipeline engineering is effectively complete.
-
 Formatting work is effectively complete.
-
 Reporting generation is effectively complete.
-
 Traceability work is effectively complete.
 
 Leadership email generation: Operational.
 General leadership judgement validation: Complete.
 Formal validation criteria: Approved.
+Documentation and comment cleanup: Substantially complete.
 
 Current phase:
-Leadership email quality optimisation and documentation alignment.
+Leadership email quality optimisation and legacy workflow rationalisation.
 
 Current governing question:
 "Does the generated leadership email direct attention to the handful of matters that genuinely require leadership awareness, intervention, or decision?"
@@ -649,40 +676,50 @@ Current governing question:
 Secondary governing question:
 "Does this change improve the quality, reliability, traceability, or maintainability, or leadership usefulness of leadership_email.txt?"
 
+Current rationalisation focus:
+- identifying legacy workflow references that survived earlier simplification work
+- reviewing obsolete tests, configuration, comments, and documentation associated with retired workflows
+- removing dead code where it is no longer used by the active leadership-email pipeline
+- preserving historical milestone and ADR documentation where appropriate
+
 Formatting must remain a consideration, but not the primary workstream.
 
 
 (19) ACTIVE BACKLOG
 
-1. DOCUMENTATION AND COMMENT CLEANUP WORKSTREAM 
+1. LEGACY WORKFLOW AND DEAD CODE REVIEW
+
+Legacy workflow review includes:
+- review archive-workflow remnants 
+- review obsolete tests associated with retired workflows
+- review stale configuration assumptions
+- review runner comments and docstrings that no longer reflect runtime behaviour
+- remove dead code only after validating it is no longer used by the active leadership-email pipeline
+- preserve historical milestone notes and ADRs where they remain accurate historical records
+
 2. Specific leadership email accuracy and presentation refinements
+
 3. Production adoption and closure
+
 4. Potential refinements, which include:
 - correct actual values where source or generated values are inaccurate
-- fix concatenated financial-risk rendering
 - clarify section semantics where "Financial watchout" coexists with "No watchouts identified"
 - improve explicit week-on-week change wording where useful
-- improve line breaks and plain-text scannability
 - preserve financial context
 - preserve concise commentary
-
+ 
 
 (20) NOT IN SCOPE
 
-Executive briefing artefact
-Status: Do not build unless Matt Toohey or Lewis Lee explicitly requests a separate briefing format.
+The current project scope is limited to improving and operationalising the weekly leadership email for Matt Toohey and Lewis Lee.
 
-Stakeholder-specific communication variants
-Status: Outside active scope.
+The following remain outside active scope unless a future stakeholder request demonstrates a direct benefit to the weekly leadership email:
 
-Monthly management reporting
-Status: Outside active scope.
-
-Presentation content generation
-Status: Outside active scope.
-
-Broader executive communications engine
-Status: Rejected as the active project framing.
+- executive briefing artefacts
+- stakeholder-specific communication variants
+- monthly management reporting
+- presentation content generation
+- broader executive communications platforms
 
 
 (21) IMPLEMENTATION DISCIPLINE
@@ -720,9 +757,9 @@ Current success metric: Correct leadership judgement, not formatting precision.
 4. Validation is complete.
 5. The formal judgement framework is approved.
 6. There are no formally open bugs.
-7. The current phase is Leadership Email Quality Optimisation and Judgement Refinement.
-8. Start with leadership_email.txt.
-9. Start by reviewing leadership_email.txt and identifying the highest-value business-quality improvement opportunity.
+7. The current phase is Leadership Email Quality Optimisation and Legacy Workflow Rationalisation.
+8. Documentation and comment cleanup is substantially complete.
+9. Current priority is identifying and reviewing legacy workflow references, obsolete tests, retired artefacts, and dead code associated with workflows no longer used by the active leadership-email pipeline.
 10. Make one validated change at a time and confirm impact before proceeding to the next change. 
 11. Do not redesign completed components.
 12. Do not rebuild extraction, comparison, matching, ranking, scoring, aggregation, commentary enrichment, candidate generation, movement classification, or theme classification.
@@ -731,31 +768,88 @@ Current success metric: Correct leadership judgement, not formatting precision.
 15. Formatting is secondary but remains relevant where it affects the final email.
 16. Silverleaf is a business exception, not a risk and not a code defect.
 17. Do not build an executive briefing unless stakeholder demand emerges.
-18. Keep all changes grounded, minimal, and directly connected to leadership_email.txt.
+18. Keep all changes grounded, minimal, and directly connected to improving the leadership email or simplifying the active leadership_email pipeline.
 19. Do not provide multiple code changes at once.
-20. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
+20. Historical milestone notes, ADRs, and implementation notes may remain unchanged where they accurately document historical decisions and implementation history.
+21. Preserve historical documentation where appropriate, but ensure active documentation reflects current runtime behaviour.
+22. Before removing legacy code, configuration, tests, or documentation, validate that it is no longer used by the active leadership-email pipeline.
+23. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
 
-(24) DOCUMENTATION AND COMMENT CLEANUP WORKSTREAM 
+
+(24) LEGACY WORKFLOW AND DEAD CODE REVIEW
 
 Status: Active
 
-Completed architectural simplification
+Background
 
-The following artefacts have been retired from the active leadership-email pipeline:
+Documentation and comment cleanup is substantially complete.
 
-- promotion_package/
-- reporting_package.txt
-- executive_summary.txt
-- key_movements.txt
+Repository review identified evidence that several legacy workflows may have
+survived earlier architecture simplification efforts.
 
-These artefacts no longer contribute to the generation of:
-- leadership_insights.txt
-- risks_watchouts.txt
-- leadership_email.txt
+Examples identified during review include:
 
-and are no longer considered part of the active business-output path.
+- archive-workflow references
+- archive-based tests
+- retired reporting artefact references
+- legacy runner assumptions
+- obsolete configuration expectations
+- stale runtime comments and docstrings
 
-Current active output path:
+Observed evidence
+
+Current implementation review indicates:
+
+- run_weekly_snapshot.py no longer contains workbook-archiving logic
+- RunnerConfig no longer contains archive configuration
+- active outputs are written to data/outputs/latest
+- state management references the workbook directly
+- comparison logic is based on worksheet comparison within the current workbook
+
+However, archive-related assumptions remain present in some tests,
+documentation, and historical implementation references.
+
+Current objective
+
+Identify and review legacy workflows, obsolete implementation paths,
+retired assumptions, and potential dead code that no longer contribute
+to the active leadership-email pipeline.
+
+Review scope
+
+Review:
+
+- runner documentation
+- runner comments and docstrings
+- configuration assumptions
+- obsolete tests
+- retired workflow references
+- inactive reporting artefacts
+- legacy pipeline stages
+
+Review rule
+
+Do not remove code, tests, configuration, or documentation solely because
+it appears obsolete.
+
+Before removal:
+
+1. Confirm the functionality is no longer used by the active leadership-email pipeline.
+2. Confirm removal does not affect:
+   - leadership_insights.txt
+   - risks_watchouts.txt
+   - leadership_email.txt
+3. Make one validated change at a time.
+
+Historical milestone notes and ADRs may remain unchanged where they
+accurately document historical implementation decisions.
+
+Current active business-output path
+
+Weekly snapshots workbook
+↓
+comparison engine
+↓
 analysis.json
 ↓
 leadership candidate generation
@@ -766,44 +860,14 @@ risks_watchouts.txt
 ↓
 leadership_email.txt
 
-Current objective:
+Current investigation topics
 
-Perform documentation and code-comment cleanup to align repository documentation with the implemented architecture.
-
-scope
-
-Review and update:
-- module docstrings
-- function docstrings
-- README content
-- project_state.txt
-- inline code comments
-
-where they still describe retired artefacts or retired dependencies.
-
-Typical stale references
-
-Review for references to:
-- promotion_package/
-- reporting_package.txt
-- executive_summary.txt
-- key_movements.txt
-- Executive Talking Points
-- movement-derived risks
-- movement-derived watchouts
-- contracts compared
-- net delta
-- top movers as leadership-insight inputs
-
-Review rule
-
-Historical context may be retained if clearly marked as historical.
-
-Documentation describing current runtime behaviour must reflect the implemented architecture.
-
-Implementation Discipline 
-
-Documentation updates should be performed independently of behavioural code changes.
+- archive workflow remnants
+- archive-based tests
+- stale runner documentation
+- legacy manifests and run-id assumptions
+- retired artefact dependencies
+- dead code candidates
 
 Make one change at a time.
 
