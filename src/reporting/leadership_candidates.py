@@ -1,3 +1,25 @@
+"""
+leadership_candidates.py
+
+Build and rank leadership candidates from current snapshot
+data and dashboard commentary.
+
+This module forms the candidate-generation stage of the
+leadership-email pipeline.
+
+Active pipeline:
+
+analysis.json
+↓
+leadership candidate generation
+↓
+leadership_insights.txt
+↓
+risks_watchouts.txt
+↓
+leadership_email.txt
+"""
+
 from dataclasses import dataclass
 from src.reporting.dashboard_status import get_actionable_statuses
 

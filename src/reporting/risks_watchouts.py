@@ -1,23 +1,20 @@
 """
-risks_watchouts.py — Risks & Watchouts assembly (Milestone 3D.3).
+risks_watchouts.py 
 
-Reporting-only artefact. Builds risks_watchouts.txt using ONLY content already
-present in existing reporting artefacts:
+Builds risks_watchouts.txt from existing leadership artefacts.
 
-    - leadership_insights.txt  (3D.2; primary — portfolio/movement facts)
-    - key_movements.txt        (3B; secondary — ranked signed movements)
+Primary input: leadership_insights.txt  
+Optional input: ranked leadership candidates
 
-No new analytics, no recalculation, no new thresholds, no AI reasoning, no
-recommendations or predictions. Entries are derived purely by reading values
-already stated in the artefacts:
+No new analytics, recalculation, scoring, or ranking is performed.
 
-    RISKS            <- ranked movements already marked as negative ("-$")
-    WATCHOUTS        <- ranked movements already marked as significant ("+$")
-    DATA OBSERVATIONS<- portfolio/movement facts already stated in leadership
-                        insights (contracts covered, net movement)
+Produces:
 
-Deterministic: identical inputs always produce identical output. When a section
-has no entries, a fixed placeholder line is emitted.
+    RISKS            
+    WATCHOUTS        
+    DATA OBSERVATIONS
+
+Deterministic: identical inputs always produce identical output.
 """
 
 import re
@@ -129,6 +126,7 @@ def generate_risks_watchouts(
     output_path,
     ranked_candidates=None,
 ) -> Path:
+
     """
     Generate risks_watchouts.txt from existing reporting artefacts.
 
@@ -136,8 +134,8 @@ def generate_risks_watchouts(
     ----------
     leadership_insights_path : str or Path
         Path to the existing leadership_insights.txt artefact (primary).
-    key_movements_path : str or Path
-        Path to the existing key_movements.txt artefact (secondary).
+    ranked_candidates : list, optional
+        Ranked leadership candidates supplied by the updstream candidate generation process.
     output_path : str or Path
         Path to write risks_watchouts.txt.
 
