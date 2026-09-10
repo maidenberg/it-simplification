@@ -251,9 +251,9 @@ def run(config: RunnerConfig | None = None) -> dict:
         previous = current
 
         manifest["previous_snapshot"] = str(previous)
-        
-        previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
 
+        previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
+        
         manifest["previous_sheet"] = previous_sheet
         manifest["current_sheet"] = current_sheet
         
@@ -276,13 +276,10 @@ def run(config: RunnerConfig | None = None) -> dict:
             rank_candidates_for_leadership,
         )
 
-        current_sheet_name = find_latest_snapshot_sheets(current)[1]
-
         current_vendors = _extract (
             config,
             current,
-            current_sheet_name,
-
+            current_sheet,
         )
 
         candidates = build_candidate_pool (current_vendors)
