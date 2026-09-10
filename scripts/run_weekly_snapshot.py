@@ -86,8 +86,8 @@ def _quiet():
 
 def preflight_workbook(config: RunnerConfig, path: Path, role: str) -> None:
     """
-    Validate that a workbook exists, opens, contains the configured worksheet,
-    and yields vendor data via the existing extractor.
+    Validate that a workbook exists, that snapshot worksheets can be identified,
+    and that vendor data can be extracted via the existing pipeline.
 
     Uses the existing pipeline (load_snapshot + extract_vendor_data) as the
     authority — no competing parser is introduced.
@@ -136,7 +136,7 @@ def preflight_workbook(config: RunnerConfig, path: Path, role: str) -> None:
     except Exception as exc:
         raise PreflightError(
             f"[{role}] Failed to extract vendor data from worksheet "
-            f"'{config.snapshot_worksheet}' in {path}: {exc}"
+            f"'{current_sheet}' in {path}: {exc}"
         )
 
     if vendors is None or len(vendors) == 0:
@@ -163,21 +163,33 @@ def _extract(config: RunnerConfig, path: Path, worksheet: str):
         return extract_vendor_data(load_snapshot(path, worksheet))
 
 
-def run_pipeline(config: RunnerConfig, previous: Path, current: Path) -> dict:
+def run_pipeline(
+    config: RunnerConfig, 
+    workbook: Path, 
+    previous_sheet: str,
+    current_sheet: str,
+    ) -> dict:
     """
     Execute 2A->2F analysis then 3A/3B reporting using the existing modules.
 
     Returns
     -------
     dict
-        {"analysis": <compare_snapshots result>,
-         "executive_summary": <str>, "key_movements": <str>}
+        {
+            "analysis": <compare_snapshots result>
+        }
     """
     
-    previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
-    
-    previous_vendors = _extract(config, current, previous_sheet)
-    current_vendors = _extract(config, current, current_sheet)
+    previous_vendors = _extract(
+        config, 
+        workbook, 
+        previous_sheet,
+        )
+    current_vendors = _extract(
+        config, 
+        workbook, 
+        current_sheet,
+        )
 
     analysis = compare_snapshots(previous_vendors, current_vendors)  # 2B-2F
 
@@ -194,8 +206,8 @@ def _write_outputs(dest: Path, results: dict) -> None:
     """Write report text and a JSON analysis dump into a directory."""
     dest.mkdir(parents=True, exist_ok=True)
     
-    # A machine-readable dump of the analysis result (contracts are strings,
-    # deltas are floats — all JSON-serialisable).
+    # Persist the comparison-analysis output for downstream reporting,
+    # traceability, and validation.
     with open(dest / "analysis.json", "w", encoding="utf-8") as fh:
         json.dump(results["analysis"], fh, indent=2)
 
@@ -227,7 +239,6 @@ def run(config: RunnerConfig | None = None) -> dict:
         "run_id": run_id,
         "status": "failed",
         "current_snapshot": None,
-        "previous_snapshot": None,
         "previous_sheet": None,
         "current_sheet": None,
         "output_directory": None,
@@ -248,10 +259,6 @@ def run(config: RunnerConfig | None = None) -> dict:
         manifest["stages_completed"].append("workbook_selection")
 
         # 4. Identify snapshot sheets.
-        previous = current
-
-        manifest["previous_snapshot"] = str(previous)
-
         previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
         
         manifest["previous_sheet"] = previous_sheet
@@ -260,12 +267,17 @@ def run(config: RunnerConfig | None = None) -> dict:
         manifest["stages_completed"].append("worksheet_selection")
 
 
-        # 5. Preflight both workbooks.
+        # 5. Preflight workbook and snapshot worksheets.
         preflight_workbook(config, current, "current")
         manifest["stages_completed"].append("preflight")
 
         # 6-7. Analysis (2A-2F) + reporting (3A/3B).
-        results = run_pipeline(config, previous, current)
+        results = run_pipeline(
+            config, 
+            current,
+            previous_sheet, 
+            current_sheet,
+        )
         
         from src.reporting.leadership_candidates import (
             build_candidate_pool,
@@ -339,8 +351,6 @@ def run(config: RunnerConfig | None = None) -> dict:
         manifest["stages_completed"].append("risks_watchouts")
 
         # 8c. Generate leadership email
-        previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
-
         comparison_label = (
             f"Comparison: {previous_sheet} → {current_sheet}"
         )
@@ -424,7 +434,6 @@ def main(argv=None) -> int:
         config_path = Path(args.config) if args.config else None
         config = build_config(
             config_path=config_path,
-            worksheet_override=args.worksheet,
             require_config_file=bool(args.config),
         )
     except ConfigError as exc:
@@ -438,10 +447,10 @@ def main(argv=None) -> int:
     if manifest["status"] == "success":
         print("Weekly snapshot run: SUCCESS")
         print(f"  Run ID:            {manifest['run_id']}")
-        print(f"  Worksheet:         {config.snapshot_worksheet}")
-        print(f"  Current snapshot:  {manifest['current_snapshot']}")
-        print(f"  Previous snapshot: {manifest['previous_snapshot']}")
-        print(f"  Output directory:  {manifest['output_directory']}")
+        print(f" Current snapshot:   {manifest['current_snapshot']}")
+        print(f" Previous sheet:     {manifest['previous_sheet']}")
+        print(f" Current sheet:      {manifest['current_sheet']}")
+        print(f" Output directory:   {manifest['output_directory']}")
         return 0
 
     print("Weekly snapshot run: FAILED", file=sys.stderr)

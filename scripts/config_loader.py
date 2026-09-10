@@ -139,7 +139,6 @@ def merge_into_config(base: RunnerConfig, raw: dict) -> RunnerConfig:
 
 def build_config(
     config_path: Path | None = None,
-    worksheet_override: str | None = None,
     require_config_file: bool = False,
 ) -> RunnerConfig:
     """
@@ -150,8 +149,6 @@ def build_config(
     config_path : Path or None
         Path to the external JSON config. If None, the default path is used when
         it exists; a missing default file is not an error (defaults apply).
-    worksheet_override : str or None
-        CLI worksheet override; takes precedence over file and defaults.
     require_config_file : bool
         If True, a missing config file raises ConfigError. Used when the operator
         explicitly passes --config.
@@ -177,11 +174,5 @@ def build_config(
             raise ConfigError(
                 f"Configuration file not found: {DEFAULT_CONFIG_PATH}"
             )
-
-    # Layer 1: CLI override (highest precedence).
-    if worksheet_override is not None:
-        if not isinstance(worksheet_override, str) or worksheet_override.strip() == "":
-            raise ConfigError("--worksheet override must be a non-empty string.")
-        config = replace(config, snapshot_worksheet=worksheet_override)
 
     return config

@@ -113,50 +113,40 @@ Phase 2: Automated reporting package generation.
 Phase 3: Leadership insight generation.
 Phase 4: Executive watchout generation.
 Phase 5: Leadership judgement validation. Question being tested: If Lewis only had 30 seconds, would the output direct attention to the most important matters?
-Phase 6 (Current): Artefact rationalisation and email-quality optimisation.
-
-This phase removed or retired multiple non-essential artefacts, workflows, and tests that did not directly improve the weekly leadership email, including:
-- workbook archiving
-- timestamped output directories
-- timestamped manifests
-- promotion packages
-- legacy Executive Talking Points outputs
-- legacy movement-derived risks/watchouts logic
-- fake workbook dependencies
-
-Documentation review and cleanup has been substantially completed.
+Phase 6: Artefact rationalisation and architecture simplification.
  
-Phase 6 also completed a major dead-code and legacy-workflow review.
-
-Validated removals included:
-- Communications Engine subsystem
-  - communications_engine.py
-  - generate_drafts.py
-  - generate_update.py
-  - ingest.py
-- obsolete runner/configuration tests associated with retired workflows
-- retired promotion/reporting package remnants
-- archive workflow infrastructure, generated artefacts, and directory structure
-- obsolete generated outputs and stale cache artefacts
-- legacy package shells no longer used by the active pipeline
-
-The active implementation is now centred on:
+This phase:
+- removed obsolete artefacts, reports, tests, and generated outputs
+- retired workbook-discovery architecture
+- retired baseline/state-management architecture
+- simplified runner configuration and operational model
+- aligned configuration, manifests, and documentation with the active worksheet-based pipeline
+- removed redundant processing, configuration surfaces, and dead code
+- validated end-to-end pipeline operation after each simplification stage
+ 
+The active implementation was simplified to:
+ 
 Weekly snapshots workbook
+→ worksheet discovery
 → comparison and analysis
 → leadership candidate generation
 → leadership insights
 → risks & watchouts
 → leadership email
 
+Phase 7 (Current): Operational model refinement and maintainability.
+ 
 Current focus:
 - improving the business usefulness of the weekly leadership email
 - improving leadership signal quality, prioritisation, and decision usefulness
-- simplifying the active leadership-email pipeline and reducing architectural complexity
-- removing remaining stale comments, docstrings, and documentation that no longer reflect the active implementation
-- reviewing package structure, import paths, and maintainability of active modules
-- continuing targeted cleanup only where it directly improves maintainability or reduces operational complexity
+- reviewing orchestration responsibilities and worksheet-discovery ownership
+- improving manifest accuracy and operational traceability
+- removing remaining stale comments, docstrings, and operator-facing messages
+- reducing structural complexity where simplification improves maintainability
+- reviewing package structure, imports, and active module boundaries
+- continuing evidence-driven cleanup only where it provides measurable maintainability benefit
  
-The current focus remains improving the business usefulness of the weekly leadership email rather than generating additional artefacts..
+The current focus remains improving the business usefulness of the weekly leadership email rather than generating additional artefacts.
 
 
 (4) PROJECT PHILOSOPHY
@@ -218,6 +208,7 @@ Data layer:
 ✅ Portfolio aggregation
 ✅ Rollups
 ✅ Top-mover identification
+✅ Worksheet discovery
 
 Reporting layer:
 ✅ Leadership insights
@@ -233,6 +224,11 @@ Reporting layer:
 ✅ Obsolete test retirement
 ✅ Archive-workflow retirement
 ✅ Repository simplification
+✅ Runner simplification
+✅ Manifest rationalisation
+✅ Configuration-contract simplification
+✅ Discovery-workflow retirement
+✅ Baseline/state-workflow retirement
 
 Communications layer:
 ✅ Leadership email generation
@@ -266,15 +262,32 @@ Phase 6 simplification status:
 ✅ Obsolete runner/configuration tests removed
 ✅ Stale generated outputs removed
 ✅ Repository structure simplified
+✅ Workbook-discovery architecture retired
+✅ Baseline/state-management architecture retired
+✅ Obsolete configuration surfaces removed
+✅ Runner configuration simplified
+✅ Manifest aligned with worksheet-based processing
+✅ Duplicate preflight validation removed
+✅ Operational documentation aligned with active implementation
 
 The active implementation path is now:
 
 Weekly snapshots workbook
+→ worksheet discovery
 → snapshot comparison
 → leadership candidate generation
 → leadership insights
 → risks & watchouts
 → leadership email
+
+Phase 7 focus:
+
+🔄 Operational model refinement
+🔄 Worksheet-discovery ownership review
+🔄 Manifest and operational traceability review
+🔄 Runner maintainability improvements
+🔄 Documentation and operator-message accuracy review
+🔄 Targeted simplification where maintainability benefits are demonstrated
 
 
 (7) REPORTING AND COMMUNICATIONS PACKAGE STRUCTURE 
@@ -708,6 +721,7 @@ Pipeline engineering is effectively complete.
 Formatting work is effectively complete.
 Reporting generation is effectively complete.
 Traceability work is effectively complete.
+Phase 6 architecture simplification is effectively complete.
 
 Leadership email generation: Operational.
 General leadership judgement validation: Complete.
@@ -715,27 +729,47 @@ Formal validation criteria: Approved.
 Documentation and comment cleanup: Substantially complete.
 
 Current phase:
-Leadership email quality optimisation and active-pipeline simplification.
-
+Phase 7: Operational model refinement and maintainability.
+ 
 Current governing question:
+ 
 "Does the generated leadership email direct attention to the handful of matters that genuinely require leadership awareness, intervention, or decision?"
-
+ 
 Secondary governing question:
-"Does this change improve the quality, reliability, traceability, or maintainability, or leadership usefulness of leadership_email.txt?"
-
-Current simplification focus:
-- improving maintainability of the active leadership-email pipeline
-- reviewing package structure, import-path management, and module boundaries
-- removing remaining stale comments, docstrings, and documentation that no longer reflect the current implementation
-- reducing architectural complexity where it does not improve leadership-email outcomes
-- preserving historical milestone and ADR documentation where appropriate
-
+ 
+"Does this change improve the quality, reliability, traceability, maintainability, or leadership usefulness of leadership_email.txt?"
+ 
+Current Phase 7 focus:
+ 
+- improving the business usefulness of the weekly leadership email
+- improving leadership signal quality, prioritisation, and decision usefulness
+- reviewing orchestration responsibilities and ownership boundaries within the active pipeline
+- reviewing worksheet-discovery ownership and lifecycle management
+- improving manifest quality, operational traceability, and operator usability
+- reviewing package structure, import-path management, and active module boundaries
+- removing remaining stale comments, docstrings, CLI messages, and operator-facing guidance that no longer reflect the active implementation
+- reducing structural complexity where simplification demonstrably improves maintainability
+- preserving historical milestone, validation, and ADR documentation where appropriate
+- continuing evidence-driven cleanup only where operational or maintainability benefits are clear
+ 
+Active implementation:
+ 
+Weekly snapshots workbook
+→ worksheet discovery
+→ snapshot comparison
+→ leadership candidate generation
+→ leadership insights
+→ risks & watchouts
+→ leadership email
+ 
 Formatting must remain a consideration, but not the primary workstream.
+ 
+The primary workstream is now maintainability, operational clarity, leadership-email usefulness, and stewardship of the simplified worksheet-based pipeline.
 
 
 (19) ACTIVE BACKLOG
 
-1. ACTIVE PIPELINE SIMPLIFICATION AND MAINTAINABILITY
+1. PHASE 7: OPERATIONAL MODEL REFINEMENT AND MAINTAINABILITY
 
 Completed:
 ✅ Communications Engine retirement
@@ -744,14 +778,23 @@ Completed:
 ✅ Obsolete test retirement
 ✅ Legacy generated-output cleanup
 ✅ Package-shell and cache cleanup
+✅ Workbook-discovery workflow retirement
+✅ Baseline/state-management workflow retirement
+✅ Runner configuration simplification
+✅ Configuration-contract simplification
+✅ Manifest rationalisation
+✅ Duplicate preflight-validation removal
+✅ Active-documentation cleanup
 
-Remaining simplification work:
-- review remaining stale comments and docstrings in active modules
+Current review areas:
+- review remaining stale comments, docstrings, CLI help text, and operator-facing messages
+- review worksheet-discovery ownership and orchestration responsibilities
+- review run_weekly_snapshot.py maintainability and module boundaries
 - review package structure and import-path management
-- review runner maintainability and module boundaries
-- review configuration and path handling for simplification opportunities
+- review manifest traceability and operational usefulness
+- review remaining configuration and path handling for simplification opportunities
 - preserve historical milestone notes and ADRs where they remain accurate historical records
-- remove additional code only after validating it is not part of the active leadership-email pipeline
+- continue cleanup only where maintainability, traceability, or operational simplicity benefits are demonstrated
 
 2. Specific leadership email accuracy and presentation refinements
 
@@ -763,6 +806,8 @@ Remaining simplification work:
 - improve explicit week-on-week change wording where useful
 - preserve financial context
 - preserve concise commentary
+- improve worksheet-comparison traceability where useful
+- improve manifest and operational visibility where it aids supportability
  
 
 (20) NOT IN SCOPE
@@ -813,10 +858,10 @@ Current success metric: Correct leadership judgement, not formatting precision.
 4. Validation is complete.
 5. The formal judgement framework is approved.
 6. There are no formally open bugs.
-7. The current phase is Leadership Email Quality Optimisation and Active Pipeline Simplification.
+7. The current phase is Phase 7: Operational Model Refinement and Maintainability.
 8. Documentation and comment cleanup is substantially complete.
-9. Major dead-code and legacy-workflow rationalisation has been substantially completed. Current priority is improving maintainability, simplifying the active leadership-email pipeline, and removing remaining stale comments, docstrings, and documentation that no longer reflect the current implementation.
-10. Make one validated change at a time and confirm impact before proceeding to the next change. 
+9. Major dead-code, configuration, workflow, and architecture rationalisation has been completed. Current priority is improving maintainability, operational clarity, manifest traceability, and leadership-email usefulness within the active worksheet-based pipeline.
+10. Make one validated change at a time and confirm impact before proceeding to the next change.
 11. Do not redesign completed components.
 12. Do not rebuild extraction, comparison, matching, ranking, scoring, aggregation, commentary enrichment, candidate generation, movement classification, or theme classification.
 13. Reuse existing outputs and commentary.
@@ -824,12 +869,13 @@ Current success metric: Correct leadership judgement, not formatting precision.
 15. Formatting is secondary but remains relevant where it affects the final email.
 16. Silverleaf is a business exception, not a risk and not a code defect.
 17. Do not build an executive briefing unless stakeholder demand emerges.
-18. Keep all changes grounded, minimal, and directly connected to improving the leadership email or simplifying the active leadership_email pipeline.
+18. Keep all changes grounded, minimal, and directly connected to improving the leadership email, improving maintainability, or simplifying the active leadership-email pipeline.
 19. Do not provide multiple code changes at once.
 20. Historical milestone notes, ADRs, and implementation notes may remain unchanged where they accurately document historical decisions and implementation history.
 21. Preserve historical documentation where appropriate, but ensure active documentation reflects current runtime behaviour.
-22. Before removing additional code, configuration, tests, or documentation, validate that it is not part of the active leadership-email pipeline and confirm that the change improves maintainability, simplicity, or leadership-email usefulness.
-23. The following simplification work has been completed and should not be re-opened without evidence:
+22. Before removing additional code, configuration, tests, workflows, or documentation, validate that it is not part of the active leadership-email pipeline and confirm that the change improves maintainability, simplicity, traceability, operational clarity, or leadership-email usefulness.
+23. The following simplification work has been completed and should not be re-opened without new evidence:
+
 - Communications Engine subsystem removal
 - Archive-workflow retirement
 - Promotion-package retirement
@@ -837,97 +883,29 @@ Current success metric: Correct leadership judgement, not formatting precision.
 - Obsolete runner/configuration test retirement
 - Legacy generated-output cleanup
 - Stale cache and package-shell cleanup
-24. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
+- Workbook-discovery architecture retirement
+- Baseline/state-management architecture retirement
+- Runner configuration simplification
+- Configuration-contract simplification
+- Obsolete manifest-stage retirement
+- Duplicate preflight-validation retirement
+- Active documentation alignment with worksheet-based processing
 
+24. Phase 7 is an architecture-review and maintainability phase, not a dead-code-removal phase. New changes should be justified by measurable improvements in maintainability, operational clarity, traceability, or leadership-email usefulness.
 
-(24) ACTIVE PIPELINE SIMPLIFICATION
-
-Status: Active
-
-Background
-
-Phase 6 completed a substantial rationalisation of legacy workflows,
-retired artefacts, obsolete tests, stale generated outputs, and dead code.
-
-Validated removals included:
-
-- Communications Engine subsystem
-  - communications_engine.py
-  - generate_drafts.py
-  - generate_update.py
-  - ingest.py
-
-- archive workflow
-  - archive directory
-  - archive-generated workbook history
-  - archive-related operational documentation
-
-- obsolete runner and configuration tests associated with retired workflows
-
-- retired reporting-package and promotion-package remnants
-
-- stale cache artefacts, generated outputs, and unused package shells
-
-- stale comments, docstrings, and operational documentation that no longer
-  reflected current runtime behaviour
-
-Current implementation
-
-The active implementation path is:
+25. The active implementation model is:
 
 Weekly snapshots workbook
-↓
-comparison engine
-↓
-analysis.json
-↓
-leadership candidate generation
-↓
-leadership_insights.txt
-↓
-risks_watchouts.txt
-↓
-leadership_email.txt
+→ worksheet discovery
+→ snapshot comparison
+→ leadership candidate generation
+→ leadership insights
+→ risks & watchouts
+→ leadership email
 
-Current objective
-
-Improve maintainability, simplicity, and clarity of the active
-leadership-email pipeline without changing approved leadership
-judgement behaviour.
-
-Current review scope
-
-Review:
-
-- active module maintainability
-- package structure
-- import-path management
-- runner complexity and module boundaries
-- stale comments and docstrings
-- active documentation accuracy
-- simplification opportunities that reduce complexity without affecting
-  leadership-email outputs
-
-Review rule
-
-Do not redesign or replace completed pipeline components.
-
-Before making implementation changes:
-
-1. Confirm the change improves maintainability, simplicity, traceability,
-   reliability, or leadership-email usefulness.
-2. Validate that leadership_email.txt behaviour remains acceptable.
-3. Make one validated change at a time.
-
-Historical milestone notes, ADRs, and implementation-history documents may
-remain unchanged where they accurately document historical decisions.
-
-Current investigation topics
-
-- package and import-path simplification
-- active-pipeline maintainability
-- runner simplification opportunities
-- stale implementation documentation in active modules
-- leadership email quality optimisation
-
-Dead-code and legacy-workflow review is substantially complete.
+26. If implementation inspection identifies a new bug:
+- explain the bug
+- add it to OPEN BUGS
+- make one change only
+- validate the change against leadership_email.txt and existing comparison outputs
+- continue only after the prior change is confirmed complete.
