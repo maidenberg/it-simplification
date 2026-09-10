@@ -7,11 +7,8 @@ only reads, validates, resolves paths, and merges runtime settings.
 
 Supported configuration keys (config/weekly_snapshot.json):
     snapshot_worksheet   : str
-    incoming_directory   : str  (repo-relative or absolute path)
     outputs_directory    : str
-    state_directory      : str
-    allowed_extensions   : list[str]  (each like ".xlsx")
-
+        
 Validation rules:
     - The file must contain a JSON object.
     - Unknown keys are rejected with a clear message.
@@ -39,12 +36,8 @@ DEFAULT_CONFIG_PATH = _REPO_ROOT / "config" / "weekly_snapshot.json"
 # Map each supported JSON key to (RunnerConfig field, expected python type,
 # whether the value is a repo-relative path).
 _STRING_KEYS = {"snapshot_worksheet"}
-_PATH_KEYS = {
-    "incoming_directory": "incoming_dir",
-    "outputs_directory": "outputs_dir",
-    "state_directory": "state_dir",
-}
-_LIST_KEYS = {"allowed_extensions"}
+_PATH_KEYS = {"outputs_directory": "outputs_dir"}
+_LIST_KEYS = set()
 
 SUPPORTED_KEYS = set(_STRING_KEYS) | set(_PATH_KEYS) | set(_LIST_KEYS)
 
@@ -140,11 +133,6 @@ def merge_into_config(base: RunnerConfig, raw: dict) -> RunnerConfig:
     for key, field_name in _PATH_KEYS.items():
         if key in raw:
             overrides[field_name] = _resolve_path(raw[key])
-
-    for key in _LIST_KEYS:
-        if key in raw:
-            # RunnerConfig stores allowed_extensions as a tuple.
-            overrides["allowed_extensions"] = tuple(raw[key])
 
     return replace(base, **overrides)
 

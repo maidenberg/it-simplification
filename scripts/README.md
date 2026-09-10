@@ -21,27 +21,30 @@ Install dependencies:
 pip install -r scripts/requirements.txt
 ```
 
-The runner uses these directories (created automatically if missing):
-
-- `data/incoming/` — where you drop the new weekly workbook
-- `data/outputs/latest` — generated reporting artefacts and leadership email outputs
-- `data/state/` — `last_successful_run.json`, the baseline pointer
-
-Runtime settings (paths, allowed extensions, and worksheet selection) live in `scripts/runner_config.py`. The default worksheet is Live Dashboard.
+The runner uses:
+ 
+- data/Weekly snapshots.xlsx — source workbook containing snapshot worksheets.
+- data/outputs/latest/ — generated reporting artefacts and leadership email outputs.
+ 
+Runtime settings live in scripts/runner_config.py. The default worksheet is Live Dashboard.
 
 ### Weekly operator workflow
 
-1. Place exactly **one** new `.xlsx` workbook in `data/incoming/`.
-2. Run the weekly snapshot command in PowerShell:  python scripts/run_weekly_snapshot.py
+1. Update the latest snapshot within `data/Weekly snapshots.xlsx`.
+2. Run the weekly snapshot command in PowerShell:
+ 
+python scripts/run_weekly_snapshot.py
+ 
 3. Review the generated output in `data/outputs/latest/`:
-   - analysis.json
-   - leadership_insights.txt
-   - risks_watchouts.txt
-   - leadership_email.txt
-4. **On success**, outputs are written to data/outputs/latest and state is updated for the next comparison.
-5. **On failure**, the workbook stays in `data/incoming/`, the baseline is left
-   unchanged, no partial report is promoted, and the printed error identifies
-   exactly what must be corrected.
+- analysis.json
+- leadership_insights.txt
+- risks_watchouts.txt
+- leadership_email.txt
+ 
+4. On success, outputs are written to `data/outputs/latest/`.
+ 
+5. On failure, no partial report is promoted and the printed error identifies
+the issue that must be corrected before re-running.
 
 ### External configuration 
 
@@ -50,10 +53,7 @@ Runtime settings can be changed with **no Python code edits** via `config/weekly
 ```json
 {
   "snapshot_worksheet": "Live dashboard",
-  "incoming_directory": "data/incoming",
   "outputs_directory": "data/outputs",
-  "state_directory": "data/state",
-  "allowed_extensions": [".xlsx"]
 }
 ```
 
@@ -64,36 +64,14 @@ Precedence (highest first): **CLI flag > configuration file > built-in default.*
 - With no flags, `config/weekly_snapshot.json` is used if present; otherwise the
   built-in defaults apply.
 
-Invalid configuration (missing explicit file, malformed JSON, unknown key, wrong
-value type) fails the run *before* any analysis, and never updates state or produces outputs or changes the baseline.
-
-### Establishing the first baseline
-
-The first run needs a previous snapshot to compare against. Until a baseline
-exists the runner stops with a clear message ("a baseline must be established").
-The runner never uses the current file as both previous and current.
-
-To establish the first baseline, record an already-processed workbook as the`
-baseline. This writes `data/state/last_successful_run.json` pointing at that
-workbook:
-
-```
-python -c "import sys; sys.path.insert(0,'scripts'); from config_loader import build_config; import run_weekly_snapshot as r; from pathlib import Path; c=build_config(); c.ensure_directories(); r.write_state(c, Path(<baseline>.xlsx'), 'manual-baseline')"
-```
-
-After this, drop the next week's workbook into `data/incoming/` and run the
-normal command. On each subsequent success state is updated and the latest outputs are
-written to data/outputs/latest.
+Invalid configuration (missing explicit file, malformed JSON, unknown key, or
+wrong value type) fails the run before any analysis or output generation.
 
 ### Rules the runner enforces
 
-- Exactly one eligible workbook must be in `data/incoming/`. Zero or multiple
-  stops the run with an actionable message (multiple lists the candidates).
-- Temporary Excel lock files (names starting with `~$`) are ignored.
-- The current and previous snapshots must be different files.
-- Preflight validation opens both workbooks, confirms the required worksheet is
-  present, and reuses the existing extractor to confirm vendor structure before
-  any analysis or reporting runs.
+- Preflight validation confirms that the workbook can be opened, that valid
+snapshot worksheets can be identified, and that vendor data can be extracted
+before any analysis or reporting runs.
 
 ### Tests
 

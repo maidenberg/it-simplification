@@ -1,5 +1,9 @@
 # Milestone 3C.2 — External Configuration and Real-Pair Acceptance: Notes
 
+Note: This document records the original Milestone 3C.2 implementation and
+validation activities. It is retained as historical project documentation and
+may not reflect the current active pipeline architecture.
+
 ## Goal
 Let an operator process a new weekly snapshot workbook with **no Python code
 changes** by externalising runtime configuration, and prove the end-to-end runner
@@ -29,11 +33,7 @@ No business rules were modified.
 | Key                   | Type          | Meaning                                   |
 |-----------------------|---------------|-------------------------------------------|
 | `snapshot_worksheet`  | string        | Worksheet the runner reads per workbook.  |
-| `incoming_directory`  | string (path) | Where the operator drops the workbook.    |
-| `archive_directory`   | string (path) | Where processed workbooks are moved.      |
 | `outputs_directory`   | string (path) | Per-run outputs and manifests.            |
-| `state_directory`     | string (path) | Location of the last-successful-run state.|
-| `allowed_extensions`  | list[string]  | Eligible file extensions (e.g. `.xlsx`).  |
 
 Paths may be repository-relative (resolved against the repo root) or absolute.
 
@@ -60,27 +60,25 @@ flags behaves as before.
 A configuration failure never archives the incoming workbook and never updates the
 baseline state.
 
-## Real-pair acceptance-test result
-Two genuinely different single-snapshot workbooks were built from the sample
-workbook's two worksheets ("Snapshot Wk 1" as previous, "Snapshot Wk 2" as
-current), each saved as its own workbook with the configured worksheet name.
+## Validation
 
-- Movements produced: **3** (increases: 3, decreases: 0).
-- Net delta: **+24,750.09**.
-- The runner's `executive_summary.txt` and `key_movements.txt` exactly matched the
-  output of invoking the existing 2A–3B functions directly on the same pair.
-- Archive, output promotion, state update, and a success manifest all verified.
+The active weekly snapshot pipeline was executed successfully after Phase 6
+simplification changes. The pipeline successfully generated:
 
-## Test results
-`python -m unittest scripts.test_run_weekly_snapshot scripts.test_executive_summary scripts.test_config_loader`
-— 41 tests, all pass.
+- analysis.json
+- leadership_insights.txt
+- risks_watchouts.txt
+- leadership_email.txt
+
+Validation confirmed that removal of the retired workbook-discovery and
+baseline-state workflows did not affect leadership output generation.
 
 ## Remaining assumptions
 1. **Worksheet name per workbook.** Each weekly workbook is assumed to contain a
    worksheet whose name matches `snapshot_worksheet`. This is now operator-settable
    via config/CLI; it is still not auto-detected (no fuzzy matching), by design.
-2. **One snapshot per workbook** is the operating model; the previous snapshot comes
-   from the archived prior run. The acceptance test synthesises single-sheet
-   workbooks to model this from the multi-sheet sample.
+2. Snapshot comparison is performed using the latest two snapshot worksheets
+   within the Weekly snapshots workbook. The active runner identifies the most
+   recent worksheet pair and compares them directly.
 3. The **acceptance pair reuses the sample data's two worksheets**; a real future
    weekly workbook pair was not available in the repository to test against.

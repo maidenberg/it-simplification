@@ -35,7 +35,6 @@ class RunnerConfig:
     state_filename: str = "last_successful_run.json"
 
     # File-eligibility rules.
-    allowed_extensions: tuple = (".xlsx",)
     lock_file_prefix: str = "~$"
 
     # Worksheet the pipeline reads from a dropped workbook. This is a runtime
