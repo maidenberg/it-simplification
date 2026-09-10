@@ -121,8 +121,8 @@ def merge_into_config(base: RunnerConfig, raw: dict) -> RunnerConfig:
     Return a new RunnerConfig with values from `raw` merged over `base`.
 
     Only keys present in `raw` override the base. Paths are resolved against the
-    repository root. `data_dir`, `state_filename`, and `lock_file_prefix` are not
-    externally configurable and are preserved from `base`.
+    repository root. Values not exposed through the configuration contract are
+    preserved from `base`.
     """
     overrides = {}
 
