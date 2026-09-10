@@ -23,73 +23,24 @@ from src.reporting.leadership_insights import (
 )
 
 
-EXEC_ARTEFACT = "\n".join([
-    "=" * 50,
-    "IT SIMPLIFICATION WEEKLY MOVEMENT SUMMARY",
-    "=" * 50,
-    "",
-    "Contracts compared: 142",
-    "Contracts with movement: 3",
-    "",
-    "Increases: 3",
-    "Decreases: 0",
-    "",
-    "Total positive delta: $24,750.09",
-    "Total negative delta: $0.00",
-    "",
-    "Net delta: $24,750.09",
-    "",
-    "Top Movements",
-    "-------------",
-    "",
-    "1. Example Contract 028: $16,764.09",
-    "2. Example Contract 034: $7,489.00",
-    "3. Example Contract 023: $497.00",
-])
-
-MOVES_ARTEFACT = "\n".join([
-    "KEY MOVEMENTS",
-    "-------------",
-    "",
-    "1. Example Contract 028 (+$16,764.09)",
-    "2. Example Contract 034 (+$7,489.00)",
-    "3. Example Contract 023 (+$497.00)",
-])
-
-MOVES_SINGLE = "\n".join([
-    "KEY MOVEMENTS",
-    "-------------",
-    "",
-    "1. Example Contract 028 (+$16,764.09)",
-])
-
-
 class LeadershipInsightsTestBase(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="li_"))
-        self.exec_path = self.tmp / "executive_summary.txt"
-        self.moves_path = self.tmp / "key_movements.txt"
         self.out_path = self.tmp / "leadership_insights.txt"
 
     def tearDown(self):
         shutil.rmtree(self.tmp, ignore_errors=True)
-
-    def _seed(self, exec_content=EXEC_ARTEFACT, moves_content=MOVES_ARTEFACT):
-        self.exec_path.write_text(exec_content, encoding="utf-8")
-        self.moves_path.write_text(moves_content, encoding="utf-8")
 
     def _generate(self):
         return generate_leadership_insights(self.out_path)
 
 class TestFileGeneration(LeadershipInsightsTestBase):
     def test_file_generation(self):
-        self._seed()
         out = self._generate()
         self.assertEqual(out, self.out_path)
         self.assertTrue(self.out_path.exists())
 
     def test_exact_insight_count(self):
-        self._seed()
         text = self._generate().read_text(encoding="utf-8")
         
         self.assertTrue(text.startswith("Leadership Insights"))
@@ -97,7 +48,6 @@ class TestFileGeneration(LeadershipInsightsTestBase):
 
 class TestDeterminism(LeadershipInsightsTestBase):
     def test_deterministic_output(self):
-        self._seed()
         first = self._generate().read_text(encoding="utf-8")
         second = self._generate().read_text(encoding="utf-8")
         self.assertEqual(first, second)

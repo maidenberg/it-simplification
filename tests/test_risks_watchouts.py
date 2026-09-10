@@ -83,7 +83,6 @@ class RisksWatchoutsTestBase(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="rw_"))
         self.leadership_path = self.tmp / "leadership_insights.txt"
-        self.moves_path = self.tmp / "key_movements.txt"
         self.out_path = self.tmp / "risks_watchouts.txt"
 
     def tearDown(self):
@@ -91,8 +90,7 @@ class RisksWatchoutsTestBase(unittest.TestCase):
 
     def _seed(self, leadership=LEADERSHIP_ARTEFACT, moves=MOVES_POSITIVE_ONLY):
         self.leadership_path.write_text(leadership, encoding="utf-8")
-        self.moves_path.write_text(moves, encoding="utf-8")
-
+    
     def _generate(self):
         return generate_risks_watchouts(
             self.leadership_path, self.out_path
@@ -159,7 +157,6 @@ class TestDeterminism(RisksWatchoutsTestBase):
 
 class TestFailureHandling(RisksWatchoutsTestBase):
     def test_missing_leadership_raises(self):
-        self.moves_path.write_text(MOVES_POSITIVE_ONLY, encoding="utf-8")
         with self.assertRaises(RisksWatchoutsError) as ctx:
             self._generate()
         self.assertIn("leadership insights", str(ctx.exception))
