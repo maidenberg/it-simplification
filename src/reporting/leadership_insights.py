@@ -153,15 +153,6 @@ def generate_leadership_insights(
         If either required input artefact is missing.
     """
     if ranked_candidates:
-        print("\nLEADERSHIP INSIGHT INPUTS")
-
-        for candidate in ranked_candidates[:5]:
-            print (
-                f"{candidate.contract} | "
-                f"{candidate.commentary}"
-            )
-
-    if ranked_candidates:
         by_theme = {}
 
         for candidate in ranked_candidates:
@@ -169,15 +160,6 @@ def generate_leadership_insights(
 
             if theme not in by_theme:
                 by_theme[theme] = candidate
-
-        print("\nTHEME WINNERS")
-
-        for theme, candidate in by_theme.items():
-            print(
-                f"{theme}: "
-                f"{candidate.contract} | "
-                f"{candidate.commentary}"
-            )
 
     delivery_progress = None
 

@@ -216,15 +216,6 @@ def rank_candidates_for_leadership(candidates):
         reverse=True,
     )
 
-    for candidate in ranked[:20]:
-        print (
-            f"SCORE={executive_relevance_score(candidate):.1f} | "
-            f"COSTOUT={candidate.costout:,.0f} | "
-            f"{candidate.vendor} | "
-            f"{candidate.contract} | "
-            f"{candidate.commentary}"
-        )
-
     return ranked
 
 def classify_leadership_theme(candidate):
@@ -264,9 +255,4 @@ def classify_leadership_theme(candidate):
     if "working on it" in commentary:
         return "risk"
 
-    print (
-        candidate.contract,
-        "->",
-        commentary,
-    )
     return "general"
