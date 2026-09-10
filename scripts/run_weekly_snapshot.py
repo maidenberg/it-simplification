@@ -438,7 +438,7 @@ def main(argv=None) -> int:
     except ConfigError as exc:
         print("Weekly snapshot run: FAILED (configuration error)", file=sys.stderr)
         print(f"  - {exc}", file=sys.stderr)
-        print("  No analysis was run; the incoming workbook and baseline are unchanged.",
+        print("  No analysis was run; the weekly snapshot workbook was unchanged.",
               file=sys.stderr)
         return 1
 
