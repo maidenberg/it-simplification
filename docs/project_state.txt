@@ -126,13 +126,37 @@ This phase removed or retired multiple non-essential artefacts, workflows, and t
 
 Documentation review and cleanup has been substantially completed.
  
+Phase 6 also completed a major dead-code and legacy-workflow review.
+
+Validated removals included:
+- Communications Engine subsystem
+  - communications_engine.py
+  - generate_drafts.py
+  - generate_update.py
+  - ingest.py
+- obsolete runner/configuration tests associated with retired workflows
+- retired promotion/reporting package remnants
+- archive workflow infrastructure, generated artefacts, and directory structure
+- obsolete generated outputs and stale cache artefacts
+- legacy package shells no longer used by the active pipeline
+
+The active implementation is now centred on:
+Weekly snapshots workbook
+→ comparison and analysis
+→ leadership candidate generation
+→ leadership insights
+→ risks & watchouts
+→ leadership email
+
 Current focus:
 - improving the business usefulness of the weekly leadership email
-- identifying legacy workflow references that survived earlier simplification work
-- reviewing obsolete tests, configuration, comments, and documentation associated with retired workflows
-- removing dead code and legacy implementation paths where they are no longer used by the active leadership-email pipeline
+- improving leadership signal quality, prioritisation, and decision usefulness
+- simplifying the active leadership-email pipeline and reducing architectural complexity
+- removing remaining stale comments, docstrings, and documentation that no longer reflect the active implementation
+- reviewing package structure, import paths, and maintainability of active modules
+- continuing targeted cleanup only where it directly improves maintainability or reduces operational complexity
  
-The current focus remains improving the business usefulness of the weekly leadership email rather than generating additional artefacts.
+The current focus remains improving the business usefulness of the weekly leadership email rather than generating additional artefacts..
 
 
 (4) PROJECT PHILOSOPHY
@@ -204,6 +228,11 @@ Reporting layer:
 ✅ Artefact rationalisation
 ✅ Documentation cleanup
 ✅ Legacy workflow review
+✅ Communications Engine retirement
+✅ Dead-code removal
+✅ Obsolete test retirement
+✅ Archive-workflow retirement
+✅ Repository simplification
 
 Communications layer:
 ✅ Leadership email generation
@@ -228,6 +257,24 @@ Judgement layer:
 ✅ Executive watchout identification
 ✅ Decision-required identification
 ✅ Financial watchout identification
+
+Phase 6 simplification status:
+
+✅ Communications Engine subsystem removed
+✅ Archive workflow removed
+✅ Retired reporting-package and promotion-package remnants removed
+✅ Obsolete runner/configuration tests removed
+✅ Stale generated outputs removed
+✅ Repository structure simplified
+
+The active implementation path is now:
+
+Weekly snapshots workbook
+→ snapshot comparison
+→ leadership candidate generation
+→ leadership insights
+→ risks & watchouts
+→ leadership email
 
 
 (7) REPORTING AND COMMUNICATIONS PACKAGE STRUCTURE 
@@ -668,7 +715,7 @@ Formal validation criteria: Approved.
 Documentation and comment cleanup: Substantially complete.
 
 Current phase:
-Leadership email quality optimisation and legacy workflow rationalisation.
+Leadership email quality optimisation and active-pipeline simplification.
 
 Current governing question:
 "Does the generated leadership email direct attention to the handful of matters that genuinely require leadership awareness, intervention, or decision?"
@@ -676,10 +723,11 @@ Current governing question:
 Secondary governing question:
 "Does this change improve the quality, reliability, traceability, or maintainability, or leadership usefulness of leadership_email.txt?"
 
-Current rationalisation focus:
-- identifying legacy workflow references that survived earlier simplification work
-- reviewing obsolete tests, configuration, comments, and documentation associated with retired workflows
-- removing dead code where it is no longer used by the active leadership-email pipeline
+Current simplification focus:
+- improving maintainability of the active leadership-email pipeline
+- reviewing package structure, import-path management, and module boundaries
+- removing remaining stale comments, docstrings, and documentation that no longer reflect the current implementation
+- reducing architectural complexity where it does not improve leadership-email outcomes
 - preserving historical milestone and ADR documentation where appropriate
 
 Formatting must remain a consideration, but not the primary workstream.
@@ -687,15 +735,23 @@ Formatting must remain a consideration, but not the primary workstream.
 
 (19) ACTIVE BACKLOG
 
-1. LEGACY WORKFLOW AND DEAD CODE REVIEW
+1. ACTIVE PIPELINE SIMPLIFICATION AND MAINTAINABILITY
 
-Legacy workflow review includes:
-- review archive-workflow remnants 
-- review obsolete tests associated with retired workflows
-- review stale configuration assumptions
-- review runner comments and docstrings that no longer reflect runtime behaviour
-- remove dead code only after validating it is no longer used by the active leadership-email pipeline
+Completed:
+✅ Communications Engine retirement
+✅ Archive workflow retirement
+✅ Dead-code review
+✅ Obsolete test retirement
+✅ Legacy generated-output cleanup
+✅ Package-shell and cache cleanup
+
+Remaining simplification work:
+- review remaining stale comments and docstrings in active modules
+- review package structure and import-path management
+- review runner maintainability and module boundaries
+- review configuration and path handling for simplification opportunities
 - preserve historical milestone notes and ADRs where they remain accurate historical records
+- remove additional code only after validating it is not part of the active leadership-email pipeline
 
 2. Specific leadership email accuracy and presentation refinements
 
@@ -757,9 +813,9 @@ Current success metric: Correct leadership judgement, not formatting precision.
 4. Validation is complete.
 5. The formal judgement framework is approved.
 6. There are no formally open bugs.
-7. The current phase is Leadership Email Quality Optimisation and Legacy Workflow Rationalisation.
+7. The current phase is Leadership Email Quality Optimisation and Active Pipeline Simplification.
 8. Documentation and comment cleanup is substantially complete.
-9. Current priority is identifying and reviewing legacy workflow references, obsolete tests, retired artefacts, and dead code associated with workflows no longer used by the active leadership-email pipeline.
+9. Major dead-code and legacy-workflow rationalisation has been substantially completed. Current priority is improving maintainability, simplifying the active leadership-email pipeline, and removing remaining stale comments, docstrings, and documentation that no longer reflect the current implementation.
 10. Make one validated change at a time and confirm impact before proceeding to the next change. 
 11. Do not redesign completed components.
 12. Do not rebuild extraction, comparison, matching, ranking, scoring, aggregation, commentary enrichment, candidate generation, movement classification, or theme classification.
@@ -772,79 +828,52 @@ Current success metric: Correct leadership judgement, not formatting precision.
 19. Do not provide multiple code changes at once.
 20. Historical milestone notes, ADRs, and implementation notes may remain unchanged where they accurately document historical decisions and implementation history.
 21. Preserve historical documentation where appropriate, but ensure active documentation reflects current runtime behaviour.
-22. Before removing legacy code, configuration, tests, or documentation, validate that it is no longer used by the active leadership-email pipeline.
-23. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
+22. Before removing additional code, configuration, tests, or documentation, validate that it is not part of the active leadership-email pipeline and confirm that the change improves maintainability, simplicity, or leadership-email usefulness.
+23. The following simplification work has been completed and should not be re-opened without evidence:
+- Communications Engine subsystem removal
+- Archive-workflow retirement
+- Promotion-package retirement
+- Reporting-package retirement
+- Obsolete runner/configuration test retirement
+- Legacy generated-output cleanup
+- Stale cache and package-shell cleanup
+24. If implementation inspection identifies a new bug: explain the bug, add it to OPEN BUGS, make one change only, validate the change against leadership_email.txt and existing comparison outputs, and continue only after the prior change is confirmed complete.
 
 
-(24) LEGACY WORKFLOW AND DEAD CODE REVIEW
+(24) ACTIVE PIPELINE SIMPLIFICATION
 
 Status: Active
 
 Background
 
-Documentation and comment cleanup is substantially complete.
+Phase 6 completed a substantial rationalisation of legacy workflows,
+retired artefacts, obsolete tests, stale generated outputs, and dead code.
 
-Repository review identified evidence that several legacy workflows may have
-survived earlier architecture simplification efforts.
+Validated removals included:
 
-Examples identified during review include:
+- Communications Engine subsystem
+  - communications_engine.py
+  - generate_drafts.py
+  - generate_update.py
+  - ingest.py
 
-- archive-workflow references
-- archive-based tests
-- retired reporting artefact references
-- legacy runner assumptions
-- obsolete configuration expectations
-- stale runtime comments and docstrings
+- archive workflow
+  - archive directory
+  - archive-generated workbook history
+  - archive-related operational documentation
 
-Observed evidence
+- obsolete runner and configuration tests associated with retired workflows
 
-Current implementation review indicates:
+- retired reporting-package and promotion-package remnants
 
-- run_weekly_snapshot.py no longer contains workbook-archiving logic
-- RunnerConfig no longer contains archive configuration
-- active outputs are written to data/outputs/latest
-- state management references the workbook directly
-- comparison logic is based on worksheet comparison within the current workbook
+- stale cache artefacts, generated outputs, and unused package shells
 
-However, archive-related assumptions remain present in some tests,
-documentation, and historical implementation references.
+- stale comments, docstrings, and operational documentation that no longer
+  reflected current runtime behaviour
 
-Current objective
+Current implementation
 
-Identify and review legacy workflows, obsolete implementation paths,
-retired assumptions, and potential dead code that no longer contribute
-to the active leadership-email pipeline.
-
-Review scope
-
-Review:
-
-- runner documentation
-- runner comments and docstrings
-- configuration assumptions
-- obsolete tests
-- retired workflow references
-- inactive reporting artefacts
-- legacy pipeline stages
-
-Review rule
-
-Do not remove code, tests, configuration, or documentation solely because
-it appears obsolete.
-
-Before removal:
-
-1. Confirm the functionality is no longer used by the active leadership-email pipeline.
-2. Confirm removal does not affect:
-   - leadership_insights.txt
-   - risks_watchouts.txt
-   - leadership_email.txt
-3. Make one validated change at a time.
-
-Historical milestone notes and ADRs may remain unchanged where they
-accurately document historical implementation decisions.
-
-Current active business-output path
+The active implementation path is:
 
 Weekly snapshots workbook
 ↓
@@ -860,15 +889,45 @@ risks_watchouts.txt
 ↓
 leadership_email.txt
 
+Current objective
+
+Improve maintainability, simplicity, and clarity of the active
+leadership-email pipeline without changing approved leadership
+judgement behaviour.
+
+Current review scope
+
+Review:
+
+- active module maintainability
+- package structure
+- import-path management
+- runner complexity and module boundaries
+- stale comments and docstrings
+- active documentation accuracy
+- simplification opportunities that reduce complexity without affecting
+  leadership-email outputs
+
+Review rule
+
+Do not redesign or replace completed pipeline components.
+
+Before making implementation changes:
+
+1. Confirm the change improves maintainability, simplicity, traceability,
+   reliability, or leadership-email usefulness.
+2. Validate that leadership_email.txt behaviour remains acceptable.
+3. Make one validated change at a time.
+
+Historical milestone notes, ADRs, and implementation-history documents may
+remain unchanged where they accurately document historical decisions.
+
 Current investigation topics
 
-- archive workflow remnants
-- archive-based tests
-- stale runner documentation
-- legacy manifests and run-id assumptions
-- retired artefact dependencies
-- dead code candidates
+- package and import-path simplification
+- active-pipeline maintainability
+- runner simplification opportunities
+- stale implementation documentation in active modules
+- leadership email quality optimisation
 
-Make one change at a time.
-
-Maintain a passing test suite throughout the cleanup effort.
+Dead-code and legacy-workflow review is substantially complete.

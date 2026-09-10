@@ -1,24 +1,29 @@
 """
-run_weekly_snapshot.py — Drop-in weekly snapshot runner (Milestone 3C.1).
+run_weekly_snapshot.py
 
-Orchestration only. This module wires together the existing, unchanged pipeline:
+Orchestrates the active IT Simplification weekly reporting pipeline.
 
-    2A  compare_snapshots.load_snapshot / extract_vendor_data
-    2B-2F  compare_snapshots.compare_snapshots
+Current flow:
 
-The runner performs no analysis or reporting calculations itself. It adds only
-discovery, previous-snapshot resolution, preflight validation, temp->promote
-output handling, last-successful-run state, and a per-run manifest.
+Weekly snapshots workbook
+-> snapshot comparison
+-> analysis.json
+-> leadership candidate generation
+-> leadership_insights.txt
+-> risks_watchouts.txt
+-> leadership_email.txt
 
-Operator workflow:
-    1. Ensure the latest Weekly snapshots.xlsx workbook is present in data/.
-    2. Run:  python scripts/run_weekly_snapshot.py
-    3. Review data/outputs/latest/ and data/outputs/manifest.json.
-    4. The workbook remains in place and can be re-run as required.
-    5. On failure, review the error message and re-run after correction.
+The runner coordinates existing pipeline components and manages:
 
-Usage:
-    python scripts/run_weekly_snapshot.py
+- workbook validation
+- snapshot-sheet discovery
+- pipeline execution
+- output generation
+- manifest creation
+
+It does not contain leadership judgement, ranking, risk-identification,
+comparison, or reporting business logic. Those responsibilities remain within
+the existing pipeline modules.
 """
 
 import contextlib
@@ -58,15 +63,6 @@ from src.reporting.leadership_email import generate_leadership_email
 class RunnerError(Exception):
     """Base class for runner failures with operator-facing messages."""
 
-
-class DiscoveryError(RunnerError):
-    """Raised when the incoming directory does not contain exactly one workbook."""
-
-
-class BaselineError(RunnerError):
-    """Raised when no previous successful snapshot baseline is available."""
-
-
 class PreflightError(RunnerError):
     """Raised when a workbook fails preflight validation."""
 
@@ -82,109 +78,6 @@ def _now_iso() -> str:
 def _quiet():
     """Suppress the pipeline's diagnostic stdout while still capturing errors."""
     return contextlib.redirect_stdout(io.StringIO())
-
-
-# ---------------------------------------------------------------------------
-# B. Current snapshot discovery
-# ---------------------------------------------------------------------------
-
-def discover_current_snapshot(config: RunnerConfig) -> Path:
-    """
-    Return the single eligible workbook in the incoming directory.
-
-    Eligibility: file suffix in allowed_extensions and name not starting with the
-    lock-file prefix (temporary Excel "~$" files are ignored).
-
-    Raises
-    ------
-    DiscoveryError
-        If zero or more than one eligible workbook is present.
-    """
-    if not config.incoming_dir.exists():
-        raise DiscoveryError(
-            f"Incoming directory does not exist: {config.incoming_dir}. "
-            f"Create it and place exactly one workbook inside."
-        )
-
-    candidates = sorted(
-        p for p in config.incoming_dir.iterdir()
-        if p.is_file()
-        and not p.name.startswith(config.lock_file_prefix)
-        and p.suffix.lower() in config.allowed_extensions
-    )
-
-    if len(candidates) == 0:
-        raise DiscoveryError(
-            f"No eligible workbook found in {config.incoming_dir}. "
-            f"Place exactly one {'/'.join(config.allowed_extensions)} file to process."
-        )
-    if len(candidates) > 1:
-        names = "\n  - ".join(p.name for p in candidates)
-        raise DiscoveryError(
-            f"Multiple eligible workbooks found in {config.incoming_dir}; "
-            f"expected exactly one. Candidates:\n  - {names}\n"
-            f"Remove all but the workbook you want to process."
-        )
-
-    return candidates[0]
-
-
-# ---------------------------------------------------------------------------
-# C. Previous snapshot resolution + state
-# ---------------------------------------------------------------------------
-
-def read_state(config: RunnerConfig) -> dict | None:
-    """Return the last-successful-run state dict, or None if none exists."""
-    if not config.state_file.exists():
-        return None
-    with open(config.state_file, "r", encoding="utf-8") as fh:
-        return json.load(fh)
-
-
-def resolve_previous_snapshot(config: RunnerConfig, current: Path) -> Path:
-    """
-    Resolve the previous successful snapshot from state.
-
-    Raises
-    ------
-    BaselineError
-        If no previous successful snapshot exists, or the resolved file is
-        missing, or it resolves to the same file as the current snapshot.
-    """
-    state = read_state(config)
-    if not state or not state.get("snapshot_path"):
-        raise BaselineError(
-            "No previous successful snapshot found. A baseline must be "
-            "established first: process an initial workbook so its result "
-            "becomes the baseline for subsequent runs."
-        )
-
-    previous = Path(state["snapshot_path"])
-    if not previous.exists():
-        raise BaselineError(
-            f"Previous snapshot recorded in state is missing on disk: {previous}. "
-            f"Re-establish a baseline before running."
-        )
-
-    if previous.resolve() == current.resolve():
-        raise BaselineError(
-            f"Current and previous snapshots resolve to the same file: "
-            f"{previous}. Provide a new workbook distinct from the baseline."
-        )
-
-    return previous
-
-
-def write_state(config: RunnerConfig, snapshot: Path, run_id: str) -> None:
-    """Persist the last-successful-run state (called only after 3B succeeds)."""
-    config.state_dir.mkdir(parents=True, exist_ok=True)
-    state = {
-        "snapshot_path": str(snapshot.resolve()),
-        "run_id": run_id,
-        "updated_at": _now_iso(),
-    }
-    with open(config.state_file, "w", encoding="utf-8") as fh:
-        json.dump(state, fh, indent=2)
 
 
 # ---------------------------------------------------------------------------
@@ -324,8 +217,7 @@ def run(config: RunnerConfig | None = None) -> dict:
     """
     Execute the full drop-in run. Returns the run manifest dict.
 
-    A manifest is produced for every attempt. On failure, state is not updated,
-    and no promoted output directory is left behind.
+    A manifest is produced for every attempt. On failure, no promoted output directory is left behind.
     """
     config = config or default_config()
     config.ensure_directories()
@@ -347,13 +239,13 @@ def run(config: RunnerConfig | None = None) -> dict:
     temp_dir = config.outputs_dir / f".tmp_{run_id}"
 
     try:
-        # 3. Discover current snapshot.
+        # 3. Select workbook.
         current = config.weekly_snapshot_workbook
 
         manifest["current_snapshot"] = str(current)
-        manifest["stages_completed"].append("discovery")
+        manifest["stages_completed"].append("workbook_selection")
 
-        # 4. Resolve previous snapshot.
+        # 4. Identify snapshot sheets.
         previous = current
 
         manifest["previous_snapshot"] = str(previous)
@@ -469,11 +361,7 @@ def run(config: RunnerConfig | None = None) -> dict:
         shutil.move(str(temp_dir), str(final_output))
         manifest["output_directory"] = str(final_output)
         manifest["stages_completed"].append("promote")
-
-        # 10. Update last-successful-run state.
-        write_state(config, current, run_id)
-        manifest["stages_completed"].append("state_update")
-
+       
         manifest["status"] = "success"
 
     except RunnerError as exc:
