@@ -6,7 +6,6 @@ RunnerConfig object. This component contains no analysis or reporting logic; it
 only reads, validates, resolves paths, and merges runtime settings.
 
 Supported configuration keys (config/weekly_snapshot.json):
-    snapshot_worksheet   : str
     outputs_directory    : str
         
 Validation rules:
@@ -35,7 +34,7 @@ DEFAULT_CONFIG_PATH = _REPO_ROOT / "config" / "weekly_snapshot.json"
 
 # Map each supported JSON key to (RunnerConfig field, expected python type,
 # whether the value is a repo-relative path).
-_STRING_KEYS = {"snapshot_worksheet"}
+_STRING_KEYS = set()
 _PATH_KEYS = {"outputs_directory": "outputs_dir"}
 _LIST_KEYS = set()
 

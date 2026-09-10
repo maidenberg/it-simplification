@@ -28,12 +28,6 @@ class RunnerConfig:
     outputs_dir: Path = _REPO_ROOT / "data" / "outputs"
     weekly_snapshot_workbook: Path = _REPO_ROOT / "data" / "Weekly snapshots.xlsx"
 
-    # Worksheet the pipeline reads from a dropped workbook. This is a runtime
-    # input, not a business rule. The existing pipeline reads a named worksheet,
-    # so the runner must be told which one to use. Default is the sheet the
-    # pipeline treats as the "current" snapshot.
-    snapshot_worksheet: str = "Live dashboard"
-
     def ensure_directories(self) -> None:
         self.outputs_dir.mkdir(parents=True, exist_ok=True)
 
