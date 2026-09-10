@@ -244,7 +244,6 @@ def run(config: RunnerConfig | None = None) -> dict:
         "output_directory": None,
         "stages_completed": [],
         "generated_artefacts": [],
-        "warnings": [],
         "errors": [],
         "started_at": _now_iso(),
     }

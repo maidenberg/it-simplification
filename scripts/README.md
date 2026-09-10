@@ -26,7 +26,8 @@ The runner uses:
 - data/Weekly snapshots.xlsx — source workbook containing snapshot worksheets.
 - data/outputs/latest/ — generated reporting artefacts and leadership email outputs.
  
-Runtime settings live in scripts/runner_config.py. The default worksheet is Live Dashboard.
+Runtime settings live in scripts/runner_config.py. The runner automatically
+discovers the latest snapshots worksheets.
 
 ### Weekly operator workflow
 
@@ -52,14 +53,12 @@ Runtime settings can be changed with **no Python code edits** via `config/weekly
 
 ```json
 {
-  "snapshot_worksheet": "Live dashboard",
-  "outputs_directory": "data/outputs",
+  "outputs_directory": "data/outputs"
 }
 ```
 
 Precedence (highest first): **CLI flag > configuration file > built-in default.**
 
-- `--worksheet NAME` overrides the worksheet for a single run.
 - `--config PATH` uses a specific configuration file (it must exist and be valid).
 - With no flags, `config/weekly_snapshot.json` is used if present; otherwise the
   built-in defaults apply.
