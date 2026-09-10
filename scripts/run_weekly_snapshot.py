@@ -81,7 +81,7 @@ def _quiet():
 
 
 # ---------------------------------------------------------------------------
-# D. Preflight validation (reuses the existing extractor as authority)
+# Preflight validation (reuses the existing extractor as authority)
 # ---------------------------------------------------------------------------
 
 def preflight_workbook(config: RunnerConfig, path: Path, role: str) -> None:
@@ -210,7 +210,7 @@ def _write_manifest(config: RunnerConfig, manifest: dict) -> Path:
 
 
 # ---------------------------------------------------------------------------
-# E. Orchestration entry point
+# Orchestration entry point
 # ---------------------------------------------------------------------------
 
 def run(config: RunnerConfig | None = None) -> dict:
@@ -349,7 +349,7 @@ def run(config: RunnerConfig | None = None) -> dict:
 
         manifest["stages_completed"].append("leadership_email")
 
-        # Record the generated artefacts (sorted for deterministic manifests).
+        # 8d. Record the generated artefacts (sorted for deterministic manifests).
         manifest["generated_artefacts"] = sorted(
             p.name for p in temp_dir.iterdir() if p.is_file()
         )
