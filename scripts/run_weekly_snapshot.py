@@ -228,6 +228,8 @@ def run(config: RunnerConfig | None = None) -> dict:
         "status": "failed",
         "current_snapshot": None,
         "previous_snapshot": None,
+        "previous_sheet": None,
+        "current_sheet": None,
         "output_directory": None,
         "stages_completed": [],
         "generated_artefacts": [],
@@ -249,10 +251,16 @@ def run(config: RunnerConfig | None = None) -> dict:
         previous = current
 
         manifest["previous_snapshot"] = str(previous)
-        manifest["stages_completed"].append("previous_resolution")
+        
+        previous_sheet, current_sheet = find_latest_snapshot_sheets(current)
+
+        manifest["previous_sheet"] = previous_sheet
+        manifest["current_sheet"] = current_sheet
+        
+        manifest["stages_completed"].append("worksheet_selection")
+
 
         # 5. Preflight both workbooks.
-        preflight_workbook(config, previous, "previous")
         preflight_workbook(config, current, "current")
         manifest["stages_completed"].append("preflight")
 
