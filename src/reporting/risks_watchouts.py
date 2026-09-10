@@ -17,7 +17,6 @@ Produces:
 Deterministic: identical inputs always produce identical output.
 """
 
-import re
 from pathlib import Path
 
 

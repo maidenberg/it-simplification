@@ -136,13 +136,13 @@ class TestEmptyPlaceholders(RisksWatchoutsTestBase):
 class TestPreferredLabelledApproach(RisksWatchoutsTestBase):
     def test_prelabelled_entries_take_precedence(self):
         # When leadership_insights carries labelled entries, they are used
-        # verbatim in preference to deriving from key_movements.
+        # verbatim in preference to any fallback derivation.
         self._seed(leadership=LEADERSHIP_LABELLED, moves=MOVES_WITH_NEGATIVE)
         text = self._generate().read_text(encoding="utf-8")
         self.assertIn("Vendor X contract lapses next week.", text)
         self.assertIn("Concentration in top vendor.", text)
         self.assertIn("142 contracts under review.", text)
-        # The key_movements fallback derivation is NOT used when labels exist.
+        # Fallback derivation is NOT used when labelled entries exist.
         self.assertNotIn("Negative movement:", text)
         self.assertNotIn("Significant movement:", text)
 

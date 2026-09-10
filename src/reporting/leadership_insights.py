@@ -14,7 +14,6 @@ Produces themed executive insights including:
 Contains no analytics, ranking, or cost calculations. Inputs are provided by the leadership-candidate generation layer.
 """
 
-import re
 from pathlib import Path
 from src.reporting.leadership_candidates import (
     classify_leadership_theme,
