@@ -114,17 +114,35 @@ Phase 3: Leadership insight generation.
 Phase 4: Executive watchout generation.
 Phase 5: Leadership judgement validation. Question being tested: If Lewis only had 30 seconds, would the output direct attention to the most important matters?
 Phase 6: Artefact rationalisation and architecture simplification.
+
+The reporting architecture was simplified, obsolete workflows and 
+artefacts were retired, configuration and runner behaviour were 
+rationalised, and active documentation was aligned with the
+worksheet-based pipeline. End-to-end validation was completed after
+each simplification stage.
+
+Phase 7: Operational model refinement and maintainability.
+
+Documentation, runtime messaging, test scaffolding, manifest
+traceability, repository cleanliness, and operational maintainability
+were reviewed and simplified. Active test coverage was reviewed
+against the production architecture and no material coverage gaps
+were identified. Remaining coverage limitations were accepted based
+on low business risk and normal operator review.
  
-This phase:
-- removed obsolete artefacts, reports, tests, and generated outputs
-- retired workbook-discovery architecture
-- retired baseline/state-management architecture
-- simplified runner configuration and operational model
-- aligned configuration, manifests, and documentation with the active worksheet-based pipeline
-- removed redundant processing, configuration surfaces, and dead code
-- validated end-to-end pipeline operation after each simplification stage
+Status: COMPLETE.
  
-The active implementation was simplified to:
+Phase 8: (Current) Production adoption and closure
+
+Current focus:
+- production operationalisation
+- execution reliability
+- operator guidance
+- production adoption
+- project closure
+- targeted leadership-email improvements were justified
+
+Active architecture:
  
 Weekly snapshots workbook
 → worksheet discovery
@@ -133,18 +151,6 @@ Weekly snapshots workbook
 → leadership insights
 → risks & watchouts
 → leadership email
-
-Phase 7 (Current): Operational model refinement and maintainability.
- 
-Current focus:
-- improving the business usefulness of the weekly leadership email
-- improving leadership signal quality, prioritisation, and decision usefulness
-- reviewing orchestration responsibilities and worksheet-discovery ownership
-- improving manifest accuracy and operational traceability
-- removing remaining stale comments, docstrings, and operator-facing messages
-- reducing structural complexity where simplification improves maintainability
-- reviewing package structure, imports, and active module boundaries
-- continuing evidence-driven cleanup only where it provides measurable maintainability benefit
  
 The current focus remains improving the business usefulness of the weekly leadership email rather than generating additional artefacts.
 
@@ -269,25 +275,6 @@ Phase 6 simplification status:
 ✅ Manifest aligned with worksheet-based processing
 ✅ Duplicate preflight validation removed
 ✅ Operational documentation aligned with active implementation
-
-The active implementation path is now:
-
-Weekly snapshots workbook
-→ worksheet discovery
-→ snapshot comparison
-→ leadership candidate generation
-→ leadership insights
-→ risks & watchouts
-→ leadership email
-
-Phase 7 focus:
-
-🔄 Operational model refinement
-🔄 Worksheet-discovery ownership review
-🔄 Manifest and operational traceability review
-🔄 Runner maintainability improvements
-🔄 Documentation and operator-message accuracy review
-🔄 Targeted simplification where maintainability benefits are demonstrated
 
 
 (7) REPORTING AND COMMUNICATIONS PACKAGE STRUCTURE 
@@ -652,11 +639,15 @@ Status: RESOLVED.
 Finding 12
 "Financial watchout" followed by "Items to monitor: No watchouts identified" can read as semantically contradictory.
 
-The financial section may contain material risks while the monitor section says no watchouts were identified.
+The wording could be interpreted as contradictory because the email contained financial watchouts while also stating that no watchouts had been identified.
 
 This is an email wording and section-semantics issue, not evidence that the underlying financial items are wrong.
 
-No approved code change has yet been recorded.
+Conclusion: The issue was a presentation and terminology defect rather than a failure in extraction, ranking, candidate generation, promotion logic, or leadership judgement.
+
+Resolution: The leadership email rendering was updated to distinguish executive watchouts from financial watchouts.
+
+Status: RESOLVED
 
 Finding 13
 The latest email did not explicitly explain what changed week-on-week.
@@ -714,6 +705,31 @@ Resolution: Inserted explicit line break between commentary and financial-impact
  
 Status: RESOLVED
 
+BUG-004
+
+Issue: Leadership email watchout wording could create a semantic contradiction.
+
+Observed:
+
+Financial watchout:
+[material financial risks]
+
+Items to monitor:
+No watchouts identified.
+
+The email could simultaneously present financial watchouts while stating that no watchouts had been identified.
+
+Root cause: The rendered section referred to executive watchouts, but the wording did not distinguish executive watchouts from financial watchouts.
+
+Resolution: Updated leadership_email rendering to explicitly distinguish executive watchouts from financial watchouts.
+
+Updated rendering:
+
+Executive watchouts:
+No executive watchouts identified.
+
+Status: RESOLVED
+
 
 (18) CURRENT ASSESSMENT
 
@@ -729,80 +745,70 @@ Formal validation criteria: Approved.
 Documentation and comment cleanup: Substantially complete.
 
 Current phase:
-Phase 7: Operational model refinement and maintainability.
- 
+Phase 8: Production adoption and closure 
+
+Phase 7 maintainability review: Completed.
+Phase 7 test-coverage review: Completed.
+Phase 7 exit criteria: Satisfied.
+
 Current governing question:
- 
-"Does the generated leadership email direct attention to the handful of matters that genuinely require leadership awareness, intervention, or decision?"
- 
+
+"Does the generated leadership email direct attention to the handful of matters 
+that genuinely require leadership awareness, intervention, or decision?"
+
 Secondary governing question:
- 
-"Does this change improve the quality, reliability, traceability, maintainability, or leadership usefulness of leadership_email.txt?"
- 
-Current Phase 7 focus:
- 
-- improving the business usefulness of the weekly leadership email
-- improving leadership signal quality, prioritisation, and decision usefulness
-- reviewing orchestration responsibilities and ownership boundaries within the active pipeline
-- reviewing worksheet-discovery ownership and lifecycle management
-- improving manifest quality, operational traceability, and operator usability
-- reviewing package structure, import-path management, and active module boundaries
-- removing remaining stale comments, docstrings, CLI messages, and operator-facing guidance that no longer reflect the active implementation
-- reducing structural complexity where simplification demonstrably improves maintainability
-- preserving historical milestone, validation, and ADR documentation where appropriate
-- continuing evidence-driven cleanup only where operational or maintainability benefits are clear
- 
-Active implementation:
- 
-Weekly snapshots workbook
-→ worksheet discovery
-→ snapshot comparison
-→ leadership candidate generation
-→ leadership insights
-→ risks & watchouts
-→ leadership email
- 
-Formatting must remain a consideration, but not the primary workstream.
- 
-The primary workstream is now maintainability, operational clarity, leadership-email usefulness, and stewardship of the simplified worksheet-based pipeline.
+
+"Does this change improve the quality, reliability, traceability, maintainability, 
+or leadership usefulness of leadership_email.txt?"
+
+Formatting remains important, but is no longer the primary workstream.
+
+Completed architecture simplification, judgement validation, and
+maintainability-review activities should not be reopened without new
+evidence of a material defect, regression, or business benefit.
+
+Recent Phase 8 activity:
+
+- Leadership-email section-semantics review completed.
+- Finding 12 was validated as a presentation defect and resolved through BUG-004.
+- Leadership-email rendering now explicitly distinguishes executive watchouts from financial watchouts.
+- Finding 13 was investigated using existing comparison outputs and analysis.json.
+- Existing comparison outputs were confirmed to be available, however no additional week-on-week reporting change has been approved.
+- No new judgement, ranking, promotion, candidate-generation, or comparison logic changes were justified.
+- No open bugs are currently recorded.
+
+Closure readiness assessment:
+
+- The leadership email remains operational.
+- The current architecture remains aligned with project objectives.
+- The project remains in Phase 8: Production Adoption and Closure.
+- A further production run using a new weekly snapshot is recommended before declaring Phase 8 complete and transitioning the solution to BAU maintenance.
 
 
 (19) ACTIVE BACKLOG
 
-1. PHASE 7: OPERATIONAL MODEL REFINEMENT AND MAINTAINABILITY
+1. PHASE 8: PRODUCTION ADOPTION AND CLOSURE
 
-Completed:
-✅ Communications Engine retirement
-✅ Archive workflow retirement
-✅ Dead-code review
-✅ Obsolete test retirement
-✅ Legacy generated-output cleanup
-✅ Package-shell and cache cleanup
-✅ Workbook-discovery workflow retirement
-✅ Baseline/state-management workflow retirement
-✅ Runner configuration simplification
-✅ Configuration-contract simplification
-✅ Manifest rationalisation
-✅ Duplicate preflight-validation removal
-✅ Active-documentation cleanup
+Current objectives:
 
-Current review areas:
-- review remaining stale comments, docstrings, CLI help text, and operator-facing messages
-- review worksheet-discovery ownership and orchestration responsibilities
-- review run_weekly_snapshot.py maintainability and module boundaries
-- review package structure and import-path management
-- review manifest traceability and operational usefulness
-- review remaining configuration and path handling for simplification opportunities
-- preserve historical milestone notes and ADRs where they remain accurate historical records
-- continue cleanup only where maintainability, traceability, or operational simplicity benefits are demonstrated
+- production operationalisation
+- execution reliability
+- operator readiness
+- production adoption
+- project closure
 
-2. Specific leadership email accuracy and presentation refinements
+Operating principles:
 
-3. Production adoption and closure
+- preserve accurate historical milestone notes and ADRs
+- do not reopen completed validation, simplification, or maintainability work without new evidence
+- prefer operational stability over further architectural change
+- continue to prioritise leadership-email usefulness over additional artefact generation
 
-4. Potential refinements, which include:
+2. Leadership email refinements
+
+Potential refinements may include:
+
 - correct actual values where source or generated values are inaccurate
-- clarify section semantics where "Financial watchout" coexists with "No watchouts identified"
 - improve explicit week-on-week change wording where useful
 - preserve financial context
 - preserve concise commentary
@@ -858,42 +864,16 @@ Current success metric: Correct leadership judgement, not formatting precision.
 4. Validation is complete.
 5. The formal judgement framework is approved.
 6. There are no formally open bugs.
-7. The current phase is Phase 7: Operational Model Refinement and Maintainability.
+7. The current phase is Phase 8: Production Adoption and Closure.
 8. Documentation and comment cleanup is substantially complete.
-9. Major dead-code, configuration, workflow, and architecture rationalisation has been completed. Current priority is improving maintainability, operational clarity, manifest traceability, and leadership-email usefulness within the active worksheet-based pipeline.
-10. Make one validated change at a time and confirm impact before proceeding to the next change.
-11. Do not redesign completed components.
-12. Do not rebuild extraction, comparison, matching, ranking, scoring, aggregation, commentary enrichment, candidate generation, movement classification, or theme classification.
-13. Reuse existing outputs and commentary.
-14. Turn data into judgement, not narrative.
-15. Formatting is secondary but remains relevant where it affects the final email.
-16. Silverleaf is a business exception, not a risk and not a code defect.
-17. Do not build an executive briefing unless stakeholder demand emerges.
-18. Keep all changes grounded, minimal, and directly connected to improving the leadership email, improving maintainability, or simplifying the active leadership-email pipeline.
-19. Do not provide multiple code changes at once.
-20. Historical milestone notes, ADRs, and implementation notes may remain unchanged where they accurately document historical decisions and implementation history.
-21. Preserve historical documentation where appropriate, but ensure active documentation reflects current runtime behaviour.
-22. Before removing additional code, configuration, tests, workflows, or documentation, validate that it is not part of the active leadership-email pipeline and confirm that the change improves maintainability, simplicity, traceability, operational clarity, or leadership-email usefulness.
-23. The following simplification work has been completed and should not be re-opened without new evidence:
-
-- Communications Engine subsystem removal
-- Archive-workflow retirement
-- Promotion-package retirement
-- Reporting-package retirement
-- Obsolete runner/configuration test retirement
-- Legacy generated-output cleanup
-- Stale cache and package-shell cleanup
-- Workbook-discovery architecture retirement
-- Baseline/state-management architecture retirement
-- Runner configuration simplification
-- Configuration-contract simplification
-- Obsolete manifest-stage retirement
-- Duplicate preflight-validation retirement
-- Active documentation alignment with worksheet-based processing
-
-24. Phase 7 is an architecture-review and maintainability phase, not a dead-code-removal phase. New changes should be justified by measurable improvements in maintainability, operational clarity, traceability, or leadership-email usefulness.
-
-25. The active implementation model is:
+9. Major dead-code, configuration, workflow, architecture, maintainability, and test-coverage review activities have been completed. Current priority is production adoption, operational readiness, execution reliability, and targeted leadership-email improvements where justified.
+10. Do not redesign completed components.
+11. Do not rebuild extraction, comparison, matching, ranking, scoring, aggregation, commentary enrichment, candidate generation, movement classification, or theme classification.
+12. Reuse existing outputs and commentary.
+13. Turn data into judgement, not narrative.
+14. Formatting is secondary but remains relevant where it affects the final email.
+15. Keep all changes grounded, minimal, and directly connected to improving the leadership email, improving maintainability, or simplifying the active leadership-email pipeline.
+16. The active implementation model is:
 
 Weekly snapshots workbook
 → worksheet discovery
@@ -902,10 +882,3 @@ Weekly snapshots workbook
 → leadership insights
 → risks & watchouts
 → leadership email
-
-26. If implementation inspection identifies a new bug:
-- explain the bug
-- add it to OPEN BUGS
-- make one change only
-- validate the change against leadership_email.txt and existing comparison outputs
-- continue only after the prior change is confirmed complete.

@@ -81,7 +81,7 @@ def render_leadership_email(
       
     if watchlist:
         lines.append("")
-        lines.append("Items to monitor:")
+        lines.append("Executive watchouts:")
         lines.append("")
 
         for item in watchlist:
@@ -151,7 +151,9 @@ def _extract_watchlist(
 
         cleaned_block = "\n".join(cleaned_lines).strip()
 
-        if cleaned_block:
+        if cleaned_block == "No watchouts identified.":
+            watchlist.append("No executive watchouts identified.")
+        elif cleaned_block:
             watchlist.append(cleaned_block)
 
     return watchlist
